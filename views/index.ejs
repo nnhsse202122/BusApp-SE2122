@@ -1,0 +1,20 @@
+<html>
+    <head>
+        <title>Home</title>
+        <link rel="stylesheet" href="/css/style.css">
+    </head>
+    <body>
+        <table>
+            <tr>
+                <th>Bus Number</th>
+                <th>Status</th>
+            </tr>
+        <% for(let i = 0; i < buses.length; i++) { %> 
+            <tr>
+                <td><%= buses[i].number %></td>
+                <td><%= buses[i].status %></td>
+            </tr>
+        <% } %> 
+        </table>
+    </body>
+</html>
