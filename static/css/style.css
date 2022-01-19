@@ -3,6 +3,10 @@ table, th, td {
     border-collapse: collapse;
 }
 
+table {
+    margin: auto;
+}
+
 .tableInput {
     border: none;
 }
