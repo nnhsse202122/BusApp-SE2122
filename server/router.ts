@@ -1,17 +1,23 @@
 import express, {Request, Response} from "express";
+import {createServer} from "http";
+import {Server} from "socket.io";
 import {read, write} from "../data/YmlController";
 
-export const router = express.Router();
+const app = express();
+const httpServer = createServer(app);
+const io = new Server(httpServer);
+io.on("connection")
 
-router.get("/", (req: Request, res: Response) => {
+
+app.get("/", (req: Request, res: Response) => {
     res.render("index", {buses: read()});
 });
 
-router.get("/admin", (req: Request, res: Response) => {
+app.get("/admin", (req: Request, res: Response) => {
     res.render("admin", {buses: read()});
 });
 
-router.post("/api/save", (req: Request, res: Response) => {
+app.post("/api/save", (req: Request, res: Response) => {
     write(req.body);
     res.redirect("/admin");
 });
