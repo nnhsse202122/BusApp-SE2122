@@ -1,6 +1,9 @@
 - number: '4'
+  change: '7'
   status: NOT HERE
 - number: '46'
+  change: ''
   status: LOADING
 - number: '88'
+  change: ''
   status: HERE
