@@ -17,7 +17,7 @@ exports.read = read;
 function write(data) {
     const buses = [];
     for (let i = 0; i < data.busNumber.length; i++) {
-        buses.push({ number: data.busNumber[i], status: data.busStatus[i] });
+        buses.push({ number: data.busNumber[i], change: data.busChange[i], status: data.busStatus[i] });
     }
     fs_1.default.writeFile(path_1.default.resolve(__dirname, filepath), js_yaml_1.default.dump(buses), (err) => {
         if (err)
