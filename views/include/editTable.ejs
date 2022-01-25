@@ -1,12 +1,14 @@
 <table id="table">
     <tr>
         <th>Bus Number</th>
+        <th>Bus Change</th>
         <th>Status</th>
         <th class="deleteBus"></th>
     </tr>
 <% for(let i = 0; i < buses.length; i++) { %> 
     <tr>
         <td><input class="tableInput" type="number" name="busNumber" value=<%= buses[i].number %>></td>
+        <td><input class="tableInput" type="number" name="busChange" value=<%= buses[i].change %>></td>
         <td>
             <select name="busStatus">
                 <option value="NOT HERE" <%= buses[i].status == "NOT HERE"? "selected" : "" %>>NOT HERE</option>

@@ -4,7 +4,7 @@ import path from "path";
 
 const filepath = "./busData.yml";
 
-type Bus = {number: string, status: string};
+type Bus = {number: string, change: string, status: string};
 
 // Load data file
 export function read() {
@@ -12,10 +12,10 @@ export function read() {
 }
 
 // Edit data object
-export function write(data: {busNumber: string[], busStatus: string[]}) {
+export function write(data: {busNumber: string[], busChange: string[], busStatus: string[]}) {
     const buses: Bus[] = [];
     for(let i = 0; i < data.busNumber.length; i++) {
-        buses.push({number: data.busNumber[i], status: data.busStatus[i]});
+        buses.push({number: data.busNumber[i], change: data.busChange[i], status: data.busStatus[i]});
     }
     fs.writeFile(path.resolve(__dirname, filepath), yaml.dump(buses), (err) => {
         if (err) console.log(err);
