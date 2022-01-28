@@ -9,6 +9,7 @@ const path_1 = __importDefault(require("path"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const http_1 = require("http");
 const socket_io_1 = require("socket.io");
+const YmlController_1 = require("./data/YmlController");
 const app = (0, express_1.default)();
 const httpServer = (0, http_1.createServer)(app);
 const io = new socket_io_1.Server(httpServer);
@@ -17,12 +18,22 @@ const PORT = process.env.PORT || 3000;
 io.of('/main').on("connection", (socket) => {
     console.log(`new connection on root (id:${socket.id})`);
     socket.on('debug', (data) => {
-        console.log(`debug: ${data}`);
+        console.log(`debug(root): ${data}`);
     });
 });
 //admin socket
 io.of('/admin').on("connection", (socket) => {
     console.log(`new connection on admin (id:${socket.id})`);
+    socket.on('update', () => {
+        console.log('updated');
+        console.log('data: ' + (0, YmlController_1.read)()[0].number);
+        setTimeout(() => {
+            io.of('/main').emit('update', (0, YmlController_1.read)());
+        }, 1000);
+    });
+    socket.on('debug', (data) => {
+        console.log(`debug(admin): ${data}`);
+    });
 });
 app.set("view engine", "ejs");
 app.use(body_parser_1.default.urlencoded({ extended: true }));

@@ -1,0 +1,14 @@
+<table>
+    <tr>
+        <th>Bus Number</th>
+        <th>Bus Change</th>
+        <th>Status</th>
+    </tr>
+<% for(let i = 0; i < buses.length; i++) { %> 
+    <tr>
+        <td><%= buses[i].number %></td>
+        <td><%= buses[i].change %></td>
+        <td><%= buses[i].status %></td>
+    </tr>
+<% } %> 
+</table>
