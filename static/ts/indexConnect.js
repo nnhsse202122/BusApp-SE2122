@@ -52,4 +52,5 @@ socket.on('update',(data)=>{
             getBusRow(bus).remove();
         }
     })
+    
 })

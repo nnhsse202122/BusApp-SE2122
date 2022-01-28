@@ -8,6 +8,7 @@ router.get("/", (req: Request, res: Response) => {
 });
 
 router.get("/admin", (req: Request, res: Response) => {
+    console.log(read());
     res.render("admin", {buses: read()});
 });
 
