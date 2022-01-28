@@ -7,9 +7,9 @@
     <body>
         <script src="/js/manageBuses.js"></script>
         <script src="/socket.io/socket.io.js"></script>
-        <script src="/js/socketConnect.js"></script>
-        <form action="/api/save" method="post">
-            <button type="submit">Save</button>
+        <script src='js/adminConnect.js'></script>
+        <form id='form' action="/api/save" method="post" onsubmit="updateStudents()">
+            <button type="submit" >Save</button>
             <button type="button" onclick="addBus()">Add Bus</button>
             <table id="table">
                 <tr>
