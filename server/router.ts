@@ -9,7 +9,7 @@ router.get("/", (req: Request, res: Response) => {
 
 router.get("/admin", (req: Request, res: Response) => {
     console.log(read());
-    res.render("admin", {buses: read()});
+    res.render("admin", {data: read()});
 });
 
 router.post("/api/save", (req: Request, res: Response) => {

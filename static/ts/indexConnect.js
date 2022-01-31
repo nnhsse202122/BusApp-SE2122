@@ -20,7 +20,7 @@ function getBusses(){
 
 socket.on('update',(data)=>{
     socket.emit('debug','recieved data');
-    data.forEach((bus) => {
+    data.buses.forEach((bus) => {
         if(getBusses().includes("bus_"+bus.number)){
             //updating a bus in both the updated file and the html table(editing a bus)
             socket.emit('debug','editing bus '+bus.number)
@@ -45,7 +45,7 @@ socket.on('update',(data)=>{
     });
     //delete buses that are not in data file(removing a bus)
     var busIds = [];
-    data.forEach((b)=>{
+    data.buses.forEach((b)=>{
         busIds.push('bus_'+b.number);
     })
     getBusses().forEach((bus)=>{

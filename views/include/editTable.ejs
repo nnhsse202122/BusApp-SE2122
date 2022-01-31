@@ -5,16 +5,16 @@
         <th>Status</th>
         <th class="deleteBus"></th>
     </tr>
-<% for(let i = 0; i < buses.length; i++) { %> 
+<% for(let i = 0; i < data.buses.length; i++) { %> 
     <tr>
-        <td><input class="tableInput" type="number" name="busNumber" value=<%= buses[i].number %>></td>
-        <td><input class="tableInput" type="number" name="busChange" value=<%= buses[i].change %>></td>
+        <td><input class="tableInput" type="number" name="busNumber" value=<%= data.buses[i].number %>></td>
+        <td><input class="tableInput" type="number" name="busChange" value=<%= data.buses[i].change %>></td>
         <td>
             <select name="busStatus">
-                <option value="NOT HERE" <%= buses[i].status == "NOT HERE"? "selected" : "" %>>NOT HERE</option>
-                <option value="HERE" <%= buses[i].status == "HERE"? "selected" : "" %>>HERE</option>
-                <option value="LOADING" <%= buses[i].status == "LOADING"? "selected" : ""%>>LOADING</option>
-                <option value="GONE" <%= buses[i].status == "GONE"? "selected" : "" %>>GONE</option>
+                <option value="NOT HERE" <%= data.buses[i].status == "NOT HERE"? "selected" : "" %>>NOT HERE</option>
+                <option value="HERE" <%= data.buses[i].status == "HERE"? "selected" : "" %>>HERE</option>
+                <option value="LOADING" <%= data.buses[i].status == "LOADING"? "selected" : ""%>>LOADING</option>
+                <option value="GONE" <%= data.buses[i].status == "GONE"? "selected" : "" %>>GONE</option>
             </select>
         </td>
         <td class="deleteBus"><i class="fas fa-times" onclick="removeBus(this)"></i></td>

@@ -12,7 +12,7 @@ exports.router.get("/", (req, res) => {
 });
 exports.router.get("/admin", (req, res) => {
     console.log((0, YmlController_1.read)());
-    res.render("admin", { buses: (0, YmlController_1.read)() });
+    res.render("admin", { data: (0, YmlController_1.read)() });
 });
 exports.router.post("/api/save", (req, res) => {
     (0, YmlController_1.write)(req.body);
