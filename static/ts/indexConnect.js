@@ -25,20 +25,22 @@ socket.on('update',(data)=>{
             //updating a bus in both the updated file and the html table(editing a bus)
             socket.emit('debug','editing bus '+bus.number)
             var busRow = document.getElementById("bus_"+bus.number);
-            
-            busRow.children[1].innerHTML = bus.status;
+            busRow.children[1].innerHTML = bus.change;
+            busRow.children[2].innerHTML = bus.status;
         } else {
             //a bus in the file but not the table(adding a bus)
             socket.emit('debug','adding bus ' + bus.number);
-            var busRow = document.createElement('tr');
+            var busRow = document.getElementById('busTable').children[0].insertRow(1);
             busRow.id = 'bus_'+bus.number;
             var busNumber = document.createElement('td');
             busNumber.innerHTML = bus.number;
+            var busChange = document.createElement('td');
+            busChange.innerHTML = bus.change;
             var busStatus = document.createElement('td');
             busStatus.innerHTML = bus.status;
             busRow.appendChild(busNumber);
+            busRow.appendChild(busChange);
             busRow.appendChild(busStatus);
-            document.getElementById('busTable').children[0].appendChild(busRow);
         }
     });
     //delete buses that are not in data file(removing a bus)
