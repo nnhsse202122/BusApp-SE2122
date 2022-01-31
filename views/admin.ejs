@@ -7,9 +7,12 @@
     <body>
         <script src="/js/manageBuses.js"></script>
         <form action="/api/save" method="post">
-            <button type="submit">Save</button>
-            <button type="button" onclick="addBus()">Add Bus</button>
+            <button type="submit" id="save">Save</button>
+            <button type="button" onclick="addBus()" id="addBus">Add Bus</button>
             <table id="table">
+                <colgroup>
+                    <col span="2">
+                  </colgroup>
                 <tr>
                     <th>Bus Number</th>
                     <th>Status</th>
