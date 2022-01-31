@@ -1,11 +1,11 @@
-<table>
+<table id='busTable'>
     <tr>
         <th>Bus Number</th>
         <th>Bus Change</th>
         <th>Status</th>
     </tr>
 <% for(let i = 0; i < buses.length; i++) { %> 
-    <tr>
+    <tr id=<%= 'bus_'+buses[i].number%>>
         <td><%= buses[i].number %></td>
         <td><%= buses[i].change %></td>
         <td><%= buses[i].status %></td>
