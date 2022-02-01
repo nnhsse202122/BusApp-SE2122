@@ -4,7 +4,7 @@ import {read, write} from "../data/YmlController";
 export const router = express.Router();
 
 router.get("/", (req: Request, res: Response) => {
-    res.render("index", {buses: read()});
+    res.render("index", {data: read()});
 });
 
 router.get("/admin", (req: Request, res: Response) => {

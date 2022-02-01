@@ -26,7 +26,6 @@ io.of('/admin').on("connection", (socket) => {
     console.log(`new connection on admin (id:${socket.id})`);
     socket.on('update', () => {
         console.log('updated');
-        console.log('data: ' + (0, YmlController_1.read)()[0].number);
         setTimeout(() => {
             io.of('/main').emit('update', (0, YmlController_1.read)());
         }, 1000);

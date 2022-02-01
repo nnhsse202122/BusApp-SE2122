@@ -53,6 +53,6 @@ socket.on('update',(data)=>{
             socket.emit('debug',`deleting bus ${bus}`);
             getBusRow(bus).remove();
         }
-    })
-    
+    });
+    document.getElementById('weather').innerHTML = data.weather;
 })

@@ -8,16 +8,16 @@ type Bus = {number: string, change: string, status: string};
 
 // Load data file
 export function read() {
-    return <Bus[]> yaml.load(fs.readFileSync(path.resolve(__dirname, filepath), "utf-8"));
+    return <{weather: string, buses: Bus[]}> yaml.load(fs.readFileSync(path.resolve(__dirname, filepath), "utf-8"));
 }
 
 // Edit data object
-export function write(data: {busNumber: string[], busChange: string[], busStatus: string[]}) {
+export function write(data: {busNumber: string[], busChange: string[], busStatus: string[], weather: string}) {
     const buses: Bus[] = [];
     for(let i = 0; i < data.busNumber.length; i++) {
         buses.push({number: data.busNumber[i], change: data.busChange[i], status: data.busStatus[i]});
     }
-    fs.writeFile(path.resolve(__dirname, filepath), yaml.dump(buses), (err) => {
+    fs.writeFile(path.resolve(__dirname, filepath), yaml.dump({weather: data.weather, buses: buses}), (err) => {
         if (err) console.log(err);
     });
 }
