@@ -16,10 +16,22 @@ export function read() {
 }
 
 // Edit data object
-export function write(data: {busNumber: string[], busChange: string[], busStatus: string[]}) {
+export function write(data: {
+    busNumber: string | string[], 
+    busChange: string | string[], 
+    busStatus: string | string[]}
+    ) {
     const buses: Bus[] = [];
-    for(let i = 0; i < data.busNumber.length; i++) {
-        buses.push({number: data.busNumber[i], change: data.busChange[i], status: data.busStatus[i]});
+    if (typeof data.busNumber === "string" && 
+        typeof data.busChange === "string" && 
+        typeof data.busStatus === "string"
+    ) {
+        buses.push({number: data.busNumber, change: data.busChange, status: data.busStatus});
+    }
+    else {
+        for(let i = 0; i < data.busNumber.length; i++) {
+            buses.push({number: data.busNumber[i], change: data.busChange[i], status: data.busStatus[i]});
+        }    
     }
     fs.writeFileSync(filepath, yaml.dump(buses));
 }

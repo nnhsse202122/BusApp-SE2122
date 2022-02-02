@@ -11,6 +11,7 @@ function addBus() {
     numberInput.setAttribute("class", "tableInput");
     numberInput.setAttribute("type", "number");
     numberInput.setAttribute("name", "busNumber");
+    numberInput.setAttribute("required", "");
     busNumber.appendChild(numberInput);
 
     const changeInput = document.createElement("input");

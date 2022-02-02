@@ -7,7 +7,7 @@
     </tr>
 <% for(let i = 0; i < buses.length; i++) { %> 
     <tr>
-        <td><input class="tableInput" type="number" name="busNumber" value=<%= buses[i].number %>></td>
+        <td><input class="tableInput" type="number" name="busNumber" value=<%= buses[i].number %> required></td>
         <td><input class="tableInput" type="number" name="busChange" value=<%= buses[i].change %>></td>
         <td>
             <select name="busStatus">

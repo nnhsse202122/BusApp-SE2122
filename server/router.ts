@@ -12,7 +12,6 @@ router.get("/admin", (req: Request, res: Response) => {
 });
 
 router.post("/api/save", (req: Request, res: Response) => {
-    //console.log(req.body);
     write(req.body);
     res.redirect("/admin");
 });

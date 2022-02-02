@@ -14,7 +14,6 @@ exports.router.get("/admin", (req, res) => {
     res.render("admin", { buses: (0, ymlController_1.read)() });
 });
 exports.router.post("/api/save", (req, res) => {
-    //console.log(req.body);
     (0, ymlController_1.write)(req.body);
     res.redirect("/admin");
 });

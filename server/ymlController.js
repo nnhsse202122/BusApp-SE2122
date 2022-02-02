@@ -20,8 +20,15 @@ exports.read = read;
 // Edit data object
 function write(data) {
     const buses = [];
-    for (let i = 0; i < data.busNumber.length; i++) {
-        buses.push({ number: data.busNumber[i], change: data.busChange[i], status: data.busStatus[i] });
+    if (typeof data.busNumber === "string" &&
+        typeof data.busChange === "string" &&
+        typeof data.busStatus === "string") {
+        buses.push({ number: data.busNumber, change: data.busChange, status: data.busStatus });
+    }
+    else {
+        for (let i = 0; i < data.busNumber.length; i++) {
+            buses.push({ number: data.busNumber[i], change: data.busChange[i], status: data.busStatus[i] });
+        }
     }
     fs_1.default.writeFileSync(filepath, js_yaml_1.default.dump(buses));
 }

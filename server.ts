@@ -4,7 +4,7 @@ import path from "path";
 import bodyParser from "body-parser";
 import {createServer} from "http";
 import {Server} from "socket.io";
-import {read, write} from "./data/YmlController";
+import {read, write} from "./server/ymlController";
 
 
 const app: Application = express();
@@ -27,7 +27,7 @@ io.of('/admin').on("connection",(socket)=>{
     console.log(`new connection on admin (id:${socket.id})`);
     socket.on('update',()=>{
         console.log('updated');
-        console.log('data: '+read()[0].number);
+        //console.log('data: '+read()[0].number);
         setTimeout(()=>{
             io.of('/main').emit('update',read());
         },1000);
