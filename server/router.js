@@ -8,10 +8,11 @@ const express_1 = __importDefault(require("express"));
 const ymlController_1 = require("./ymlController");
 exports.router = express_1.default.Router();
 exports.router.get("/", (req, res) => {
-    res.render("index", { buses: (0, ymlController_1.read)() });
+    res.render("index", { data: (0, ymlController_1.read)() });
 });
 exports.router.get("/admin", (req, res) => {
-    res.render("admin", { buses: (0, ymlController_1.read)() });
+    console.log((0, ymlController_1.read)());
+    res.render("admin", { data: (0, ymlController_1.read)() });
 });
 exports.router.post("/api/save", (req, res) => {
     (0, ymlController_1.write)(req.body);

@@ -12,7 +12,13 @@ export function read() {
         if (!fs.existsSync(path.resolve(__dirname, "../data"))) {
             fs.mkdirSync(path.resolve(__dirname, "../data"));
         }
-        const data = "-\n  number: ''\n  change: ''\n  status: 'NOT HERE'";  
+        const data = 
+`buses:
+-
+    number: ''
+    change: ''
+    status: 'NOT HERE'
+weather: ''`;  
         fs.writeFileSync(filepath, data);
     }
     return <Bus[]> yaml.load(fs.readFileSync(filepath, "utf-8"));
@@ -22,7 +28,8 @@ export function read() {
 export function write(data: {
     busNumber: string | string[], 
     busChange: string | string[], 
-    busStatus: string | string[]}
+    busStatus: string | string[],
+    weather: string}
     ) {
     const buses: Bus[] = [];
     if (typeof data.busNumber === "string" && 
@@ -36,6 +43,6 @@ export function write(data: {
             buses.push({number: data.busNumber[i], change: data.busChange[i], status: data.busStatus[i]});
         }    
     }
-    fs.writeFileSync(filepath, yaml.dump(buses));
+    fs.writeFileSync(filepath, yaml.dump({buses: buses, weather: data.weather}));
 }
 

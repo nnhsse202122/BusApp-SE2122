@@ -14,7 +14,12 @@ function read() {
         if (!fs_1.default.existsSync(path_1.default.resolve(__dirname, "../data"))) {
             fs_1.default.mkdirSync(path_1.default.resolve(__dirname, "../data"));
         }
-        const data = "-\n  number: ''\n  change: ''\n  status: 'NOT HERE'";
+        const data = `buses:
+-
+    number: ''
+    change: ''
+    status: 'NOT HERE'
+weather: ''`;
         fs_1.default.writeFileSync(filepath, data);
     }
     return js_yaml_1.default.load(fs_1.default.readFileSync(filepath, "utf-8"));
@@ -33,6 +38,6 @@ function write(data) {
             buses.push({ number: data.busNumber[i], change: data.busChange[i], status: data.busStatus[i] });
         }
     }
-    fs_1.default.writeFileSync(filepath, js_yaml_1.default.dump(buses));
+    fs_1.default.writeFileSync(filepath, js_yaml_1.default.dump({ buses: buses, weather: data.weather }));
 }
 exports.write = write;
