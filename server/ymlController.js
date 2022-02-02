@@ -12,6 +12,7 @@ const filepath = path_1.default.resolve(__dirname, "../data/busData.yml");
 function read() {
     if (!fs_1.default.existsSync(filepath)) {
         const data = "-\n  number: ''\n  change: ''\n  status: 'NOT HERE'";
+        fs_1.default.mkdirSync(path_1.default.resolve(__dirname, "../data"));
         fs_1.default.writeFileSync(filepath, data);
     }
     return js_yaml_1.default.load(fs_1.default.readFileSync(filepath, "utf-8"));

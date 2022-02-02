@@ -10,6 +10,7 @@ type Bus = {number: string, change: string, status: string};
 export function read() {
     if (!fs.existsSync(filepath)) {
         const data = "-\n  number: ''\n  change: ''\n  status: 'NOT HERE'";
+        fs.mkdirSync(path.resolve(__dirname, "../data"));
         fs.writeFileSync(filepath, data);
     }
     return <Bus[]> yaml.load(fs.readFileSync(filepath, "utf-8"));
