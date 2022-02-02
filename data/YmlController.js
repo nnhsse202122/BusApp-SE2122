@@ -19,7 +19,7 @@ function write(data) {
     for (let i = 0; i < data.busNumber.length; i++) {
         buses.push({ number: data.busNumber[i], change: data.busChange[i], status: data.busStatus[i] });
     }
-    fs_1.default.writeFile(path_1.default.resolve(__dirname, filepath), js_yaml_1.default.dump({ weather: data.weather, buses: buses }), (err) => {
+    fs_1.default.writeFile(path_1.default.resolve(__dirname, filepath), js_yaml_1.default.dump({ buses: buses, weather: data.weather }), (err) => {
         if (err)
             console.log(err);
     });
