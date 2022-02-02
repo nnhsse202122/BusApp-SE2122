@@ -19,17 +19,14 @@ function getBusses(){
 }
 
 socket.on('update',(data)=>{
-    socket.emit('debug','recieved data');
-    data.forEach((bus) => {
+    data.buses.forEach((bus) => {
         if(getBusses().includes("bus_"+bus.number)){
             //updating a bus in both the updated file and the html table(editing a bus)
-            socket.emit('debug','editing bus '+bus.number)
             var busRow = document.getElementById("bus_"+bus.number);
             busRow.children[1].innerHTML = bus.change;
             busRow.children[2].innerHTML = bus.status;
         } else {
             //a bus in the file but not the table(adding a bus)
-            socket.emit('debug','adding bus ' + bus.number);
             var busRow = document.getElementById('busTable').children[0].insertRow(1);
             busRow.id = 'bus_'+bus.number;
             var busNumber = document.createElement('td');
@@ -45,14 +42,13 @@ socket.on('update',(data)=>{
     });
     //delete buses that are not in data file(removing a bus)
     var busIds = [];
-    data.forEach((b)=>{
+    data.buses.forEach((b)=>{
         busIds.push('bus_'+b.number);
     })
     getBusses().forEach((bus)=>{
         if(!busIds.includes(bus)){
-            socket.emit('debug',`deleting bus ${bus}`);
             getBusRow(bus).remove();
         }
-    })
-    
+    });
+    document.getElementById('weather').innerHTML = data.weather;
 })
