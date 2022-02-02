@@ -17,7 +17,7 @@ export function write(data: {busNumber: string[], busChange: string[], busStatus
     for(let i = 0; i < data.busNumber.length; i++) {
         buses.push({number: data.busNumber[i], change: data.busChange[i], status: data.busStatus[i]});
     }
-    fs.writeFile(path.resolve(__dirname, filepath), yaml.dump({weather: data.weather, buses: buses}), (err) => {
+    fs.writeFile(path.resolve(__dirname, filepath), yaml.dump({buses: buses, weather: data.weather}), (err) => {
         if (err) console.log(err);
     });
 }
