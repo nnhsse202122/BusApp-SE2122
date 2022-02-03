@@ -5,16 +5,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.router = void 0;
 const express_1 = __importDefault(require("express"));
-const YmlController_1 = require("../data/YmlController");
+const ymlController_1 = require("./ymlController");
 exports.router = express_1.default.Router();
 exports.router.get("/", (req, res) => {
-    res.render("index", { data: (0, YmlController_1.read)() });
+    res.render("index", { data: (0, ymlController_1.read)() });
 });
 exports.router.get("/admin", (req, res) => {
-    console.log((0, YmlController_1.read)());
-    res.render("admin", { data: (0, YmlController_1.read)() });
+    res.render("admin", { data: (0, ymlController_1.read)() });
 });
 exports.router.post("/api/save", (req, res) => {
-    (0, YmlController_1.write)(req.body);
+    (0, ymlController_1.write)(req.body);
     res.redirect("/admin");
 });

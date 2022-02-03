@@ -4,7 +4,7 @@ import path from "path";
 import bodyParser from "body-parser";
 import {createServer} from "http";
 import {Server} from "socket.io";
-import {read, write} from "./data/YmlController";
+import {read, write} from "./server/ymlController";
 
 
 const app: Application = express();
@@ -16,22 +16,22 @@ const PORT = process.env.PORT || 3000;
 
 //root socket
 io.of('/main').on("connection",(socket)=>{
-    console.log(`new connection on root (id:${socket.id})`);
+    //console.log(`new connection on root (id:${socket.id})`);
     socket.on('debug',(data)=>{
-        console.log(`debug(root): ${data}`);
+        //console.log(`debug(root): ${data}`);
     })
 })
 
 //admin socket
 io.of('/admin').on("connection",(socket)=>{
-    console.log(`new connection on admin (id:${socket.id})`);
+    //console.log(`new connection on admin (id:${socket.id})`);
     socket.on('update',()=>{
         setTimeout(()=>{
             io.of('/main').emit('update',read());
         },1000);
     })
     socket.on('debug',(data)=>{
-        console.log(`debug(admin): ${data}`);
+        //console.log(`debug(admin): ${data}`);
     })
 })
 
