@@ -11,7 +11,6 @@ exports.router.get("/", (req, res) => {
     res.render("index", { data: (0, ymlController_1.read)() });
 });
 exports.router.get("/admin", (req, res) => {
-    console.log((0, ymlController_1.read)());
     res.render("admin", { data: (0, ymlController_1.read)() });
 });
 exports.router.post("/api/save", (req, res) => {
