@@ -16,7 +16,7 @@ const PORT = process.env.PORT || 3000;
 
 //root socket
 io.of('/main').on("connection",(socket)=>{
-    //console.log(`new connection on root (id:${socket.id})`);
+    console.log(`new connection on root (id:${socket.id})`);
     socket.on('debug',(data)=>{
         //console.log(`debug(root): ${data}`);
     })
@@ -24,7 +24,7 @@ io.of('/main').on("connection",(socket)=>{
 
 //admin socket
 io.of('/admin').on("connection",(socket)=>{
-    //console.log(`new connection on admin (id:${socket.id})`);
+    console.log(`new connection on admin (id:${socket.id})`);
     socket.on('update',()=>{
         setTimeout(()=>{
             io.of('/main').emit('update',read());

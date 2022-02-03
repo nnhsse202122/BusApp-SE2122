@@ -7,9 +7,10 @@
         <link href="https://fonts.googleapis.com/css2?family=Comfortaa&display=swap" rel="stylesheet">
     </head>
     <body>
+        <p><b>Weather: </b><span id='weather'><%= data.weather %></span></p>
         <script src="/socket.io/socket.io.js"></script>
         <script src='js/indexConnect.js'></script>
         <%- include("include/showTable") %>
-        <p><b>Weather: </b><span id='weather'><%= data.weather %></span></p>
+        
     </body>
 </html>
