@@ -7,20 +7,9 @@
         <link href="https://fonts.googleapis.com/css2?family=Comfortaa&display=swap" rel="stylesheet">
     </head>
     <body>
-        <table>
-            <colgroup>
-                <col span="1">
-            </colgroup>
-            <tr>
-                <th>Bus Number</th>
-                <th>Status</th>
-            </tr>
-        <% for(let i = 0; i < buses.length; i++) { %> 
-            <tr>
-                <td><%= buses[i].number %></td>
-                <td><%= buses[i].status %></td>
-            </tr>
-        <% } %> 
-        </table>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src='js/indexConnect.js'></script>
+        <%- include("include/showTable") %>
+        <p><b>Weather: </b><span id='weather'><%= data.weather %></span></p>
     </body>
 </html>
