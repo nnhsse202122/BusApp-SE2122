@@ -24,7 +24,8 @@ socket.on('update',(data)=>{
             //updating a bus in both the updated file and the html table(editing a bus)
             var busRow = document.getElementById("bus_"+bus.number);
             busRow.children[1].innerHTML = bus.change;
-            busRow.children[2].innerHTML = bus.status;
+            busRow.children[2].innerHTML = bus.arrival;
+            busRow.children[3].innerHTML = bus.status;
         } else {
             //a bus in the file but not the table(adding a bus)
             var busRow = document.getElementById('busTable').children[0].insertRow(1);
@@ -33,10 +34,13 @@ socket.on('update',(data)=>{
             busNumber.innerHTML = bus.number;
             var busChange = document.createElement('td');
             busChange.innerHTML = bus.change;
+            var busArrival = document.createElement('td');
+            busArrival.innerHTML = bus.bus.arrival;
             var busStatus = document.createElement('td');
             busStatus.innerHTML = bus.status;
             busRow.appendChild(busNumber);
             busRow.appendChild(busChange);
+            busRow.appendChild(busArrival);
             busRow.appendChild(busStatus);
         }
     });
