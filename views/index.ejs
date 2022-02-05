@@ -6,7 +6,10 @@
     <body>
         <script src="/socket.io/socket.io.js"></script>
         <script src='js/indexConnect.js'></script>
-        <%- include("include/showTable") %>
-        <p><b>Weather: </b><span id='weather'><%= data.weather %></span></p>
+        <div id="content">
+            <%- include("include/showTable") %>
+            <p><b>Weather: </b><span id='weather'><%= data.weather %></span></p>
+        </div>
+        <div id="login"><a href="/login">Login as editor</a></div>
     </body>
 </html>

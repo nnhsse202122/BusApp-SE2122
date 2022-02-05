@@ -15,6 +15,10 @@ router.get("/admin", (req: Request, res: Response) => {
     res.render("admin", {data: read()});
 });
 
+router.get("/login", (req: Request, res: Response) => {
+    res.render("login");
+});
+
 // Post request to update bus information. 
 // Writes to data file with the information provided by the form then redirects back to admin
 router.post("/api/save", (req: Request, res: Response) => {

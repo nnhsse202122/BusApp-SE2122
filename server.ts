@@ -36,7 +36,6 @@ io.of('/admin').on("connection",(socket)=>{
 })
 
 
-
 app.set("view engine", "ejs");
 
 app.use(bodyParser.urlencoded({extended: true}));
