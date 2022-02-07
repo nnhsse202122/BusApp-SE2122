@@ -104,13 +104,3 @@ textarea{
     width: 75%;
 }
 
-textarea:focus{
-    background-color: #aaa; 
-}
-
-#weatherDiv{
-    position:relative;
-    left: 12.5%; 
-    /* margin-top: 1%; */
-
-}

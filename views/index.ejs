@@ -1,16 +1,21 @@
 <html>
     <head>
         <title>Home</title>
-        <link rel="stylesheet" href="/css/style.css">
+        <link rel="stylesheet" href="/css/studentView.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Comfortaa&display=swap" rel="stylesheet">
     </head>
     <body>
-        <p><b>Weather: </b><span id='weather'><%= data.weather %></span></p>
+        
         <script src="/socket.io/socket.io.js"></script>
         <script src='js/indexConnect.js'></script>
-        <%- include("include/showTable") %>
+        <div id='flexContainer'>
+            <%- include("include/showTable") %>
+            <div id='weatherDiv'>
+                <p id="weatherP"><b>Weather: </b><span id='weather'><%= data.weather %></span></p>
+            </div>
+        </div>
         
     </body>
 </html>
