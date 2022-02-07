@@ -35,7 +35,7 @@ socket.on('update',(data)=>{
             var busChange = document.createElement('td');
             busChange.innerHTML = bus.change;
             var busArrival = document.createElement('td');
-            busArrival.innerHTML = bus.bus.arrival;
+            busArrival.innerHTML = bus.arrival;
             var busStatus = document.createElement('td');
             busStatus.innerHTML = bus.status;
             busRow.appendChild(busNumber);
