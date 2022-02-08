@@ -16,7 +16,7 @@ td {
 table {
     /* margin: auto; */
     width: 75%;
-    height: 500px;
+    /* height: 500px; */
     border-collapse: collapse;
 }
 tr:nth-child(odd){
@@ -27,7 +27,7 @@ tr:nth-child(even) {
 }
 
 tr{
-    height: 70px;
+    height: 100px;
 }
 
 col{
@@ -70,10 +70,8 @@ select{
 
 
 #weatherDiv{
-    position:relative;
-    left: 12.5%; 
-    width: 75%;
-    margin: 0;
+   
+    width:75%;
 }
 #flexContainer{
     width:100%;
@@ -83,3 +81,4 @@ select{
     justify-content: flex-start;
     align-items: center;
 }
+
