@@ -2,6 +2,7 @@ import express, {Application, Request, Response} from "express";
 import {router} from "./server/router";
 import path from "path";
 import bodyParser from "body-parser";
+const cookieParser = require("cookie-parser");
 import {createServer} from "http";
 import {Server} from "socket.io";
 import {read, write} from "./server/ymlController";
@@ -39,6 +40,7 @@ io.of('/admin').on("connection",(socket)=>{
 app.set("view engine", "ejs");
 
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookieParser());
 
 app.use("/", router);
 

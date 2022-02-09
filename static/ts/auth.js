@@ -1,14 +1,16 @@
-import { gapi } from "gapi-script";
-let auth2;
 gapi.load("auth2", () => {
-    let auth2 = gapi.auth2.init({
-        client_id: "245771948528-c31us1t1k3l0tpmlcm2kq8jd33jmd6rj.apps.googleusercontent.com"
+    auth2 = gapi.auth2.init({
+        client_id: "319647294384-m93pfm59lb2i07t532t09ed5165let11.apps.googleusercontent.com"
     });
-});
-gapi.signin2.render("login-btn", {
-    "scope": "profile email",
-    "width": 240,
-    "height": 50,
-    "longtitle": true,
-    "theme": "dark"
+    gapi.signin2.render("login-btn", {
+        "scope": "profile email",
+        "width": 240,
+        "height": 50,
+        "longtitle": true,
+        "theme": "dark",
+        "onsuccess": (user) => {
+            document.cookie = `token=${user.getAuthResponse().id_token}`;
+            window.location.replace("/admin");
+        }
+    });
 });

@@ -1,14 +1,20 @@
-import yaml from "js-yaml";
-import fs from "fs";
-import path from "path";
-const filepath = path.resolve(__dirname, "../data/busData.yml");
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.readWhitelist = exports.write = exports.read = void 0;
+const js_yaml_1 = __importDefault(require("js-yaml"));
+const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
+const filepath = path_1.default.resolve(__dirname, "../data/busData.yml");
 // Load data file. If no file exists creates one
-export function read() {
+function read() {
     // Checks if datafile exists
-    if (!fs.existsSync(filepath)) {
+    if (!fs_1.default.existsSync(filepath)) {
         // Creates a data directory if none exists
-        if (!fs.existsSync(path.resolve(__dirname, "../data"))) {
-            fs.mkdirSync(path.resolve(__dirname, "../data"));
+        if (!fs_1.default.existsSync(path_1.default.resolve(__dirname, "../data"))) {
+            fs_1.default.mkdirSync(path_1.default.resolve(__dirname, "../data"));
         }
         const data = `buses:
 -
@@ -17,12 +23,13 @@ export function read() {
     status: 'NOT HERE'
 weather: ''`;
         // Creates data file
-        fs.writeFileSync(filepath, data);
+        fs_1.default.writeFileSync(filepath, data);
     }
-    return yaml.load(fs.readFileSync(filepath, "utf-8"));
+    return js_yaml_1.default.load(fs_1.default.readFileSync(filepath, "utf-8"));
 }
+exports.read = read;
 // Writes to data file bus first formating the arrays provided by the form and then combining it with weather
-export function write(data) {
+function write(data) {
     const buses = [];
     // In case of one bus
     if (typeof data.busNumber === "string" &&
@@ -36,5 +43,10 @@ export function write(data) {
             buses.push({ number: data.busNumber[i], change: data.busChange[i], status: data.busStatus[i] });
         }
     }
-    fs.writeFileSync(filepath, yaml.dump({ buses: buses, weather: data.weather }));
+    fs_1.default.writeFileSync(filepath, js_yaml_1.default.dump({ buses: buses, weather: data.weather }));
 }
+exports.write = write;
+function readWhitelist() {
+    return js_yaml_1.default.load(fs_1.default.readFileSync(path_1.default.resolve(__dirname, "../data/whitelist.yml"), "utf-8"));
+}
+exports.readWhitelist = readWhitelist;

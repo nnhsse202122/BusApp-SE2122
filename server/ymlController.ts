@@ -51,3 +51,6 @@ export function write(data: {
     fs.writeFileSync(filepath, yaml.dump({buses: buses, weather: data.weather}));
 }
 
+export function readWhitelist() {
+    return <{users: string[]}> yaml.load(fs.readFileSync(path.resolve(__dirname, "../data/whitelist.yml"), "utf-8"));
+}
