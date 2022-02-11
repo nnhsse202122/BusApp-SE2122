@@ -17,26 +17,49 @@ const express_1 = __importDefault(require("express"));
 const google_auth_library_1 = require("google-auth-library");
 const ymlController_1 = require("./ymlController");
 exports.router = express_1.default.Router();
-const oAuth2 = new google_auth_library_1.OAuth2Client("319647294384-m93pfm59lb2i07t532t09ed5165let11.apps.googleusercontent.com");
+const CLIENT_ID = "319647294384-m93pfm59lb2i07t532t09ed5165let11.apps.googleusercontent.com";
+const oAuth2 = new google_auth_library_1.OAuth2Client(CLIENT_ID);
 // Homepage. This is where students will view bus information from. 
 // Reads from data file and displays data
 exports.router.get("/", (req, res) => {
     res.render("index", { data: (0, ymlController_1.read)() });
 });
+exports.router.post("/auth/v1/google", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let { token } = req.body; //get the token from the request body
+    let ticket = yield oAuth2.verifyIdToken({
+        idToken: token,
+        audience: CLIENT_ID
+    });
+    let email = ticket.getPayload().email; //get the user data we care about from the id_token
+    req.session.userEmail = email;
+    if ((0, ymlController_1.readWhitelist)().users.includes(email)) {
+        let user = { isAdmin: true };
+        res.status(201);
+        res.json(user);
+    }
+    else {
+        let user = { isAdmin: false };
+        res.status(201);
+        res.json(user);
+    }
+}));
 // Admin page. This is where bus information can be updated from
 // Reads from data file and displays data
 exports.router.get("/admin", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    if (!req.cookies.token) {
+    if (req.session.userEmail) {
+        if ((0, ymlController_1.readWhitelist)().users.includes(req.session.userEmail)) {
+            req.user = { isAdmin: true };
+        }
+        else {
+            req.user = { isAdmin: false };
+        }
+    }
+    console.log(req.session.userEmail, req.user);
+    if (!req.session.userEmail || !req.user || !req.user.isAdmin) {
         res.redirect("/login");
         return;
     }
-    const ticket = yield oAuth2.verifyIdToken({ idToken: req.cookies.token });
-    if ((0, ymlController_1.readWhitelist)().users.includes(ticket.getPayload().email)) {
-        res.render("admin", { data: (0, ymlController_1.read)() });
-    }
-    else {
-        res.render("unauthorized");
-    }
+    res.render("admin", { data: (0, ymlController_1.read)() });
 }));
 exports.router.get("/login", (req, res) => {
     res.render("login");

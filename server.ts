@@ -8,9 +8,16 @@ import {Server} from "socket.io";
 import {read, write} from "./server/ymlController";
 
 
+
+
 const app: Application = express();
 const httpServer = createServer(app);
 const io  = new Server(httpServer);
+
+// !!! don't know how to do this in typescript....
+let session = require('express-session');
+app.use(session({secret: "Shh, its a secret!"})); //REPLACE THE SECRET WITH SOMETHING SECURE LATER
+
 
 const PORT = process.env.PORT || 3000;
 

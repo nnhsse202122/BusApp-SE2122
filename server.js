@@ -14,6 +14,9 @@ const ymlController_1 = require("./server/ymlController");
 const app = (0, express_1.default)();
 const httpServer = (0, http_1.createServer)(app);
 const io = new socket_io_1.Server(httpServer);
+// !!! don't know how to do this in typescript....
+let session = require('express-session');
+app.use(session({ secret: "Shh, its a secret!" })); //REPLACE THE SECRET WITH SOMETHING SECURE LATER
 const PORT = process.env.PORT || 3000;
 //root socket
 io.of('/main').on("connection", (socket) => {
