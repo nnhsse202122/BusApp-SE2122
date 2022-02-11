@@ -34,21 +34,27 @@ router.post("/auth/v1/google", async (req: Request, res: Response) => { //login.
     }
 })
 
+
 // Admin page. This is where bus information can be updated from
 // Reads from data file and displays data
 router.get("/admin", async (req: Request, res: Response) => {
-    if (!req.cookies.token) {
+    if(req.session.userEmail) {
+        if (readWhitelist().users.includes(req.session.userEmail)) {
+            req.user = {isAdmin: true};
+        }
+        else {
+            req.user = {isAdmin: false};
+        }
+    }
+    console.log(req.session.userEmail,req.user);
+    if (!req.session.userEmail || !req.user || !req.user.isAdmin) {
         res.redirect("/login");
         return;
     }
-    const ticket = await oAuth2.verifyIdToken({idToken: req.cookies.token});
-    if (readWhitelist().users.includes(<string> (<TokenPayload> ticket.getPayload()).email)) {
-        res.render("admin", {data: read()});
-    }
-    else {
-        res.render("unauthorized");
-    }
+
+    res.render("admin", {data: read()});
 });
+
 
 router.get("/login", (req: Request, res: Response) => {
     res.render("login");
