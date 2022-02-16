@@ -1,23 +1,28 @@
 "use strict";
+// Adds a new bus to the admin table
 function addBus() {
     const table = document.getElementById("table");
+    // Adds table row and cells
     const row = table.insertRow(1);
     const busNumber = row.insertCell(0);
     const busChange = row.insertCell(1);
     const busStatus = row.insertCell(2);
     const deleteBus = row.insertCell(3);
     deleteBus.setAttribute("class", "deleteBus");
+    // Creates input element for bus number and adds it to the first cell
     const numberInput = document.createElement("input");
     numberInput.setAttribute("class", "tableInput");
     numberInput.setAttribute("type", "number");
     numberInput.setAttribute("name", "busNumber");
     numberInput.setAttribute("required", "");
     busNumber.appendChild(numberInput);
+    // Creates input element for bus change and adds it to the second cell
     const changeInput = document.createElement("input");
     changeInput.setAttribute("class", "tableInput");
     changeInput.setAttribute("type", "number");
     changeInput.setAttribute("name", "busChange");
     busChange.appendChild(changeInput);
+    // Creates select element for bus status and adds it to the third cell
     const statusSelect = document.createElement("select");
     statusSelect.setAttribute("name", "busStatus");
     ["NOT HERE", "HERE", "LOADING", "GONE"].forEach((status) => {
@@ -26,11 +31,13 @@ function addBus() {
         statusSelect.appendChild(option);
     });
     busStatus.appendChild(statusSelect);
+    // Creates delete button and adds it to the fourth cell
     const deleteIcon = document.createElement("i");
     deleteIcon.setAttribute("class", "fas fa-times");
     deleteIcon.setAttribute("onclick", "removeBus(this)");
     deleteBus.appendChild(deleteIcon);
 }
+// Deletes a bus from the admin table
 function removeBus(icon) {
     icon.parentElement.parentElement.remove();
 }
