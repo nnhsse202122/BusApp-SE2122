@@ -5,8 +5,9 @@ function addBus() {
     const row = table.insertRow(1);
     const busNumber = row.insertCell(0);
     const busChange = row.insertCell(1);
-    const busStatus = row.insertCell(2);
-    const deleteBus = row.insertCell(3);
+    const busArrival = row.insertCell(2);
+    const busStatus = row.insertCell(3);
+    const deleteBus = row.insertCell(4);
     deleteBus.setAttribute("class", "deleteBus");
 
     // Creates input element for bus number and adds it to the first cell
@@ -24,7 +25,14 @@ function addBus() {
     changeInput.setAttribute("name", "busChange");
     busChange.appendChild(changeInput);
     
-    // Creates select element for bus status and adds it to the third cell
+    // Creates input element for bus arrival and adds it to the third cell
+    const arrivalInput = document.createElement("input");
+    arrivalInput.setAttribute("class", "tableInput");
+    arrivalInput.setAttribute("type", "text");
+    arrivalInput.setAttribute("name", "busArrival");
+    busArrival.appendChild(arrivalInput);
+    
+    // Creates select element for bus status and adds it to the forth cell
     const statusSelect = document.createElement("select");
     statusSelect.setAttribute("name", "busStatus");
     ["NOT HERE", "HERE", "LOADING", "GONE"].forEach((status) => {
