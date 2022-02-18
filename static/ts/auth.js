@@ -11,8 +11,7 @@ gapi.load("auth2", () => {
             console.log("error with login prompt:", e); //if there is an error (eg. closed the prompt, something else went wrong) log it and don't continue
             return;
         }
-
-        let res = await fetch("/auth/v1/google", { //send the googleUser's id_token which has all the data we want to the server with a POST request
+        await fetch("/auth/v1/google", { //send the googleUser's id_token which has all the data we want to the server with a POST request
             method: "POST",
             body: JSON.stringify({
                 token: googleUser.getAuthResponse().id_token
@@ -20,13 +19,8 @@ gapi.load("auth2", () => {
             headers: {
                 "Content-Type": "application/json"
             }
-        })
-        var user = await res.json();
-
-        if (user.isAdmin) {
-            window.location = "/admin";
-        } else{
-            window.location = "/unauthorized";
-        }
+        });
+        console.log(3);
+        window.location = "/admin";
     }
 });

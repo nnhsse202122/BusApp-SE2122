@@ -39,6 +39,7 @@ io.of('/admin').on("connection", (socket) => {
 });
 app.set("view engine", "ejs");
 app.use(body_parser_1.default.urlencoded({ extended: true }));
+app.use(body_parser_1.default.json());
 app.use(cookieParser());
 app.use("/", router_1.router);
 app.use("/css", express_1.default.static(path_1.default.resolve(__dirname, "static/css")));

@@ -25,41 +25,35 @@ exports.router.get("/", (req, res) => {
     res.render("index", { data: (0, ymlController_1.read)() });
 });
 exports.router.post("/auth/v1/google", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let { token } = req.body; //get the token from the request body
+    let token = req.body.token; //get the token from the request body
     let ticket = yield oAuth2.verifyIdToken({
         idToken: token,
         audience: CLIENT_ID
     });
-    let email = ticket.getPayload().email; //get the user data we care about from the id_token
-    req.session.userEmail = email;
-    if ((0, ymlController_1.readWhitelist)().users.includes(email)) {
-        let user = { isAdmin: true };
-        res.status(201);
-        res.json(user);
-    }
-    else {
-        let user = { isAdmin: false };
-        res.status(201);
-        res.json(user);
-    }
+    req.session.userEmail = ticket.getPayload().email;
+    console.log("here");
+    console.log(req.session.userEmail);
 }));
+function authorize(req) {
+    // Gives user admin privledges if they are in the whitelist
+    req.session.isAdmin = (0, ymlController_1.readWhitelist)().users.includes(req.session.userEmail);
+}
 // Admin page. This is where bus information can be updated from
 // Reads from data file and displays data
 exports.router.get("/admin", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    if (req.session.userEmail) {
-        if ((0, ymlController_1.readWhitelist)().users.includes(req.session.userEmail)) {
-            req.user = { isAdmin: true };
-        }
-        else {
-            req.user = { isAdmin: false };
-        }
-    }
-    console.log(req.session.userEmail, req.user);
-    if (!req.session.userEmail || !req.user || !req.user.isAdmin) {
+    console.log(1);
+    if (!req.session.userEmail) {
+        console.log(2);
         res.redirect("/login");
         return;
     }
-    res.render("admin", { data: (0, ymlController_1.read)() });
+    authorize(req);
+    if (req.session.isAdmin) {
+        res.render("admin", { data: (0, ymlController_1.read)() });
+    }
+    else {
+        res.redirect("/unauthroized");
+    }
 }));
 exports.router.get("/login", (req, res) => {
     res.render("login");
