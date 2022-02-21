@@ -2,13 +2,9 @@ import express, {Application, Request, Response} from "express";
 import {router} from "./server/router";
 import path from "path";
 import bodyParser from "body-parser";
-const cookieParser = require("cookie-parser");
 import {createServer} from "http";
 import {Server} from "socket.io";
-import {read, write} from "./server/ymlController";
-
-
-
+import {readData, writeData} from "./server/ymlController";
 
 const app: Application = express();
 const httpServer = createServer(app);
@@ -35,7 +31,7 @@ io.of('/admin').on("connection",(socket)=>{
     //console.log(`new connection on admin (id:${socket.id})`);
     socket.on('update',()=>{
         setTimeout(()=>{
-            io.of('/main').emit('update',read());
+            io.of('/main').emit('update',readData());
         },1000);
     })
     socket.on('debug',(data)=>{
@@ -48,7 +44,6 @@ app.set("view engine", "ejs");
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-app.use(cookieParser());
 
 app.use("/", router);
 

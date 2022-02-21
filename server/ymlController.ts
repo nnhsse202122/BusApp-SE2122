@@ -1,15 +1,15 @@
 import yaml from "js-yaml";
-import fs, { existsSync } from "fs";
 import path from "path";
+import fs, {existsSync} from "fs";
 
-const filepath = path.resolve(__dirname, "../data/busData.yml");
+const dataFile = path.resolve(__dirname, "../data/busData.yml");
 
 type Bus = {number: string, change: string, status: string};
 
 // Load data file. If no file exists creates one
-export function read() {
+export function readData() {
     // Checks if datafile exists
-    if (!fs.existsSync(filepath)) {
+    if (!fs.existsSync(dataFile)) {
         // Creates a data directory if none exists
         if (!fs.existsSync(path.resolve(__dirname, "../data"))) {
             fs.mkdirSync(path.resolve(__dirname, "../data"));
@@ -22,13 +22,13 @@ export function read() {
     status: 'NOT HERE'
 weather: ''`;  
         // Creates data file
-        fs.writeFileSync(filepath, data);
+        fs.writeFileSync(dataFile, data);
     }
-    return <Bus[]> yaml.load(fs.readFileSync(filepath, "utf-8"));
+    return <Bus[]> yaml.load(fs.readFileSync(dataFile, "utf-8"));
 }
 
 // Writes to data file bus first formating the arrays provided by the form and then combining it with weather
-export function write(data: {
+export function writeData(data: {
     busNumber: string | string[], 
     busChange: string | string[], 
     busStatus: string | string[],
@@ -48,9 +48,10 @@ export function write(data: {
             buses.push({number: data.busNumber[i], change: data.busChange[i], status: data.busStatus[i]});
         }    
     }
-    fs.writeFileSync(filepath, yaml.dump({buses: buses, weather: data.weather}));
+    fs.writeFileSync(dataFile, yaml.dump({buses: buses, weather: data.weather}));
 }
 
+// Reads a list of users who are allowed access to the admin page
 export function readWhitelist() {
-    return <{users: string[]}> yaml.load(fs.readFileSync(path.resolve(__dirname, "../data/whitelist.yml"), "utf-8"));
+    return <{admins: string[]}> yaml.load(fs.readFileSync(path.resolve(__dirname, "../data/whitelist.yml"), "utf-8"));
 }

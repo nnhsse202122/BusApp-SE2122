@@ -20,47 +20,47 @@ exports.router = express_1.default.Router();
 const CLIENT_ID = "319647294384-m93pfm59lb2i07t532t09ed5165let11.apps.googleusercontent.com";
 const oAuth2 = new google_auth_library_1.OAuth2Client(CLIENT_ID);
 // Homepage. This is where students will view bus information from. 
-// Reads from data file and displays data
 exports.router.get("/", (req, res) => {
-    res.render("index", { data: (0, ymlController_1.read)() });
+    // Reads from data file and displays data
+    res.render("index", { data: (0, ymlController_1.readData)() });
 });
+// Login page. User authenticates here and then is redirected to admin (where they will be authorized)
+exports.router.get("/login", (req, res) => {
+    res.render("login");
+});
+// Authenticates the user
 exports.router.post("/auth/v1/google", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let token = req.body.token; //get the token from the request body
+    let token = req.body.token; // Gets token from request body
     let ticket = yield oAuth2.verifyIdToken({
         idToken: token,
         audience: CLIENT_ID
     });
-    req.session.userEmail = ticket.getPayload().email;
-    console.log("here");
-    console.log(req.session.userEmail);
+    req.session.userEmail = ticket.getPayload().email; // Store email in session
+    res.status(201).end();
 }));
+// Checks if the user's email is in the whitelist and authorizes accordingly
 function authorize(req) {
-    // Gives user admin privledges if they are in the whitelist
-    req.session.isAdmin = (0, ymlController_1.readWhitelist)().users.includes(req.session.userEmail);
+    req.session.isAdmin = (0, ymlController_1.readWhitelist)().admins.includes(req.session.userEmail);
 }
-// Admin page. This is where bus information can be updated from
-// Reads from data file and displays data
+/* Admin page. This is where bus information can be updated from
+Reads from data file and displays data */
 exports.router.get("/admin", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(1);
+    // If user is not authenticated (email is not is session) redirects to login page
     if (!req.session.userEmail) {
-        console.log(2);
         res.redirect("/login");
         return;
     }
+    // Authorizes user, then either displays admin page or unauthorized page
     authorize(req);
     if (req.session.isAdmin) {
-        res.render("admin", { data: (0, ymlController_1.read)() });
+        res.render("admin", { data: (0, ymlController_1.readData)() });
     }
     else {
-        res.redirect("/unauthroized");
+        res.render("unauthorized");
     }
 }));
-exports.router.get("/login", (req, res) => {
-    res.render("login");
-});
 // Post request to update bus information. 
-// Writes to data file with the information provided by the form then redirects back to admin
 exports.router.post("/api/save", (req, res) => {
-    (0, ymlController_1.write)(req.body);
+    (0, ymlController_1.writeData)(req.body); // Writes to data file
     res.redirect("/admin");
 });

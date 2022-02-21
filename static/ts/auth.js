@@ -2,7 +2,7 @@ gapi.load("auth2", () => {
     auth2 = gapi.auth2.init({
         client_id: "319647294384-m93pfm59lb2i07t532t09ed5165let11.apps.googleusercontent.com"
     });
-    document.querySelector("#google-login").addEventListener("click",doLogin); 
+    document.querySelector("#google-login").addEventListener("click", doLogin); 
 
     async function doLogin() { //add click listener to #google-login button which will do the login
         try {
@@ -20,7 +20,6 @@ gapi.load("auth2", () => {
                 "Content-Type": "application/json"
             }
         });
-        console.log(3);
         window.location = "/admin";
     }
 });

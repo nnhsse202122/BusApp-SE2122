@@ -7,7 +7,6 @@ const express_1 = __importDefault(require("express"));
 const router_1 = require("./server/router");
 const path_1 = __importDefault(require("path"));
 const body_parser_1 = __importDefault(require("body-parser"));
-const cookieParser = require("cookie-parser");
 const http_1 = require("http");
 const socket_io_1 = require("socket.io");
 const ymlController_1 = require("./server/ymlController");
@@ -30,7 +29,7 @@ io.of('/admin').on("connection", (socket) => {
     //console.log(`new connection on admin (id:${socket.id})`);
     socket.on('update', () => {
         setTimeout(() => {
-            io.of('/main').emit('update', (0, ymlController_1.read)());
+            io.of('/main').emit('update', (0, ymlController_1.readData)());
         }, 1000);
     });
     socket.on('debug', (data) => {
@@ -40,7 +39,7 @@ io.of('/admin').on("connection", (socket) => {
 app.set("view engine", "ejs");
 app.use(body_parser_1.default.urlencoded({ extended: true }));
 app.use(body_parser_1.default.json());
-app.use(cookieParser());
+// app.use(cookieParser());
 app.use("/", router_1.router);
 app.use("/css", express_1.default.static(path_1.default.resolve(__dirname, "static/css")));
 app.use("/js", express_1.default.static(path_1.default.resolve(__dirname, "static/ts")));
