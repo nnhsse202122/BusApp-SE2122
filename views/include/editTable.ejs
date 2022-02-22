@@ -2,6 +2,7 @@
     <tr>
         <th>Bus Number</th>
         <th>Bus Change</th>
+        <th>Bus Arrived</th>
         <th>Status</th>
         <th class="deleteBus"></th>
     </tr>
@@ -9,6 +10,7 @@
     <tr>
         <td><input class="tableInput" type="number" name="busNumber" value=<%= data.buses[i].number %> required></td>
         <td><input class="tableInput" type="number" name="busChange" value=<%= data.buses[i].change %>></td>
+        <td><input class="tableInput" type="text" name="busArrival" value=<%= data.buses[i].arrival %>></td>
         <td>
             <select name="busStatus">
                 <option value="NOT HERE" <%= data.buses[i].status == "NOT HERE"? "selected" : "" %>>NOT HERE</option>

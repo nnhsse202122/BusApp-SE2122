@@ -20,6 +20,7 @@ function readData() {
 -
     number: ''
     change: ''
+    arrival: ''
     status: 'NOT HERE'
 weather: ''`;
         // Creates data file
@@ -34,13 +35,14 @@ function writeData(data) {
     // In case of one bus
     if (typeof data.busNumber === "string" &&
         typeof data.busChange === "string" &&
+        typeof data.busArrival === "string" &&
         typeof data.busStatus === "string") {
-        buses.push({ number: data.busNumber, change: data.busChange, status: data.busStatus });
+        buses.push({ number: data.busNumber, change: data.busChange, arrival: data.busArrival, status: data.busStatus });
     }
     // In case of multiple buses
     else {
         for (let i = 0; i < data.busNumber.length; i++) {
-            buses.push({ number: data.busNumber[i], change: data.busChange[i], status: data.busStatus[i] });
+            buses.push({ number: data.busNumber[i], change: data.busChange[i], arrival: data.busArrival[i], status: data.busStatus[i] });
         }
     }
     fs_1.default.writeFileSync(dataFile, js_yaml_1.default.dump({ buses: buses, weather: data.weather }));
