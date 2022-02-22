@@ -10,12 +10,10 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const http_1 = require("http");
 const socket_io_1 = require("socket.io");
 const ymlController_1 = require("./server/ymlController");
+const express_session_1 = __importDefault(require("express-session"));
 const app = (0, express_1.default)();
 const httpServer = (0, http_1.createServer)(app);
 const io = new socket_io_1.Server(httpServer);
-// !!! don't know how to do this in typescript....
-let session = require('express-session');
-app.use(session({ secret: "Shh, its a secret!" })); //REPLACE THE SECRET WITH SOMETHING SECURE LATER
 const PORT = process.env.PORT || 3000;
 //root socket
 io.of('/main').on("connection", (socket) => {
@@ -36,11 +34,15 @@ io.of('/admin').on("connection", (socket) => {
         //console.log(`debug(admin): ${data}`);
     });
 });
-app.set("view engine", "ejs");
-app.use(body_parser_1.default.urlencoded({ extended: true }));
-app.use(body_parser_1.default.json());
-// app.use(cookieParser());
-app.use("/", router_1.router);
+app.set("view engine", "ejs"); // Allows res.render() to render ejs
+app.use((0, express_session_1.default)({
+    secret: "KQdqLPDjaGUWPXFKZrEGYYANxsxPvFMwGYpAtLjCCcN",
+    resave: true,
+    saveUninitialized: true
+})); // Allows use of req.session
+app.use(body_parser_1.default.urlencoded({ extended: true })); // Allows html forms to be accessed with req.body
+app.use(body_parser_1.default.json()); // Allows use of json format for req.body
+app.use("/", router_1.router); // Imports routes from server/router.ts
 app.use("/css", express_1.default.static(path_1.default.resolve(__dirname, "static/css")));
 app.use("/js", express_1.default.static(path_1.default.resolve(__dirname, "static/ts")));
 httpServer.listen(PORT, () => { console.log(`Server is running on port ${PORT}`); });

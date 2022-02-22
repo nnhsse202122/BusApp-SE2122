@@ -35,7 +35,11 @@ io.of('/admin').on("connection",(socket)=>{
 })
 
 app.set("view engine", "ejs"); // Allows res.render() to render ejs
-app.use(session({secret: "Shh, its a secret!"})); // Allows use of req.session
+app.use(session({
+    secret: "KQdqLPDjaGUWPXFKZrEGYYANxsxPvFMwGYpAtLjCCcN",
+    resave: true,
+    saveUninitialized: true
+})); // Allows use of req.session
 app.use(bodyParser.urlencoded({extended: true})); // Allows html forms to be accessed with req.body
 app.use(bodyParser.json()); // Allows use of json format for req.body
 
