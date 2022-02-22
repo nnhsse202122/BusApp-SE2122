@@ -48,3 +48,23 @@ function addBus() {
 function removeBus(icon) {
     icon.parentElement.parentElement.remove();
 }
+function statusChange(dropDown) {
+    const tr = dropDown.parentElement.parentElement;
+    const busArrival = tr.querySelector(`input[name="busArrival"]`);
+    if (dropDown.value == "NOT HERE") {
+        busArrival.value = "";
+        return;
+    }
+    const date = new Date();
+    let hour = parseInt(date.toTimeString().substring(0, 3));
+    let minute = date.toTimeString().substring(3, 5);
+    let effix;
+    if (hour > 12) {
+        hour -= 12;
+        effix = "pm";
+    }
+    else {
+        effix = "am";
+    }
+    busArrival.value = `${hour}:${minute}${effix}`;
+}
