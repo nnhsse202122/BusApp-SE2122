@@ -40,6 +40,7 @@ function addBus() {
         option.innerHTML = status;
         statusSelect.appendChild(option);
     });
+    statusSelect.setAttribute("onchange", "statusChange(this)");
     busStatus.appendChild(statusSelect);
 
     // Creates delete button and adds it to the fourth cell
@@ -59,18 +60,19 @@ function statusChange(dropDown: HTMLSelectElement) {
     const busArrival = <HTMLInputElement> tr.querySelector(`input[name="busArrival"]`);
     if (dropDown.value == "NOT HERE") {
         busArrival.value = "";
-        return;
     }
-    const date = new Date();
-    let hour = parseInt(date.toTimeString().substring(0, 3));
-    let minute = date.toTimeString().substring(3, 5);
-    let effix: string;
-    if (hour > 12)  {
-        hour -= 12;
-        effix = "pm";
-    }    
-    else {
-        effix = "am";
+    else if (dropDown.value == "HERE") {
+        const date = new Date();
+        let hour = parseInt(date.toTimeString().substring(0, 3));
+        let minute = date.toTimeString().substring(3, 5);
+        let effix: string;
+        if (hour > 12)  {
+            hour -= 12;
+            effix = "pm";
+        }    
+        else {
+            effix = "am";
+        }
+        busArrival.value = `${hour}:${minute}${effix}`;    
     }
-    busArrival.value = `${hour}:${minute}${effix}`;
 }
