@@ -1,23 +1,60 @@
 import express, {Request, Response} from "express";
-import {read, write} from "./ymlController";
+import {OAuth2Client, TokenPayload} from "google-auth-library";
+import {readData, writeData, readWhitelist} from "./ymlController";
 
 export const router = express.Router();
 
+const CLIENT_ID = "319647294384-m93pfm59lb2i07t532t09ed5165let11.apps.googleusercontent.com"
+const oAuth2 = new OAuth2Client(CLIENT_ID);
+
 // Homepage. This is where students will view bus information from. 
-// Reads from data file and displays data
 router.get("/", (req: Request, res: Response) => {
-    res.render("index", {data: read()});
+    // Reads from data file and displays data
+    res.render("index", {data: readData()});
 });
 
-// Admin page. This is where bus information can be updated from
-// Reads from data file and displays data
-router.get("/admin", (req: Request, res: Response) => {
-    res.render("admin", {data: read()});
+// Login page. User authenticates here and then is redirected to admin (where they will be authorized)
+router.get("/login", (req: Request, res: Response) => {
+    res.render("login");
+});
+
+// Authenticates the user
+router.post("/auth/v1/google", async (req: Request, res: Response) => {
+    let token = req.body.token; // Gets token from request body
+    let ticket = await oAuth2.verifyIdToken({ // Verifies and decodes token
+        idToken: token,
+        audience: CLIENT_ID
+    });
+    req.session!.userEmail = <string> (<TokenPayload> ticket.getPayload()).email; // Store email in session
+    res.status(201).end();
+});
+
+// Checks if the user's email is in the whitelist and authorizes accordingly
+function authorize(req: Request) {
+    req.session!.isAdmin = readWhitelist().admins.includes(req.session!.userEmail); 
+}
+
+/* Admin page. This is where bus information can be updated from
+Reads from data file and displays data */
+router.get("/admin", async (req: Request, res: Response) => {
+    // If user is not authenticated (email is not is session) redirects to login page
+    if (!req.session!.userEmail) {
+        res.redirect("/login");
+        return;
+    }
+    
+    // Authorizes user, then either displays admin page or unauthorized page
+    authorize(req);
+    if (req.session!.isAdmin) {
+        res.render("admin", {data: readData()});
+    }
+    else {
+        res.render("unauthorized");
+    }
 });
 
 // Post request to update bus information. 
-// Writes to data file with the information provided by the form then redirects back to admin
 router.post("/api/save", (req: Request, res: Response) => {
-    write(req.body);
+    writeData(req.body); // Writes to data file
     res.redirect("/admin");
 });
