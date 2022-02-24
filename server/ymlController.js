@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.write = exports.read = void 0;
+exports.writeBuses = exports.write = exports.read = void 0;
 const js_yaml_1 = __importDefault(require("js-yaml"));
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
@@ -48,3 +48,7 @@ function write(data) {
     fs_1.default.writeFileSync(filepath, js_yaml_1.default.dump({ buses: buses, weather: data.weather }));
 }
 exports.write = write;
+function writeBuses(data) {
+    fs_1.default.writeFileSync(filepath, js_yaml_1.default.dump({ buses: data, weather: '' }));
+}
+exports.writeBuses = writeBuses;

@@ -7,13 +7,14 @@
     <body>
         <script src="/js/manageBuses.js"></script>
         <script src="/socket.io/socket.io.js"></script>
-        <script src='js/adminConnect.js'></script>
-        <script src="js/formVerification.js"></script>
+        
         <form id='form' action="/api/save" method="post" onsubmit="updateStudents(); return verifyForm()">
             <button type="submit" >Save</button>
             <button type="button" onclick="addBus()">Add Bus</button>
             <%- include("include/editTable") %>
             <textarea name="weather" placeholder="Enter the current weather conditions here: "><%= data.weather %> </textarea>
         </form>
+        <script src='js/adminConnect.js'></script>
+        <script src="js/formVerification.js"></script>
     </body>
 </html>

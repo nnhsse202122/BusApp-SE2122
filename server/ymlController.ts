@@ -53,4 +53,6 @@ export function write(data: {
     }
     fs.writeFileSync(filepath, yaml.dump({buses: buses, weather: data.weather}));
 }
-
+export function writeBuses(data: Bus[]){
+    fs.writeFileSync(filepath, yaml.dump({buses: data, weather: ''}));
+}
