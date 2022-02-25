@@ -1,0 +1,5 @@
+weather:
+  status: Overcast
+  icon: //cdn.weatherapi.com/weather/64x64/day/122.png
+  temperature: 25
+  real_feel: 14.2

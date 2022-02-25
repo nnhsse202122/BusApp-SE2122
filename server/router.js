@@ -61,6 +61,6 @@ exports.router.get("/admin", (req, res) => __awaiter(void 0, void 0, void 0, fun
 }));
 // Post request to update bus information. 
 exports.router.post("/api/save", (req, res) => {
-    (0, ymlController_1.writeData)(req.body); // Writes to data file
+    (0, ymlController_1.writeBuses)(req.body); // Writes to data file
     res.redirect("/admin");
 });

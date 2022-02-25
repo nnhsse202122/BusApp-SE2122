@@ -1,6 +1,6 @@
 import express, {Request, Response} from "express";
 import {OAuth2Client, TokenPayload} from "google-auth-library";
-import {readData, writeData, readWhitelist} from "./ymlController";
+import {readData, writeBuses, readWhitelist} from "./ymlController";
 
 export const router = express.Router();
 
@@ -55,6 +55,6 @@ router.get("/admin", async (req: Request, res: Response) => {
 
 // Post request to update bus information. 
 router.post("/api/save", (req: Request, res: Response) => {
-    writeData(req.body); // Writes to data file
+    writeBuses(req.body); // Writes to data file
     res.redirect("/admin");
 });

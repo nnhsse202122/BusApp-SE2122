@@ -4,8 +4,9 @@ import path from "path";
 import bodyParser from "body-parser";
 import {createServer} from "http";
 import {Server} from "socket.io";
-import {readData, writeData} from "./server/ymlController";
+import {readData, writeBuses, writeWeather} from "./server/ymlController";
 import session from "express-session";
+import fetch from "node-fetch"
 
 const app: Application = express();
 const httpServer = createServer(app);
@@ -47,5 +48,29 @@ app.use("/", router); // Imports routes from server/router.ts
 
 app.use("/css", express.static(path.resolve(__dirname, "static/css")));
 app.use("/js", express.static(path.resolve(__dirname, "static/ts")));
+
+// async function getWeather() {
+//     const res = await fetch("http://api.weatherapi.com/v1/current.json", {
+//         method: "POST",
+//         headers: {
+//             "Content-Type": "application/json"
+//         },
+//         body: JSON.stringify({
+//             key: "8afcf03c285047a1b6e201401222202",
+//             q: 60540
+//         })
+//     });
+//     console.log(res);
+// }
+async function getWeather() {
+    const res = await fetch("http://api.weatherapi.com/v1/current.json?" 
+        + new URLSearchParams([["key", "8afcf03c285047a1b6e201401222202"], ["q", "60540"]]
+    ));
+    writeWeather((await res.json()));
+}
+getWeather();
+setInterval(getWeather, 300000);
+
+
 
 httpServer.listen(PORT, () => {console.log(`Server is running on port ${PORT}`)});
