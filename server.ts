@@ -4,15 +4,15 @@ import path from "path";
 import bodyParser from "body-parser";
 import {createServer} from "http";
 import {Server} from "socket.io";
-import {read, write, writeBuses} from "./server/ymlController";
-
+import {readData, writeBuses, writeWeather} from "./server/ymlController";
+import session from "express-session";
+import fetch from "node-fetch"
 
 const app: Application = express();
 const httpServer = createServer(app);
 const io  = new Server(httpServer);
 
 const PORT = process.env.PORT || 3000;
-
 
 //root socket
 io.of('/main').on("connection",(socket)=>{
@@ -42,15 +42,29 @@ io.of('/admin').on("connection",(socket)=>{
     })
 })
 
+app.set("view engine", "ejs"); // Allows res.render() to render ejs
+app.use(session({
+    secret: "KQdqLPDjaGUWPXFKZrEGYYANxsxPvFMwGYpAtLjCCcN",
+    resave: true,
+    saveUninitialized: true
+})); // Allows use of req.session
+app.use(bodyParser.urlencoded({extended: true})); // Allows html forms to be accessed with req.body
+app.use(bodyParser.json()); // Allows use of json format for req.body
 
-
-app.set("view engine", "ejs");
-
-app.use(bodyParser.urlencoded({extended: true}));
-
-app.use("/", router);
+app.use("/", router); // Imports routes from server/router.ts
 
 app.use("/css", express.static(path.resolve(__dirname, "static/css")));
 app.use("/js", express.static(path.resolve(__dirname, "static/ts")));
+
+async function getWeather() {
+    const res = await fetch("http://api.weatherapi.com/v1/current.json?" 
+        + new URLSearchParams([["key", "8afcf03c285047a1b6e201401222202"], ["q", "60540"]]
+    ));
+    writeWeather((await res.json()));
+}
+getWeather();
+setInterval(getWeather, 300000);
+
+
 
 httpServer.listen(PORT, () => {console.log(`Server is running on port ${PORT}`)});

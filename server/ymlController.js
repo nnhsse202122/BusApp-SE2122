@@ -4,33 +4,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.writeBuses = exports.write = exports.read = void 0;
+exports.readWhitelist = exports.writeWeather = exports.writeBuses = exports.readData = void 0;
 const js_yaml_1 = __importDefault(require("js-yaml"));
-const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
-const filepath = path_1.default.resolve(__dirname, "../data/busData.yml");
+const fs_1 = __importDefault(require("fs"));
+const busesDatafile = path_1.default.resolve(__dirname, "../data/buses.yml");
+const defaultBusesDatafile = path_1.default.resolve(__dirname, "../data/defaultBuses.txt");
+const weatherDatafile = path_1.default.resolve(__dirname, "../data/weather.yml");
+const defaultWeatherDatafile = path_1.default.resolve(__dirname, "../data/defaultWeather.txt");
+const whitelist = path_1.default.resolve(__dirname, "../data/whitelist.yml");
 // Load data file. If no file exists creates one
-function read() {
-    // Checks if datafile exists
-    if (!fs_1.default.existsSync(filepath)) {
-        // Creates a data directory if none exists
-        if (!fs_1.default.existsSync(path_1.default.resolve(__dirname, "../data"))) {
-            fs_1.default.mkdirSync(path_1.default.resolve(__dirname, "../data"));
-        }
-        const data = `buses:
--
-    number: ''
-    change: ''
-    arrival: ''
-    status: 'NOT HERE'
-weather: ''`;
-        // Creates data file
-        fs_1.default.writeFileSync(filepath, data);
+function readData() {
+    // Makes data files if they don't exist
+    if (!fs_1.default.existsSync(busesDatafile)) {
+        fs_1.default.writeFileSync(busesDatafile, fs_1.default.readFileSync(defaultBusesDatafile));
     }
-    return js_yaml_1.default.load(fs_1.default.readFileSync(filepath, "utf-8"));
+    if (!fs_1.default.existsSync(weatherDatafile)) {
+        fs_1.default.writeFileSync(weatherDatafile, fs_1.default.readFileSync(defaultWeatherDatafile));
+    }
+    const buses = js_yaml_1.default.load(fs_1.default.readFileSync(busesDatafile, "utf-8"));
+    const weather = js_yaml_1.default.load(fs_1.default.readFileSync(weatherDatafile, "utf-8"));
+    return Object.assign(Object.assign({}, buses), weather);
 }
-exports.read = read;
+exports.readData = readData;
 // Writes to data file bus first formating the arrays provided by the form and then combining it with weather
-function write(data) {
+function writeBuses(data) {
     const buses = [];
     // In case of one bus
     if (typeof data.busNumber === "string" &&
@@ -45,10 +43,26 @@ function write(data) {
             buses.push({ number: data.busNumber[i], change: data.busChange[i], arrival: data.busArrival[i], status: data.busStatus[i] });
         }
     }
-    fs_1.default.writeFileSync(filepath, js_yaml_1.default.dump({ buses: buses, weather: data.weather }));
+    fs_1.default.writeFileSync(busesDatafile, js_yaml_1.default.dump({ buses: buses }));
+}
+exports.writeBuses = writeBuses;
+function writeWeather(weather) {
+    const data = {
+        status: weather.current.condition.text,
+        icon: weather.current.condition.icon,
+        temperature: weather.current.temp_f,
+        real_feel: weather.current.feelslike_f
+    };
+    fs_1.default.writeFileSync(weatherDatafile, js_yaml_1.default.dump({ weather: data }));
+}
+exports.writeWeather = writeWeather;
+// Reads a list of users who are allowed access to the admin page
+function readWhitelist() {
+    return js_yaml_1.default.load(fs_1.default.readFileSync(whitelist, "utf-8"));
 }
 exports.write = write;
 function writeBuses(data) {
     fs_1.default.writeFileSync(filepath, js_yaml_1.default.dump({ buses: data, weather: '' }));
 }
 exports.writeBuses = writeBuses;
+exports.readWhitelist = readWhitelist;
