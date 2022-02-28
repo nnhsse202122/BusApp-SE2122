@@ -7,7 +7,7 @@
         <th class="deleteBus"></th>
     </tr>
 <% for(let i = 0; i < data.buses.length; i++) { %> 
-    <tr>
+    <tr id=<%= 'bus_'+data.buses[i].number%>>
         <td><input class="tableInput" type="number" name="busNumber" value=<%= data.buses[i].number %> required></td>
         <td><input class="tableInput" type="number" name="busChange" value=<%= data.buses[i].change %>></td>
         <td><input class="tableInput" type="text" name="busArrival" value=<%= data.buses[i].arrival %>></td>

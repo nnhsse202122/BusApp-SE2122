@@ -34,6 +34,7 @@ io.of('/admin').on("connection",(socket)=>{
         writeBuses(buses);
         setTimeout(()=>{
             io.of('/main').emit('update',read());
+            socket.broadcast.emit('recieve',read());
         },1000);
     })
     socket.on('debug',(data)=>{
