@@ -7,15 +7,17 @@
         <link href="https://fonts.googleapis.com/css2?family=Comfortaa&display=swap" rel="stylesheet">
     </head>
     <body>
-        
-        <script src="/socket.io/socket.io.js"></script>
-        <script src='js/indexConnect.js'></script>
-        <div id='flexContainer'>
+        <div id="flex-container">
             <%- include("include/showTable") %>
-            <div id='weatherDiv'>
-                <p id="weatherP"><b>Weather: </b><span id='weather'><%= data.weather %></span></p>
+            <div id="weather">
+                <p><%= data.weather.status %> </p>
+                <img src=<%= data.weather.icon %>>
+                <p>Temperature: <%= data.weather.temperature %></p>
+                <p>Real feel: <%= data.weather.real_feel %></p>
             </div>
         </div>
         <div id="login"><a href="/admin">Login as editor</a></div>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src='js/indexConnect.js'></script>
     </body>
 </html>

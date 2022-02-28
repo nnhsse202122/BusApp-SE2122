@@ -14,12 +14,21 @@
                 <button type="button" id="addBus">Add Bus</button>
             </div>
             <%- include("include/editTable") %>
-            <textarea name="weather" placeholder="Enter the current weather conditions here: "><%= data.weather %> </textarea>
+            <div id="weather">
+                <p><%= data.weather.status %> </p>
+                <img src=<%= data.weather.icon %>>
+                <p>Temperature: <%= data.weather.temperature %></p>
+                <p>Real feel: <%= data.weather.real_feel %></p>
+            </div>
         </form>
         <script src="/js/manageBuses.js"></script>
         <script src="/socket.io/socket.io.js"></script>
         <script src='/js/adminConnect.js'></script>
         <script src="/js/formVerification.js"></script>  
         <a href="/">Back to hompage</a>
+        <script src="js/manageBuses.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src='js/adminConnect.js'></script>
+        <script src="js/formVerification.js"></script>
     </body>
 </html>

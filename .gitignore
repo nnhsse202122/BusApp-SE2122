@@ -1,6 +1,5 @@
-data/busData.txt
-data/busData.yml
-
+data/buses.yml
+data/weather.yml
 
 
 # Created by https://www.toptal.com/developers/gitignore/api/node

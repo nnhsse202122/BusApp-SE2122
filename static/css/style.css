@@ -95,7 +95,6 @@ select{
     padding-left: 10px;
     padding-right: 10px;
 }
-
 textarea{
     position: relative;
     left: 12.5%;
@@ -112,5 +111,8 @@ textarea:focus{
     position:relative;
     left: 12.5%; 
     /* margin-top: 1%; */
+}
 
+#weather {
+    border: 2px solid;
 }
