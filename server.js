@@ -34,13 +34,12 @@ io.of('/main').on("connection", (socket) => {
 });
 //admin socket
 io.of('/admin').on("connection", (socket) => {
-    //console.log(`new connection on admin (id:${socket.id})`);
     socket.on('update', (data) => {
-        //console.log(JSON.stringify(data))
         let buses = [];
         for (const k of Object.keys(data)) {
             buses.push(data[k]);
         }
+        console.log(buses);
         (0, ymlController_1.writeBuses)(buses);
         setTimeout(() => {
             io.of('/main').emit('update', (0, ymlController_1.readData)());

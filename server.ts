@@ -24,10 +24,8 @@ io.of('/main').on("connection",(socket)=>{
 
 //admin socket
 io.of('/admin').on("connection",(socket)=>{
-    //console.log(`new connection on admin (id:${socket.id})`);
-    socket.on('update',(data)=>{
-        //console.log(JSON.stringify(data))
-        let buses = []
+    socket.on('update', (data)=>{
+        let buses = [];
         for(const k of Object.keys(data)){
             buses.push(data[k]);
         }
@@ -36,12 +34,12 @@ io.of('/admin').on("connection",(socket)=>{
         setTimeout(()=>{
             io.of('/main').emit('update',readData());
             socket.broadcast.emit('recieve',readData());
-        },1000);
+        }, 1000);
     })
-    socket.on('debug',(data)=>{
+    socket.on('debug', (data)=>{
         console.log(`debug(admin): ${data}`);
-    })
-})
+    });
+});
 
 app.set("view engine", "ejs"); // Allows res.render() to render ejs
 app.use(session({
