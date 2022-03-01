@@ -26,29 +26,29 @@ export function readData() {
 }
 
 // Writes to data file bus first formating the arrays provided by the form and then combining it with weather
-export function writeBuses(data: {
-    busNumber: string | string[], 
-    busChange: string | string[], 
-    busArrival: string | string[],
-    busStatus: string | string[]}
-    ) {
-    const buses: Bus[] = [];
-    // In case of one bus
-    if (typeof data.busNumber === "string" && 
-        typeof data.busChange === "string" && 
-        typeof data.busArrival === "string" && 
-        typeof data.busStatus === "string"
-    ) {
-        buses.push({number: data.busNumber, change: data.busChange, arrival: data.busArrival, status: data.busStatus});
-    }
-    // In case of multiple buses
-    else {
-        for(let i = 0; i < data.busNumber.length; i++) {
-            buses.push({number: data.busNumber[i], change: data.busChange[i], arrival: data.busArrival[i], status: data.busStatus[i]});
-        }    
-    }
-    fs.writeFileSync(busesDatafile, yaml.dump({buses: buses}));
-}
+// export function write(data: {
+//     busNumber: string | string[], 
+//     busChange: string | string[], 
+//     busArrival: string | string[],
+//     busStatus: string | string[]}
+//     ) {
+//     const buses: Bus[] = [];
+//     // In case of one bus
+//     if (typeof data.busNumber === "string" && 
+//         typeof data.busChange === "string" && 
+//         typeof data.busArrival === "string" && 
+//         typeof data.busStatus === "string"
+//     ) {
+//         buses.push({number: data.busNumber, change: data.busChange, arrival: data.busArrival, status: data.busStatus});
+//     }
+//     // In case of multiple buses
+//     else {
+//         for(let i = 0; i < data.busNumber.length; i++) {
+//             buses.push({number: data.busNumber[i], change: data.busChange[i], arrival: data.busArrival[i], status: data.busStatus[i]});
+//         }    
+//     }
+//     fs.writeFileSync(busesDatafile, yaml.dump({buses: buses}));
+// }
 
 export function writeWeather(weather: any) {
     const data: Weather = {
@@ -60,7 +60,7 @@ export function writeWeather(weather: any) {
     fs.writeFileSync(weatherDatafile, yaml.dump({weather: data}));
 }
 export function writeBuses(data: Bus[]){
-    fs.writeFileSync(filepath, yaml.dump({buses: data, weather: ''}));
+    fs.writeFileSync(busesDatafile, yaml.dump({buses: data}));
 }
 
 // Reads a list of users who are allowed access to the admin page

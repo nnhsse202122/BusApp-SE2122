@@ -53,8 +53,8 @@ router.get("/admin", async (req: Request, res: Response) => {
     }
 });
 
-// Post request to update bus information. 
-router.post("/api/save", (req: Request, res: Response) => {
-    writeBuses(req.body); // Writes to data file
-    res.redirect("/admin");
-});
+// // Post request to update bus information. 
+// router.post("/api/save", (req: Request, res: Response) => {
+//     writeBuses(req.body); // Writes to data file
+//     res.redirect("/admin");
+// });

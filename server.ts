@@ -31,10 +31,11 @@ io.of('/admin').on("connection",(socket)=>{
         for(const k of Object.keys(data)){
             buses.push(data[k]);
         }
+        console.log(buses);
         writeBuses(buses);
         setTimeout(()=>{
-            io.of('/main').emit('update',read());
-            socket.broadcast.emit('recieve',read());
+            io.of('/main').emit('update',readData());
+            socket.broadcast.emit('recieve',readData());
         },1000);
     })
     socket.on('debug',(data)=>{

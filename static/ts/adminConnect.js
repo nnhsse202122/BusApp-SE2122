@@ -15,6 +15,7 @@ function pullData(){
 }
 
 function updateStudents(){
+    
     socket.emit('update',pullData());
 }
 function parseBuses(data){

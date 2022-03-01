@@ -44,6 +44,7 @@ io.of('/admin').on("connection", (socket) => {
         (0, ymlController_1.writeBuses)(buses);
         setTimeout(() => {
             io.of('/main').emit('update', (0, ymlController_1.readData)());
+            socket.broadcast.emit('recieve', (0, ymlController_1.readData)());
         }, 1000);
     });
     socket.on('debug', (data) => {
@@ -61,19 +62,6 @@ app.use(body_parser_1.default.json()); // Allows use of json format for req.body
 app.use("/", router_1.router); // Imports routes from server/router.ts
 app.use("/css", express_1.default.static(path_1.default.resolve(__dirname, "static/css")));
 app.use("/js", express_1.default.static(path_1.default.resolve(__dirname, "static/ts")));
-// async function getWeather() {
-//     const res = await fetch("http://api.weatherapi.com/v1/current.json", {
-//         method: "POST",
-//         headers: {
-//             "Content-Type": "application/json"
-//         },
-//         body: JSON.stringify({
-//             key: "8afcf03c285047a1b6e201401222202",
-//             q: 60540
-//         })
-//     });
-//     console.log(res);
-// }
 function getWeather() {
     return __awaiter(this, void 0, void 0, function* () {
         const res = yield (0, node_fetch_1.default)("http://api.weatherapi.com/v1/current.json?"
