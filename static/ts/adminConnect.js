@@ -1,3 +1,4 @@
+
 const socket = io('/admin');
 
 function pullData(){
@@ -15,13 +16,14 @@ function pullData(){
 }
 
 function updateStudents(){
-    
+    // if(verifyForm()){
+    //     socket.emit('update',pullData());
+    // }
     socket.emit('update',pullData());
 }
 function parseBuses(data){
     document.getElementById('table').innerHTML="";
     let busList = data.buses;
-    let busNums = [];
     let firstRow = document.createElement('tr');
     let numHeader = document.createElement('th');
     numHeader.innerHTML = 'Bus Number';
