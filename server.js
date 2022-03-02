@@ -26,25 +26,25 @@ const httpServer = (0, http_1.createServer)(app);
 const io = new socket_io_1.Server(httpServer);
 const PORT = process.env.PORT || 3000;
 //root socket
-io.of('/').on("connection", (socket) => {
+io.of("/").on("connection", (socket) => {
     //console.log(`new connection on root (id:${socket.id})`);
-    socket.on('debug', (data) => {
+    socket.on("debug", (data) => {
         //console.log(`debug(root): ${data}`);
     });
 });
 //admin socket
-io.of('/admin').on("connection", (socket) => {
-    socket.on('updateMain', (data) => {
+io.of("/admin").on("connection", (socket) => {
+    socket.on("updateMain", (data) => {
         let buses = [];
         for (const k of Object.keys(data)) {
             buses.push(data[k]);
         }
-        console.log(buses);
+        // console.log(buses);
         (0, ymlController_1.writeBuses)(buses);
-        io.of('/').emit('update', (0, ymlController_1.readData)());
-        io.of('/admin').emit('update', (0, ymlController_1.readData)());
+        io.of("/").emit("update", (0, ymlController_1.readData)());
+        io.of("/admin").emit("update", (0, ymlController_1.readData)());
     });
-    socket.on('debug', (data) => {
+    socket.on("debug", (data) => {
         console.log(`debug(admin): ${data}`);
     });
 });
@@ -64,6 +64,8 @@ function getWeather() {
         const res = yield (0, node_fetch_1.default)("http://api.weatherapi.com/v1/current.json?"
             + new URLSearchParams([["key", "8afcf03c285047a1b6e201401222202"], ["q", "60540"]]));
         (0, ymlController_1.writeWeather)((yield res.json()));
+        io.of("/").emit("update", (0, ymlController_1.readData)());
+        io.of("/admin").emit("update", (0, ymlController_1.readData)());
     });
 }
 getWeather();

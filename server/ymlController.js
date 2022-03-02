@@ -55,7 +55,7 @@ function writeWeather(weather) {
         status: weather.current.condition.text,
         icon: weather.current.condition.icon,
         temperature: weather.current.temp_f,
-        real_feel: weather.current.feelslike_f
+        feelsLike: weather.current.feelslike_f
     };
     fs_1.default.writeFileSync(weatherDatafile, js_yaml_1.default.dump({ weather: data }));
 }

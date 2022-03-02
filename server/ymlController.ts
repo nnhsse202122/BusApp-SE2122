@@ -9,7 +9,7 @@ const defaultWeatherDatafile = path.resolve(__dirname, "../data/defaultWeather.t
 const whitelist = path.resolve(__dirname, "../data/whitelist.yml");
 
 type Bus = {number: string, change: string, arrival: string, status: string};
-type Weather = {status: string, icon: string, temperature: string, real_feel: string}
+type Weather = {status: string, icon: string, temperature: string, feelsLike: string}
 
 // Load data file. If no file exists creates one
 export function readData() {
@@ -55,7 +55,7 @@ export function writeWeather(weather: any) {
         status: <string> weather.current.condition.text,
         icon: <string> weather.current.condition.icon,
         temperature: <string> weather.current.temp_f,
-        real_feel: <string> weather.current.feelslike_f
+        feelsLike: <string> weather.current.feelslike_f
     }
     fs.writeFileSync(weatherDatafile, yaml.dump({weather: data}));
 }

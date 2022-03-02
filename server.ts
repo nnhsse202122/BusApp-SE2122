@@ -15,26 +15,26 @@ const io  = new Server(httpServer);
 const PORT = process.env.PORT || 3000;
 
 //root socket
-io.of('/').on("connection",(socket)=>{
+io.of("/").on("connection", (socket)=> {
     //console.log(`new connection on root (id:${socket.id})`);
-    socket.on('debug',(data)=>{
+    socket.on("debug", (data)=> {
         //console.log(`debug(root): ${data}`);
     })
 })
 
 //admin socket
-io.of('/admin').on("connection",(socket)=>{
-    socket.on('updateMain', (data)=> {
+io.of("/admin").on("connection", (socket)=> {
+    socket.on("updateMain", (data)=> {
         let buses = [];
         for(const k of Object.keys(data)){
             buses.push(data[k]);
         }
-        console.log(buses);
+        // console.log(buses);
         writeBuses(buses);
-        io.of('/').emit('update', readData());
-        io.of('/admin').emit('update', readData());
+        io.of("/").emit("update", readData());
+        io.of("/admin").emit("update", readData());
     })
-    socket.on('debug', (data)=>{
+    socket.on("debug", (data)=> {
         console.log(`debug(admin): ${data}`);
     });
 });
@@ -58,10 +58,10 @@ async function getWeather() {
         + new URLSearchParams([["key", "8afcf03c285047a1b6e201401222202"], ["q", "60540"]]
     ));
     writeWeather((await res.json()));
+    io.of("/").emit("update", readData());
+    io.of("/admin").emit("update", readData());
 }
 getWeather();
 setInterval(getWeather, 300000);
-
-
 
 httpServer.listen(PORT, () => {console.log(`Server is running on port ${PORT}`)});

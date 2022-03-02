@@ -2,4 +2,4 @@ weather:
     status: 'No data'
     icon: ''
     temperature: ''
-    real_feel: ''
+    feelsLike: ''
