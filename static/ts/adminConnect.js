@@ -15,9 +15,9 @@ function pullData(){
 }
 
 function updateStudents(){
-    
-    socket.emit('update',pullData());
+    socket.emit('updateMain', pullData());
 }
+
 function parseBuses(data){
     let busList = data.buses;
     let busNums = [];
@@ -68,7 +68,7 @@ function parseBuses(data){
     }
 
 }
-socket.on('recieve',(data)=>{
+socket.on('update',(data)=>{
     //socket.emit('debug',JSON.stringify(data));
     parseBuses(data);
-})
+});

@@ -15,7 +15,7 @@ const io  = new Server(httpServer);
 const PORT = process.env.PORT || 3000;
 
 //root socket
-io.of('/main').on("connection",(socket)=>{
+io.of('/').on("connection",(socket)=>{
     //console.log(`new connection on root (id:${socket.id})`);
     socket.on('debug',(data)=>{
         //console.log(`debug(root): ${data}`);
@@ -24,17 +24,15 @@ io.of('/main').on("connection",(socket)=>{
 
 //admin socket
 io.of('/admin').on("connection",(socket)=>{
-    socket.on('update', (data)=>{
+    socket.on('updateMain', (data)=> {
         let buses = [];
         for(const k of Object.keys(data)){
             buses.push(data[k]);
         }
         console.log(buses);
         writeBuses(buses);
-        setTimeout(()=>{
-            io.of('/main').emit('update',readData());
-            socket.broadcast.emit('recieve',readData());
-        }, 1000);
+        io.of('/').emit('update', readData());
+        io.of('/admin').emit('update', readData());
     })
     socket.on('debug', (data)=>{
         console.log(`debug(admin): ${data}`);
