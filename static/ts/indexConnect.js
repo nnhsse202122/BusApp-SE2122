@@ -35,10 +35,3 @@ socket.on("update", (data) => {
     weatherDiv.appendChild(temperature);
     weatherDiv.appendChild(feelsLike);
 });
-
-{/* <div id="weather">
-                <p><%= data.weather.status %> </p>
-                <img src=<%= data.weather.icon %>>
-                <p>Temperature: <%= data.weather.temperature %></p>
-                <p>Real feel: <%= data.weather.real_feel %></p>
-            </div> */}
