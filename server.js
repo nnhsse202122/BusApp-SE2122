@@ -39,7 +39,6 @@ io.of('/admin').on("connection", (socket) => {
         for (const k of Object.keys(data)) {
             buses.push(data[k]);
         }
-        console.log(buses);
         (0, ymlController_1.writeBuses)(buses);
         setTimeout(() => {
             io.of('/main').emit('update', (0, ymlController_1.readData)());

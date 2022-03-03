@@ -49,7 +49,7 @@ function addBus() {
     // Creates delete button and adds it to the fourth cell
     const deleteIcon = document.createElement("i");
     deleteIcon.setAttribute("class", "fas fa-times");
-    deleteIcon.setAttribute("onclick", "removeBus(this)");
+    deleteIcon.setAttribute("onclick", "removeBus(this);updateStudents();");
     deleteBus.appendChild(deleteIcon);
 }
 

@@ -94,7 +94,7 @@ function parseBuses(data){
         let deleteI = document.createElement('i');
         deleteI.classList.add('fas');
         deleteI.classList.add('fa-times');
-        deleteI.onclick = 'removeBus(this)';
+        deleteI.onclick = 'removeBus(this);updateStudents()';
         deleteTd.appendChild(deleteI)
         row.appendChild(deleteTd)
         document.getElementById('table').appendChild(row);
