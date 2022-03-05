@@ -67,8 +67,3 @@ exports.router.get("/admin", (req, res) => __awaiter(void 0, void 0, void 0, fun
         res.render("unauthorized");
     }
 }));
-// // Post request to update bus information. 
-// router.post("/api/save", (req: Request, res: Response) => {
-//     writeBuses(req.body); // Writes to data file
-//     res.redirect("/admin");
-// });

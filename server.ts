@@ -15,21 +15,21 @@ const io  = new Server(httpServer);
 const PORT = process.env.PORT || 3000;
 
 //root socket
-io.of("/").on("connection", (socket)=> {
+io.of("/").on("connection", (socket) => {
     //console.log(`new connection on root (id:${socket.id})`);
-    socket.on("debug", (data)=> {
+    socket.on("debug", (data) => {
         //console.log(`debug(root): ${data}`);
     })
 })
 
 //admin socket
-io.of("/admin").on("connection", (socket)=> {
-    socket.on("updateMain", (data)=> {
+io.of("/admin").on("connection", (socket) => {
+    socket.on("updateMain", (data) => {
         writeBuses(data);
         io.of("/").emit("update", readData());
         io.of("/admin").emit("update", readData());
     })
-    socket.on("debug", (data)=> {
+    socket.on("debug", (data) => {
         console.log(`debug(admin): ${data}`);
     });
 });
