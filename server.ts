@@ -29,7 +29,6 @@ io.of("/admin").on("connection", (socket)=> {
         for(const k of Object.keys(data)){
             buses.push(data[k]);
         }
-        // console.log(buses);
         writeBuses(buses);
         io.of("/").emit("update", readData());
         io.of("/admin").emit("update", readData());

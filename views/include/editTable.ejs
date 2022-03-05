@@ -8,18 +8,18 @@
     </tr>
 <% for(let i = 0; i < data.buses.length; i++) { %> 
     <tr id=<%= 'bus_'+data.buses[i].number%>>
-        <td><input class="tableInput" type="number" name="busNumber" value=<%= data.buses[i].number %> required></td>
-        <td><input class="tableInput" type="number" name="busChange" value=<%= data.buses[i].change %>></td>
-        <td><input class="tableInput" type="text" name="busArrival" value=<%= data.buses[i].arrival %>></td>
+        <td><input class="tableInput" type="number" name="busNumber" oninput='updateStudents()' value=<%= data.buses[i].number %> required></td>
+        <td><input class="tableInput" type="number" name="busChange" oninput='updateStudents()' value=<%= data.buses[i].change %>></td>
+        <td><input class="tableInput" type="text" name="busArrival" oninput='updateStudents()' value=<%= data.buses[i].arrival %>></td>
         <td>
-            <select name="busStatus" onchange="statusChange(this)">
+            <select name="busStatus" onchange="statusChange(this);updateStudents();">
                 <option value="NOT HERE" <%= data.buses[i].status == "NOT HERE"? "selected" : "" %>>NOT HERE</option>
                 <option value="HERE" <%= data.buses[i].status == "HERE"? "selected" : "" %>>HERE</option>
                 <option value="LOADING" <%= data.buses[i].status == "LOADING"? "selected" : ""%>>LOADING</option>
                 <option value="GONE" <%= data.buses[i].status == "GONE"? "selected" : "" %>>GONE</option>
             </select>
         </td>
-        <td class="deleteBus"><i class="fas fa-times" onclick="removeBus(this)"></i></td>
+        <td class="deleteBus"><i class="fas fa-times" onclick="removeBus(this);updateStudents();"></i></td>
     </tr>
 <% } %> 
 </table>
