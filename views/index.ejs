@@ -8,9 +8,8 @@
             <%- include("include/indexContent") %>
         </div>
         <div id="login"><a href="/admin">Login as editor</a></div>
-        <script src="ejs.min.js"></script>
-        <script> const render = <%= render %></script>
+        <script src="js/ejs.js"></script>
         <script src="/socket.io/socket.io.js"></script>
-        <script src='js/indexConnect.js'></script>
+        <script id="getRender" render="<%= render %>" src='js/indexConnect.js'></script>
     </body>
 </html>
