@@ -5,15 +5,11 @@
     </head>
     <body>
         <div id="content">
-            <%- include("include/showTable") %>
-            <div id="weather">
-                <img src=<%= data.weather.icon %>>
-                <p><%= data.weather.status %> </p>
-                <p>Temperature: <%= data.weather.temperature %></p>
-                <p>Feels like: <%= data.weather.real_feel %></p>
-            </div>
+            <%- include("include/indexContent") %>
         </div>
         <div id="login"><a href="/admin">Login as editor</a></div>
+        <script src="ejs.min.js"></script>
+        <script> const render = <%= render %></script>
         <script src="/socket.io/socket.io.js"></script>
         <script src='js/indexConnect.js'></script>
     </body>

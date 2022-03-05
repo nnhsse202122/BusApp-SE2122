@@ -25,11 +25,7 @@ io.of("/").on("connection", (socket)=> {
 //admin socket
 io.of("/admin").on("connection", (socket)=> {
     socket.on("updateMain", (data)=> {
-        let buses = [];
-        for(const k of Object.keys(data)){
-            buses.push(data[k]);
-        }
-        writeBuses(buses);
+        writeBuses(data);
         io.of("/").emit("update", readData());
         io.of("/admin").emit("update", readData());
     })
