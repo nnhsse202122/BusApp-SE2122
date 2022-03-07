@@ -1,6 +1,7 @@
 import express, {Application, Request, Response} from "express";
 import {router} from "./server/router";
 import path from "path";
+import fs from "fs";
 import bodyParser from "body-parser";
 import {createServer} from "http";
 import {Server} from "socket.io";
@@ -19,8 +20,8 @@ io.of("/").on("connection", (socket) => {
     //console.log(`new connection on root (id:${socket.id})`);
     socket.on("debug", (data) => {
         //console.log(`debug(root): ${data}`);
-    })
-})
+    });
+});
 
 //admin socket
 io.of("/admin").on("connection", (socket) => {
@@ -58,5 +59,11 @@ async function getWeather() {
 }
 getWeather();
 setInterval(getWeather, 300000);
+
+function resetBuses() {
+    const busesDatafile = path.resolve(__dirname, "/data/buses.yml");
+    const defaultBusesDatafile = path.resolve(__dirname, "data/defaultBuses.txt");
+    fs.writeFileSync(busesDatafile, fs.readFileSync(defaultBusesDatafile));
+}
 
 httpServer.listen(PORT, () => {console.log(`Server is running on port ${PORT}`)});
