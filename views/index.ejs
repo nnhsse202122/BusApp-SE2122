@@ -7,7 +7,8 @@
         <link href="https://fonts.googleapis.com/css2?family=Comfortaa&display=swap" rel="stylesheet">
     </head>
     <body>
-        <div id="flex-container">
+        <div id="flexContainer">
+            <div id="spacer"></div>
             <%- include("include/showTable") %>
             <div id="weather">
                 <p><%= data.weather.status %> </p>
@@ -15,8 +16,8 @@
                 <p>Temperature: <%= data.weather.temperature %></p>
                 <p>Real feel: <%= data.weather.real_feel %></p>
             </div>
+            <div id="login"><a href="/admin">Login as editor</a></div>
         </div>
-        <div id="login"><a href="/admin">Login as editor</a></div>
         <script src="/socket.io/socket.io.js"></script>
         <script src='js/indexConnect.js'></script>
     </body>
