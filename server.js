@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const router_1 = require("./server/router");
 const path_1 = __importDefault(require("path"));
+const fs_1 = __importDefault(require("fs"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const http_1 = require("http");
 const socket_io_1 = require("socket.io");
@@ -58,11 +59,26 @@ function getWeather() {
     return __awaiter(this, void 0, void 0, function* () {
         const res = yield (0, node_fetch_1.default)("http://api.weatherapi.com/v1/current.json?"
             + new URLSearchParams([["key", "8afcf03c285047a1b6e201401222202"], ["q", "60540"]]));
-        (0, ymlController_1.writeWeather)((yield res.json()));
+        const json = yield res.json();
+        console.log(json);
+        (0, ymlController_1.writeWeather)(json);
         io.of("/").emit("update", (0, ymlController_1.readData)());
         io.of("/admin").emit("update", (0, ymlController_1.readData)());
     });
 }
 getWeather();
-setInterval(getWeather, 300000);
+setInterval(getWeather, 10000);
+function resetBuses() {
+    resetDatafile();
+    setInterval(resetDatafile, 86400000);
+}
+function resetDatafile() {
+    const busesDatafile = path_1.default.resolve(__dirname, "/data/buses.yml");
+    const defaultBusesDatafile = path_1.default.resolve(__dirname, "data/defaultBuses.txt");
+    fs_1.default.writeFileSync(busesDatafile, fs_1.default.readFileSync(defaultBusesDatafile));
+}
+const midnight = new Date();
+midnight.setDate(midnight.getDate() + 1);
+midnight.setHours(0, 0, 0, 0);
+setTimeout(resetBuses, midnight.valueOf() - new Date().valueOf());
 httpServer.listen(PORT, () => { console.log(`Server is running on port ${PORT}`); });

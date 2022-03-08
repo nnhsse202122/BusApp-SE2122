@@ -53,7 +53,7 @@ async function getWeather() {
     const res = await fetch("http://api.weatherapi.com/v1/current.json?" 
         + new URLSearchParams([["key", "8afcf03c285047a1b6e201401222202"], ["q", "60540"]]
     ));
-    writeWeather((await res.json()));
+    writeWeather(await res.json());
     io.of("/").emit("update", readData());
     io.of("/admin").emit("update", readData());
 }
@@ -61,9 +61,18 @@ getWeather();
 setInterval(getWeather, 300000);
 
 function resetBuses() {
+    resetDatafile();
+    setInterval(resetDatafile, 86400000);
+}
+function resetDatafile() {
     const busesDatafile = path.resolve(__dirname, "/data/buses.yml");
     const defaultBusesDatafile = path.resolve(__dirname, "data/defaultBuses.txt");
     fs.writeFileSync(busesDatafile, fs.readFileSync(defaultBusesDatafile));
 }
+const midnight = new Date();
+midnight.setDate(midnight.getDate() + 1);
+midnight.setHours(0, 0, 0, 0);
+setTimeout(resetBuses, midnight.valueOf() - new Date().valueOf());
+
 
 httpServer.listen(PORT, () => {console.log(`Server is running on port ${PORT}`)});
