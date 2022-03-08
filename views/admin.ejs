@@ -5,16 +5,12 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     </head>
     <body>
+        <%- include("include/adminContent") %>
+        <a href="/">Back to hompage</a>
+        <script src="js/ejs.js"></script>
         <script src="js/manageBuses.js"></script>
         <script src="/socket.io/socket.io.js"></script>
-        <script src='js/adminConnect.js'></script>
+        <script id="getRender" render="<%= render %>" src='js/adminConnect.js'></script>
         <script src="js/formVerification.js"></script>
-        <form id='form' action="/api/save" method="post" onsubmit="updateStudents(); return verifyForm()">
-            <button type="submit" >Save</button>
-            <button type="button" onclick="addBus()">Add Bus</button>
-            <%- include("include/editTable") %>
-            <textarea name="weather" placeholder="Enter the current weather conditions here: "><%= data.weather %> </textarea>
-        </form>
-        <a href="/">Back to hompage</a>
     </body>
 </html>

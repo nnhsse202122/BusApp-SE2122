@@ -4,12 +4,12 @@
         <link rel="stylesheet" href="/css/style.css">
     </head>
     <body>
-        <script src="/socket.io/socket.io.js"></script>
-        <script src='js/indexConnect.js'></script>
         <div id="content">
-            <%- include("include/showTable") %>
-            <p><b>Weather: </b><span id='weather'><%= data.weather %></span></p>
+            <%- include("include/indexContent") %>
         </div>
         <div id="login"><a href="/admin">Login as editor</a></div>
+        <script src="js/ejs.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script id="getRender" render="<%= render %>" src='js/indexConnect.js'></script>
     </body>
 </html>

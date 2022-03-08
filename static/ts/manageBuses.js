@@ -16,18 +16,21 @@ function addBus() {
     numberInput.setAttribute("type", "number");
     numberInput.setAttribute("name", "busNumber");
     numberInput.setAttribute("required", "");
+    numberInput.setAttribute('oninput', 'onChange()');
     busNumber.appendChild(numberInput);
     // Creates input element for bus change and adds it to the second cell
     const changeInput = document.createElement("input");
     changeInput.setAttribute("class", "tableInput");
     changeInput.setAttribute("type", "number");
     changeInput.setAttribute("name", "busChange");
+    changeInput.setAttribute('oninput', 'onChange()');
     busChange.appendChild(changeInput);
     // Creates input element for bus arrival and adds it to the third cell
     const arrivalInput = document.createElement("input");
     arrivalInput.setAttribute("class", "tableInput");
     arrivalInput.setAttribute("type", "text");
     arrivalInput.setAttribute("name", "busArrival");
+    arrivalInput.setAttribute('oninput', 'onChange()');
     busArrival.appendChild(arrivalInput);
     // Creates select element for bus status and adds it to the forth cell
     const statusSelect = document.createElement("select");
@@ -37,12 +40,12 @@ function addBus() {
         option.innerHTML = status;
         statusSelect.appendChild(option);
     });
-    statusSelect.setAttribute("onchange", "statusChange(this)");
+    statusSelect.setAttribute("onchange", "statusChange(this);onChange()");
     busStatus.appendChild(statusSelect);
     // Creates delete button and adds it to the fourth cell
     const deleteIcon = document.createElement("i");
     deleteIcon.setAttribute("class", "fas fa-times");
-    deleteIcon.setAttribute("onclick", "removeBus(this)");
+    deleteIcon.setAttribute("onclick", "removeBus(this);onChange()");
     deleteBus.appendChild(deleteIcon);
 }
 // Deletes a bus from the admin table
