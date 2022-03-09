@@ -7,7 +7,7 @@ import {createServer} from "http";
 import {Server} from "socket.io";
 import {readData, writeBuses, writeWeather} from "./server/ymlController";
 import session from "express-session";
-import fetch from "node-fetch"
+import fetch from "node-fetch";
 
 const app: Application = express();
 const httpServer = createServer(app);
@@ -48,6 +48,7 @@ app.use("/", router); // Imports routes from server/router.ts
 
 app.use("/css", express.static(path.resolve(__dirname, "static/css")));
 app.use("/js", express.static(path.resolve(__dirname, "static/ts")));
+app.use("/img", express.static(path.resolve(__dirname, "static/img")));
 
 async function getWeather() {
     const res = await fetch("http://api.weatherapi.com/v1/current.json?" 
