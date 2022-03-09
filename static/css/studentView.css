@@ -68,9 +68,13 @@ select{
 }
 
 
-#weatherDiv{
+#weather{
    
     width:75%;
+    position:sticky;
+    bottom:0;
+    background-color: #fff;
+    border: solid black
 }
 #flexContainer{
     width:100%;

@@ -26,23 +26,8 @@ function readData() {
     return Object.assign(Object.assign({}, buses), weather);
 }
 exports.readData = readData;
-// Writes to data file bus first formating the arrays provided by the form and then combining it with weather
 function writeBuses(data) {
-    const buses = [];
-    // In case of one bus
-    if (typeof data.busNumber === "string" &&
-        typeof data.busChange === "string" &&
-        typeof data.busArrival === "string" &&
-        typeof data.busStatus === "string") {
-        buses.push({ number: data.busNumber, change: data.busChange, arrival: data.busArrival, status: data.busStatus });
-    }
-    // In case of multiple buses
-    else {
-        for (let i = 0; i < data.busNumber.length; i++) {
-            buses.push({ number: data.busNumber[i], change: data.busChange[i], arrival: data.busArrival[i], status: data.busStatus[i] });
-        }
-    }
-    fs_1.default.writeFileSync(busesDatafile, js_yaml_1.default.dump({ buses: buses }));
+    fs_1.default.writeFileSync(busesDatafile, js_yaml_1.default.dump({ buses: data }));
 }
 exports.writeBuses = writeBuses;
 function writeWeather(weather) {
@@ -50,7 +35,7 @@ function writeWeather(weather) {
         status: weather.current.condition.text,
         icon: weather.current.condition.icon,
         temperature: weather.current.temp_f,
-        real_feel: weather.current.feelslike_f
+        feelsLike: weather.current.feelslike_f
     };
     fs_1.default.writeFileSync(weatherDatafile, js_yaml_1.default.dump({ weather: data }));
 }

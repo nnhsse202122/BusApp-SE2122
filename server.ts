@@ -1,6 +1,7 @@
 import express, {Application, Request, Response} from "express";
 import {router} from "./server/router";
 import path from "path";
+import fs from "fs";
 import bodyParser from "body-parser";
 import {createServer} from "http";
 import {Server} from "socket.io";
@@ -12,28 +13,27 @@ const app: Application = express();
 const httpServer = createServer(app);
 const io  = new Server(httpServer);
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5182;
 
 //root socket
-io.of('/main').on("connection",(socket)=>{
-    console.log(`new connection on root (id:${socket.id})`);
-    socket.on('debug',(data)=>{
+io.of("/").on("connection", (socket) => {
+    //console.log(`new connection on root (id:${socket.id})`);
+    socket.on("debug", (data) => {
         //console.log(`debug(root): ${data}`);
-    })
-})
+    });
+});
 
 //admin socket
-io.of('/admin').on("connection",(socket)=>{
-    console.log(`new connection on admin (id:${socket.id})`);
-    socket.on('update',()=>{
-        setTimeout(()=>{
-            io.of('/main').emit('update',readData());
-        },1000);
-    })
-    socket.on('debug',(data)=>{
-        //console.log(`debug(admin): ${data}`);
-    })
-})
+io.of("/admin").on("connection", (socket) => {
+    socket.on("updateMain", (data) => {
+        writeBuses(data);
+        io.of("/").emit("update", readData());
+        io.of("/admin").emit("update", readData());
+    });
+    socket.on("debug", (data) => {
+        console.log(`debug(admin): ${data}`);
+    });
+});
 
 app.set("view engine", "ejs"); // Allows res.render() to render ejs
 app.use(session({
@@ -53,11 +53,26 @@ async function getWeather() {
     const res = await fetch("http://api.weatherapi.com/v1/current.json?" 
         + new URLSearchParams([["key", "8afcf03c285047a1b6e201401222202"], ["q", "60540"]]
     ));
-    writeWeather((await res.json()));
+    writeWeather(await res.json());
+    io.of("/").emit("update", readData());
+    io.of("/admin").emit("update", readData());
 }
 getWeather();
 setInterval(getWeather, 300000);
 
+function resetBuses() {
+    resetDatafile();
+    setInterval(resetDatafile, 86400000);
+}
+function resetDatafile() {
+    const busesDatafile = path.resolve(__dirname, "/data/buses.yml");
+    const defaultBusesDatafile = path.resolve(__dirname, "data/defaultBuses.txt");
+    fs.writeFileSync(busesDatafile, fs.readFileSync(defaultBusesDatafile));
+}
+const midnight = new Date();
+midnight.setDate(midnight.getDate() + 1);
+midnight.setHours(0, 0, 0, 0);
+setTimeout(resetBuses, midnight.valueOf() - new Date().valueOf());
 
 
 httpServer.listen(PORT, () => {console.log(`Server is running on port ${PORT}`)});

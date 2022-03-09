@@ -16,13 +16,18 @@ exports.router = void 0;
 const express_1 = __importDefault(require("express"));
 const google_auth_library_1 = require("google-auth-library");
 const ymlController_1 = require("./ymlController");
+const path_1 = __importDefault(require("path"));
+const fs_1 = __importDefault(require("fs"));
 exports.router = express_1.default.Router();
 const CLIENT_ID = "319647294384-m93pfm59lb2i07t532t09ed5165let11.apps.googleusercontent.com";
 const oAuth2 = new google_auth_library_1.OAuth2Client(CLIENT_ID);
 // Homepage. This is where students will view bus information from. 
 exports.router.get("/", (req, res) => {
     // Reads from data file and displays data
-    res.render("index", { data: (0, ymlController_1.readData)() });
+    res.render("index", {
+        data: (0, ymlController_1.readData)(),
+        render: fs_1.default.readFileSync(path_1.default.resolve(__dirname, "../views/include/indexContent.ejs"))
+    });
 });
 // Login page. User authenticates here and then is redirected to admin (where they will be authorized)
 exports.router.get("/login", (req, res) => {
@@ -53,14 +58,12 @@ exports.router.get("/admin", (req, res) => __awaiter(void 0, void 0, void 0, fun
     // Authorizes user, then either displays admin page or unauthorized page
     authorize(req);
     if (req.session.isAdmin) {
-        res.render("admin", { data: (0, ymlController_1.readData)() });
+        res.render("admin", {
+            data: (0, ymlController_1.readData)(),
+            render: fs_1.default.readFileSync(path_1.default.resolve(__dirname, "../views/include/adminContent.ejs"))
+        });
     }
     else {
         res.render("unauthorized");
     }
 }));
-// Post request to update bus information. 
-exports.router.post("/api/save", (req, res) => {
-    (0, ymlController_1.writeBuses)(req.body); // Writes to data file
-    res.redirect("/admin");
-});

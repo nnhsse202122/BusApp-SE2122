@@ -1,0 +1,31 @@
+<div id="content">
+    <div id="flexContainer">
+        <div id="spacer"></div>
+        <div id="login"><a href="/admin">Login as editor</a></div>
+        <table id="table">
+            <colgroup>
+                <col span="3">
+            </colgroup>
+            <tr>
+                <th>Bus Number</th>
+                <th>Bus Change</th>
+                <th>Bus Arrived</th>
+                <th>Status</th>
+            </tr>
+        <% for(let i = 0; i < data.buses.length; i++) { %> 
+            <tr>
+                <td><%= data.buses[i].number %></td>
+                <td><%= data.buses[i].change %></td>
+                <td><%= data.buses[i].arrival %></td>
+                <td><%= data.buses[i].status %></td>
+            </tr>
+        <% } %> 
+        </table>
+        <div id="weather">
+            <img src=<%= data.weather.icon %>>
+            <p><%= data.weather.status %> </p>
+            <p>Temperature: <%= data.weather.temperature %></p>
+            <p>Feels like: <%= data.weather.feelsLike %></p>
+        </div>
+    </div>
+</div>

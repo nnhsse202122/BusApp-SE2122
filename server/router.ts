@@ -1,6 +1,8 @@
 import express, {Request, Response} from "express";
 import {OAuth2Client, TokenPayload} from "google-auth-library";
 import {readData, writeBuses, readWhitelist} from "./ymlController";
+import path from "path";
+import fs from "fs";
 
 export const router = express.Router();
 
@@ -10,8 +12,12 @@ const oAuth2 = new OAuth2Client(CLIENT_ID);
 // Homepage. This is where students will view bus information from. 
 router.get("/", (req: Request, res: Response) => {
     // Reads from data file and displays data
-    res.render("index", {data: readData()});
+    res.render("index", {
+        data: readData(),
+        render: fs.readFileSync(path.resolve(__dirname, "../views/include/indexContent.ejs"))
+    });
 });
+
 
 // Login page. User authenticates here and then is redirected to admin (where they will be authorized)
 router.get("/login", (req: Request, res: Response) => {
@@ -46,15 +52,12 @@ router.get("/admin", async (req: Request, res: Response) => {
     // Authorizes user, then either displays admin page or unauthorized page
     authorize(req);
     if (req.session!.isAdmin) {
-        res.render("admin", {data: readData()});
+        res.render("admin", {
+            data: readData(),
+            render: fs.readFileSync(path.resolve(__dirname, "../views/include/adminContent.ejs"))
+        });
     }
     else {
         res.render("unauthorized");
     }
-});
-
-// Post request to update bus information. 
-router.post("/api/save", (req: Request, res: Response) => {
-    writeBuses(req.body); // Writes to data file
-    res.redirect("/admin");
 });
