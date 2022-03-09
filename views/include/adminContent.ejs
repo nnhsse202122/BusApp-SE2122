@@ -1,6 +1,13 @@
 <div id="content">
-    <button type="button" onclick="addBus();onChange()">Add Bus</button>
+    <div id="buttons">
+        <a href="/">Back to hompage</a>
+        <button type="button" onclick="addBus();onChange()">Add Bus</button>
+    </div>
     <table id="table">
+        <colgroup>
+            <col span="3">
+            <col id="statusCol">
+        </colgroup>
         <tr>
             <th>Bus Number</th>
             <th>Bus Change</th>

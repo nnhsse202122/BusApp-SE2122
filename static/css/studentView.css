@@ -1,0 +1,87 @@
+body{
+    background-color:white;
+    width:100%;
+    height:100%;
+}
+html{
+    width:100%;
+    height:100%;
+}
+td {
+    text-align: center;
+    padding: 0;
+    font-size: 2em;
+}
+
+table {
+    /* margin: auto; */
+    width: 75%;
+    /* height: 500px; */
+    border-collapse: collapse;
+}
+tr:nth-child(odd){
+    background-color: #ccc;
+}
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+tr{
+    height: 50px;
+}
+
+col{
+    border-right: 3px solid black;
+    width: 25%;
+}
+
+#statusCol{
+       border-right:3px solid black;
+       width: 38%;
+}
+
+th{
+    border-collapse: collapse;
+    font-size: 2.5em;
+    background-color:steelblue;
+    border-bottom: 2.5px solid black;
+    font-family: 'Verdana', cursive;
+}
+
+
+input, select {
+    border: none;
+    width: 100%;
+    height: 100%;
+    background-color: inherit;
+    text-align: center;
+    text-align-last: center;
+}
+
+input{
+    font-size:1.5em;
+
+}
+
+select{
+    font-size: 1em;
+}
+
+
+#weather{
+   
+    width:75%;
+    position:sticky;
+    bottom:0;
+    background-color: #fff;
+    border: solid black
+}
+#flexContainer{
+    width:100%;
+    height:100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
