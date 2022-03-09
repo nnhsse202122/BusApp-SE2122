@@ -55,19 +55,18 @@ app.use(body_parser_1.default.json()); // Allows use of json format for req.body
 app.use("/", router_1.router); // Imports routes from server/router.ts
 app.use("/css", express_1.default.static(path_1.default.resolve(__dirname, "static/css")));
 app.use("/js", express_1.default.static(path_1.default.resolve(__dirname, "static/ts")));
+app.use("/img", express_1.default.static(path_1.default.resolve(__dirname, "static/img")));
 function getWeather() {
     return __awaiter(this, void 0, void 0, function* () {
         const res = yield (0, node_fetch_1.default)("http://api.weatherapi.com/v1/current.json?"
             + new URLSearchParams([["key", "8afcf03c285047a1b6e201401222202"], ["q", "60540"]]));
-        const json = yield res.json();
-        console.log(json);
-        (0, ymlController_1.writeWeather)(json);
+        (0, ymlController_1.writeWeather)(yield res.json());
         io.of("/").emit("update", (0, ymlController_1.readData)());
         io.of("/admin").emit("update", (0, ymlController_1.readData)());
     });
 }
 getWeather();
-setInterval(getWeather, 10000);
+setInterval(getWeather, 300000);
 function resetBuses() {
     resetDatafile();
     setInterval(resetDatafile, 86400000);
