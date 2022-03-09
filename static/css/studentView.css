@@ -27,7 +27,7 @@ tr:nth-child(even) {
 }
 
 tr{
-    height: 100px;
+    height: 50px;
 }
 
 col{
@@ -45,9 +45,8 @@ th{
     font-size: 2.5em;
     background-color:steelblue;
     border-bottom: 2.5px solid black;
-    font-family: 'Comfortaa', cursive;}
-
-
+    font-family: 'Verdana', cursive;
+}
 
 
 input, select {

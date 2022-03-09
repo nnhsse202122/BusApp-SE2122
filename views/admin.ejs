@@ -8,8 +8,10 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrZj/k7ujTnHg4CGR2D7kSs0v4LLanw2qksYuRlEzO+tcaEPQogQ0KaoGN26/zrn20ImR1DfuLWnOo7aBA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     </head>
     <body>
+        
         <form id='form' action="/api/save" method="post" onsubmit="updateStudents(); return verifyForm()">
             <div id="buttons">
+                <a href="/">Back to hompage</a>
                 <button type="submit" id="save">Save</button>
                 <button type="button" id="addBus">Add Bus</button>
             </div>
@@ -25,7 +27,6 @@
         <script src="/socket.io/socket.io.js"></script>
         <script src='/js/adminConnect.js'></script>
         <script src="/js/formVerification.js"></script>  
-        <a href="/">Back to hompage</a>
         <script src="js/manageBuses.js"></script>
         <script src="/socket.io/socket.io.js"></script>
         <script src='js/adminConnect.js'></script>
