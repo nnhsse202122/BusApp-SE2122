@@ -25,7 +25,7 @@ const node_fetch_1 = __importDefault(require("node-fetch"));
 const app = (0, express_1.default)();
 const httpServer = (0, http_1.createServer)(app);
 const io = new socket_io_1.Server(httpServer);
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5182;
 //root socket
 io.of("/").on("connection", (socket) => {
     //console.log(`new connection on root (id:${socket.id})`);
@@ -59,15 +59,13 @@ function getWeather() {
     return __awaiter(this, void 0, void 0, function* () {
         const res = yield (0, node_fetch_1.default)("http://api.weatherapi.com/v1/current.json?"
             + new URLSearchParams([["key", "8afcf03c285047a1b6e201401222202"], ["q", "60540"]]));
-        const json = yield res.json();
-        console.log(json);
-        (0, ymlController_1.writeWeather)(json);
+        (0, ymlController_1.writeWeather)(yield res.json());
         io.of("/").emit("update", (0, ymlController_1.readData)());
         io.of("/admin").emit("update", (0, ymlController_1.readData)());
     });
 }
 getWeather();
-setInterval(getWeather, 10000);
+setInterval(getWeather, 300000);
 function resetBuses() {
     resetDatafile();
     setInterval(resetDatafile, 86400000);
