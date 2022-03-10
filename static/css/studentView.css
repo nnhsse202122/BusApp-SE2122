@@ -102,10 +102,10 @@ select{
 
 @media screen and (max-device-width: 500px) {
     tr{
-        height: 20vh;
+        height: 15vh;
     }
-    tr>th{
-        height:10vh;
+    td{
+        font-size: 3em;
     }
     table{
         width:100%;
@@ -113,5 +113,6 @@ select{
     }
     #weather{
         width:100%;
+        font-size: 2em;
     }
 }
