@@ -50,6 +50,7 @@ app.use("/css", express.static(path.resolve(__dirname, "static/css")));
 app.use("/js", express.static(path.resolve(__dirname, "static/ts")));
 app.use("/img", express.static(path.resolve(__dirname, "static/img")));
 
+// Code to update weather automcatically every 5 minutes
 async function getWeather() {
     const res = await fetch("http://api.weatherapi.com/v1/current.json?" 
         + new URLSearchParams([["key", "8afcf03c285047a1b6e201401222202"], ["q", "60540"]]
@@ -61,19 +62,22 @@ async function getWeather() {
 getWeather();
 setInterval(getWeather, 300000);
 
+// Code to reset bus list automatically at midnight
 function resetBuses() {
     resetDatafile();
     setInterval(resetDatafile, 86400000);
 }
 function resetDatafile() {
-    const busesDatafile = path.resolve(__dirname, "/data/buses.yml");
-    const defaultBusesDatafile = path.resolve(__dirname, "data/defaultBuses.txt");
+    const busesDatafile = path.resolve(__dirname, "./data/buses.yml");
+    const defaultBusesDatafile = path.resolve(__dirname, "./data/defaultBuses.txt");
     fs.writeFileSync(busesDatafile, fs.readFileSync(defaultBusesDatafile));
+    io.of("/").emit("update", readData());
+    io.of("/admin").emit("update", readData());
 }
 const midnight = new Date();
 midnight.setDate(midnight.getDate() + 1);
 midnight.setHours(0, 0, 0, 0);
 setTimeout(resetBuses, midnight.valueOf() - new Date().valueOf());
 
-
+// Starts server
 httpServer.listen(PORT, () => {console.log(`Server is running on port ${PORT}`)});

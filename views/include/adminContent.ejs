@@ -17,7 +17,7 @@
         </tr>
     <% for(let i = 0; i < data.buses.length; i++) { %> 
         <tr>
-            <td><input class="tableInput" type="number" name="busNumber" oninput="onChange()" value=<%= data.buses[i].number %> required></td>
+            <td><input class="tableInput" type="number" name="busNumber" oninput="onChange()" value=<%= data.buses[i].number %>></td>
             <td><input class="tableInput" type="number" name="busChange" oninput="onChange()" value=<%= data.buses[i].change %>></td>
             <td><input class="tableInput" type="text" name="busArrival" oninput="onChange()" value=<%= data.buses[i].arrival %>></td>
             <td>
