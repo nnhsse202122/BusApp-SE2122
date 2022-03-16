@@ -71,6 +71,8 @@ function resetDatafile() {
     const busesDatafile = path.resolve(__dirname, "./data/buses.yml");
     const defaultBusesDatafile = path.resolve(__dirname, "./data/defaultBuses.txt");
     fs.writeFileSync(busesDatafile, fs.readFileSync(defaultBusesDatafile));
+    io.of("/").emit("update", readData());
+    io.of("/admin").emit("update", readData());
 }
 const midnight = new Date();
 midnight.setDate(midnight.getDate() + 1);
