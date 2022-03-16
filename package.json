@@ -7,7 +7,8 @@
     "start": "node server.js",
     "dev": "nodemon server.ts",
     "build": "tsc -p .",
-    "devstart": "tsc -p . nodemon server.ts"
+    "devstart": "tsc -p . nodemon server.ts",
+    "buildStart": "tsc -p . && node server.js"
   },
   "author": "",
   "license": "ISC",
