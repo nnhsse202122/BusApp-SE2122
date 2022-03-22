@@ -55,14 +55,15 @@ button{
     border: none;
     height: 100%;
     width: 20%;
-    background-color: #4CAF50; 
+    background-color: steelblue; 
     color: white;
     cursor: pointer;
 
 }
 
 a{
-    
+    text-decoration: none;
+    color:white;
 }
 
 button:hover {
