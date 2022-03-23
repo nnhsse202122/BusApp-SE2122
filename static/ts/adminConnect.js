@@ -1,7 +1,14 @@
 
 const socket = io('/admin');
 
+let timeout;
+
 function onChange() {
+    clearTimeout(timeout);
+    timeout = setTimeout(emit, 4000);
+}
+
+function emit() {
     const tableRows = document.getElementById("table").rows;
     const data = [];
     for(let i = 1; i < tableRows.length; i++) {

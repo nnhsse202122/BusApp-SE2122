@@ -56,6 +56,7 @@ app.use("/", router_1.router); // Imports routes from server/router.ts
 app.use("/css", express_1.default.static(path_1.default.resolve(__dirname, "static/css")));
 app.use("/js", express_1.default.static(path_1.default.resolve(__dirname, "static/ts")));
 app.use("/img", express_1.default.static(path_1.default.resolve(__dirname, "static/img")));
+// Code to update weather automcatically every 5 minutes
 function getWeather() {
     return __awaiter(this, void 0, void 0, function* () {
         const res = yield (0, node_fetch_1.default)("http://api.weatherapi.com/v1/current.json?"
@@ -67,13 +68,14 @@ function getWeather() {
 }
 getWeather();
 setInterval(getWeather, 300000);
+// Code to reset bus list automatically at midnight
 function resetBuses() {
     resetDatafile();
     setInterval(resetDatafile, 86400000);
 }
 function resetDatafile() {
-    const busesDatafile = path_1.default.resolve(__dirname, "/data/buses.yml");
-    const defaultBusesDatafile = path_1.default.resolve(__dirname, "data/defaultBuses.txt");
+    const busesDatafile = path_1.default.resolve(__dirname, "./data/buses.yml");
+    const defaultBusesDatafile = path_1.default.resolve(__dirname, "./data/defaultBuses.txt");
     fs_1.default.writeFileSync(busesDatafile, fs_1.default.readFileSync(defaultBusesDatafile));
     io.of("/").emit("update", (0, ymlController_1.readData)());
     io.of("/admin").emit("update", (0, ymlController_1.readData)());
@@ -82,4 +84,5 @@ const midnight = new Date();
 midnight.setDate(midnight.getDate() + 1);
 midnight.setHours(0, 0, 0, 0);
 setTimeout(resetBuses, midnight.valueOf() - new Date().valueOf());
+// Starts server
 httpServer.listen(PORT, () => { console.log(`Server is running on port ${PORT}`); });
