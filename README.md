@@ -13,5 +13,9 @@ On this page, teachers are able to add and remove buses, edit bus number, change
 
 If a user tries to access the admin page directly, this will be redirected to the login page and if they login to an account not on the whitelist, they will be redirected to an unauthorized page.
 
-## Setup
-The app is not currently ready to be used. This section will be updated will relevent information when it is ready.
+## Project Setup
+To get started, clone this repo onto your computer. Then run the command `npm i` to install dependencies. To run the server on localhost run the command `npm run buildStart` this will complie the typescript and start the server on port `localhost:5182`.
+
+## Project Overview
+This project is written using a combination of javascript, typescript, ejs, yaml and css. To get an understand of typescript read these documents [ts setup](https://docs.google.com/document/d/1Nz-GhLjmN0Ouh1HqJKd14x_Rf_aChft_tl6PNyOLsHA/edit?usp=sharing), [ts crash course](https://docs.google.com/document/d/1KSmqDuMzLxKAVosLv3uDOzb63P3wa08IcdHxCy8rYwo/edit?usp=sharing). This application is a web server using express and typescript. The start point for the project is `server.ts`. Lots of things are done in this file but the most important is creating a new express app (`const app: Application = express();` and running it on the localhost (`httpServer.listen(PORT, () => {console.log(`Server is running on port ${PORT}\`)});`)
+
