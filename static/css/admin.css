@@ -102,6 +102,12 @@ textarea{
     width: 75%;
 }
 
+#weather{
+    position:relative;
+    width:75%;
+    left:12.5%;
+}
+
 @media only screen and (max-width: 500px) {
     button{
         width:50%;
