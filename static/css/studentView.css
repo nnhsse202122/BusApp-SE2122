@@ -1,7 +1,6 @@
 body{
     background-color:white;
-    width:100%;
-    height:100%;
+    position: relative;
 }
 html{
     width:100%;
@@ -27,7 +26,7 @@ tr:nth-child(even) {
 }
 
 tr{
-    height: 50px;
+    height: 7vh;
 }
 
 col{
@@ -46,6 +45,7 @@ th{
     background-color:steelblue;
     border-bottom: 2.5px solid black;
     font-family: 'Verdana', cursive;
+    height: 10vh;
 }
 
 
@@ -67,14 +67,30 @@ select{
     font-size: 1em;
 }
 
+#login{
+    width:10%;
+    height: 50%;
+    background-color: steelblue;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#login>a{
+    width: 80%;
+    height: 80%;
+    text-decoration: none;
+    text-align: center;
+    font-size: 1.5em;
+    color: white;
+
+}
 
 #weather{
    
-    width:75%;
-    position:sticky;
-    bottom:0;
+    width:90%;
     background-color: #fff;
-    border: solid black
+
 }
 #flexContainer{
     width:100%;
@@ -84,4 +100,29 @@ select{
     justify-content: flex-start;
     align-items: center;
 }
+#header{
+    display: flex;
+    width:75%;
+    flex-direction: row;
+    align-items:center;
+}
 
+@media screen and (max-device-width: 500px) {
+    tr{
+        height: 15vh;
+    }
+    td{
+        font-size: 3em;
+    }
+    table{
+        width:100%;
+        margin: 0;
+    }
+    #header{
+        width:100%;
+    }
+    #weather{
+        width:100%;
+        font-size: 2em;
+    }
+}

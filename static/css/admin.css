@@ -55,10 +55,15 @@ button{
     border: none;
     height: 100%;
     width: 20%;
-    background-color: #4CAF50; 
+    background-color: steelblue; 
     color: white;
     cursor: pointer;
 
+}
+
+a{
+    text-decoration: none;
+    color:white;
 }
 
 button:hover {
@@ -95,6 +100,12 @@ textarea{
     background-color: #dddddd;;
     margin-top: 1%;
     width: 75%;
+}
+
+#weather{
+    position:relative;
+    width:75%;
+    left:12.5%;
 }
 
 @media only screen and (max-width: 500px) {
