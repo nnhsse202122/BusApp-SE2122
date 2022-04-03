@@ -1,6 +1,6 @@
 import express, {Request, Response} from "express";
 import {OAuth2Client, TokenPayload} from "google-auth-library";
-import {readData, writeBuses, readWhitelist} from "./ymlController";
+import {readData, readWhitelist} from "./ymlController";
 import path from "path";
 import fs from "fs";
 

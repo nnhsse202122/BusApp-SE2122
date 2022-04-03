@@ -155,6 +155,11 @@ buses:
         arrival: ''
         status: 'NOT HERE'
     -
+        number: '101'
+        change: ''
+        arrival: ''
+        status: 'NOT HERE'
+    -
         number: '110'
         change: ''
         arrival: ''
@@ -170,6 +175,11 @@ buses:
         arrival: ''
         status: 'NOT HERE'
     -
+        number: '118'
+        change: ''
+        arrival: ''
+        status: 'NOT HERE'
+    -
         number: '128'
         change: ''
         arrival: ''
@@ -179,13 +189,4 @@ buses:
         change: ''
         arrival: ''
         status: 'NOT HERE'
-    -
-        number: '118'
-        change: ''
-        arrival: ''
-        status: 'NOT HERE'
-    -
-        number: '101'
-        change: ''
-        arrival: ''
-        status: 'NOT HERE'
+
