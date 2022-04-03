@@ -38,7 +38,7 @@ io.of("/admin").on("connection", (socket) => {
     socket.on("updateMain", (data) => {
         (0, ymlController_1.writeBuses)(data);
         io.of("/").emit("update", (0, ymlController_1.readData)());
-        io.of("/admin").emit("update", (0, ymlController_1.readData)());
+        socket.broadcast.emit("update", (0, ymlController_1.readData)());
     });
     socket.on("debug", (data) => {
         console.log(`debug(admin): ${data}`);
@@ -82,7 +82,7 @@ function resetDatafile() {
 }
 const midnight = new Date();
 midnight.setDate(midnight.getDate() + 1);
-midnight.setHours(0, 0, 0, 0);
+midnight.setHours(5, 0, 0, 0);
 setTimeout(resetBuses, midnight.valueOf() - new Date().valueOf());
 // Starts server
 httpServer.listen(PORT, () => { console.log(`Server is running on port ${PORT}`); });

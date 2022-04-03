@@ -55,3 +55,7 @@ button{
   button:active {
     background: #1669F2;
   }
+
+  @media screen and (max-device-width: 500px) {
+    
+}
