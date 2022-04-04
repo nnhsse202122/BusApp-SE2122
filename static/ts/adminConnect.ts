@@ -62,7 +62,10 @@ function sort(busData: BusData) {
 //     socket.emit("updateMain", data);
 // }
 
-// socket.on("update", (data) => {
-//     const html = ejs.render(document.getElementById("getRender").getAttribute("render"), {data: data});
-//     document.getElementById("content").innerHTML = html;
-// });
+socket.on("updateBuses", (busData) => {
+    sort(busData);
+});
+
+socket.on("updateWeather", (weatherData) => {
+
+});
