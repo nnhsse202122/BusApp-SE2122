@@ -9,7 +9,18 @@ type BusData = {
     status: string
 };
 
-const timers: Map<string, number> = new Map();
+const timers: Map<HTMLTableRowElement, number> = new Map();
+
+function getRow(element: Element) {
+    return <HTMLTableRowElement> element.parentElement!.parentElement!;
+}
+
+function getBusNumber(element: Element) {
+    if (element instanceof HTMLTableRowElement) {
+        return parseInt((<HTMLInputElement> element.children[0].children[0]).value);
+    }
+    return parseInt((<HTMLInputElement> element.parentElement!.parentElement!.children[0].children[0]).value);
+}
 
 function addBus() {
     const row = (<HTMLTableElement> document.getElementById("table")).insertRow(1);
@@ -17,15 +28,28 @@ function addBus() {
     const html = ejs.render(document.getElementById("getRender").getAttribute("emptyRow"));
     row.innerHTML = html;
     (<HTMLInputElement[]> Array.from(document.getElementsByClassName("tableInput"))).forEach((input: HTMLInputElement) => {
-        input.addEventListener("blur", forceSet);
+        // input.addEventListener("blur", forceSet);
     });
     (<HTMLInputElement> row.children[0].children[0]).focus();
 }
 
-function setBus(icon: HTMLElement) {
-    const row = icon.parentElement!.parentElement!;
+function setBus(input: HTMLInputElement) {
+    const row = getRow(input);
     const busData = {} as BusData;
-    busData.number = (<HTMLInputElement> row.children[0].children[0]).value;
+    busData.number = `${getBusNumber(row)}`;
+    if (!busData.number) {
+        alert("Bus number is required");
+        startTimeout(input);
+        return;
+    }
+    const tbody = document.getElementById("tbody")!;
+    for (let i = 1; i < tbody.children.length; i++) {
+        if (parseInt(busData.number) == getBusNumber(tbody.children[i])) {
+            alert("Duplicate bus numbers are not allowed");
+            startTimeout(input);
+            return;
+        }
+    }
     busData.change = (<HTMLInputElement> row.children[1].children[0]).value;
     busData.arrival = (<HTMLInputElement> row.children[2].children[0]).value;
     busData.status = (<HTMLInputElement> row.children[3].children[0]).value;
@@ -38,9 +62,9 @@ function setBus(icon: HTMLElement) {
 }
 
 function startTimeout(input: HTMLInputElement) {
-    const busNumber = (<HTMLInputElement> input.parentElement!.parentElement!.children[0].children[0]).value;
-    clearTimeout(timers.get(busNumber));
-    timers.set(busNumber, setTimeout(setBus(k), 3000));
+    const row = getRow(input);
+    clearTimeout(timers.get(row));
+    timers.set(row, window.setTimeout(() => {setBus(input)}, 3000));
 }
 
 // function cancelBus(icon: HTMLElement) {
@@ -50,12 +74,12 @@ function startTimeout(input: HTMLInputElement) {
 // }
 
 function removeBus(icon: HTMLElement) {
-    const busNumber = (<HTMLInputElement> icon.parentElement!.parentElement!.children[0].children[0]).value;
+    const busNumber = getBusNumber(icon);
     if (confirm(`Are you sure you want to delete bus ${busNumber}?`)) {
-        icon.parentElement!.parentElement!.remove();
+        getRow(icon).remove();
         socket.emit("updateMain", {
             type: "delete",
-            number: busNumber
+            number: `${busNumber}`
         });
     }
 }
@@ -64,7 +88,7 @@ function sort(busData: BusData) {
     const tbody = document.getElementById("tbody")!;
     let i;
     for (i = 1; i < tbody.children.length; i++) {
-        if (parseInt(busData.number) < parseInt((<HTMLInputElement> tbody.children[i].children[0].children[0]).value)) break;
+        if (parseInt(busData.number) < getBusNumber(tbody.children[i])) break;
     }
     const row = (<HTMLTableElement> document.getElementById("table")).insertRow(i);
     // @ts-ignore
@@ -72,27 +96,27 @@ function sort(busData: BusData) {
     row.innerHTML = html;
 }
 
-function forceSet(event: FocusEvent) {
-    // console.log(document.activeElement);
-    // console.log(document.activeElement!.parentElement!.parentElement!);
-    // console.log(event.relatedTarg.parentElement!.parentElement!);
-    // console.log(event);
-    // console.log(event.target);
-    // console.log(document.activeElement);
-    if (!event.relatedTarget) {
-        console.log(2);
-        (<HTMLElement> event.target).blur();
-        alert("Save your changes before leaving row");
-        (<HTMLInputElement> event.target).focus();
+// function forceSet(event: FocusEvent) {
+//     // console.log(document.activeElement);
+//     // console.log(document.activeElement!.parentElement!.parentElement!);
+//     // console.log(event.relatedTarg.parentElement!.parentElement!);
+//     // console.log(event);
+//     // console.log(event.target);
+//     // console.log(document.activeElement);
+//     if (!event.relatedTarget) {
+//         console.log(2);
+//         (<HTMLElement> event.target).blur();
+//         alert("Save your changes before leaving row");
+//         (<HTMLInputElement> event.target).focus();
         
-    }
-    else if ((<HTMLInputElement> event.relatedTarget).parentElement!.parentElement! != (<HTMLInputElement> event.target).parentElement!.parentElement!) {
-        console.log(3);
-        (<HTMLElement> event.target).blur();
-        alert("Save your changes before leaving row");
-        (<HTMLInputElement> event.target).focus();
-    }
-}
+//     }
+//     else if ((<HTMLInputElement> event.relatedTarget).parentElement!.parentElement! != (<HTMLInputElement> event.target).parentElement!.parentElement!) {
+//         console.log(3);
+//         (<HTMLElement> event.target).blur();
+//         alert("Save your changes before leaving row");
+//         (<HTMLInputElement> event.target).focus();
+//     }
+// }
 
 function statusChange(dropDown: HTMLSelectElement) {
     const tr = <HTMLTableElement> (<HTMLElement> dropDown.parentElement).parentElement;

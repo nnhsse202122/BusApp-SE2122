@@ -1,9 +1,9 @@
 <tr>
     <td><input class="tableInput" type="number" value=<%= data.number %> readonly></td>
-    <td><input class="tableInput" type="number" value=<%= data.change %>></td>
-    <td><input class="tableInput" type="text" value=<%= data.arrival %>></td>
+    <td><input class="tableInput" type="number" value=<%= data.change %> oninput="startTimeout(this)"></td>
+    <td><input class="tableInput" type="text" value=<%= data.arrival %> oninput="startTimeout(this)"></td>
     <td>
-        <select class="tableInput" onchange="statusChange(this)">
+        <select class="tableInput" onchange="statusChange(this); startTimeout(this)">
             <option value="NOT HERE" <%= data.status == "NOT HERE"? "selected" : "" %>>NOT HERE</option>
             <option value="HERE" <%= data.status == "HERE"? "selected" : "" %>>HERE</option>
             <option value="LOADING" <%= data.status == "LOADING"? "selected" : ""%>>LOADING</option>
