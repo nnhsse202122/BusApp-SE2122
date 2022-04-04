@@ -7,6 +7,9 @@ function addBus() {
     // @ts-ignore
     const html = ejs.render(document.getElementById("getRender").getAttribute("emptyRow"));
     row.innerHTML = html;
+    Array.from(document.getElementsByClassName("tableInput")).forEach((input) => {
+        input.addEventListener("blur", forceSet);
+    });
     row.children[0].children[0].focus();
 }
 function setBus(icon) {
@@ -19,6 +22,11 @@ function setBus(icon) {
     row.remove();
     sort(busData);
     socket.emit("updateMain", Object.assign({ type: "set" }, busData));
+}
+function cancelBus(icon) {
+    if (confirm("Are you sure you want to cancel bus creation?")) {
+        icon.parentElement.parentElement.remove();
+    }
 }
 function removeBus(icon) {
     const busNumber = icon.parentElement.parentElement.children[0].children[0].value;
@@ -41,6 +49,26 @@ function sort(busData) {
     // @ts-ignore
     const html = ejs.render(document.getElementById("getRender").getAttribute("populatedRow"), { data: busData });
     row.innerHTML = html;
+}
+function forceSet(event) {
+    // console.log(document.activeElement);
+    // console.log(document.activeElement!.parentElement!.parentElement!);
+    // console.log(event.relatedTarg.parentElement!.parentElement!);
+    // console.log(event);
+    // console.log(event.target);
+    // console.log(document.activeElement);
+    if (!event.relatedTarget) {
+        console.log(2);
+        event.target.blur();
+        alert("Save your changes before leaving row");
+        event.target.focus();
+    }
+    else if (event.relatedTarget.parentElement.parentElement != event.target.parentElement.parentElement) {
+        console.log(3);
+        event.target.blur();
+        alert("Save your changes before leaving row");
+        event.target.focus();
+    }
 }
 function statusChange(dropDown) {
     const tr = dropDown.parentElement.parentElement;

@@ -9,12 +9,17 @@ type BusData = {
     status: string
 };
 
+const timers: Map<string, number> = new Map();
+
 function addBus() {
     const row = (<HTMLTableElement> document.getElementById("table")).insertRow(1);
     // @ts-ignore
     const html = ejs.render(document.getElementById("getRender").getAttribute("emptyRow"));
     row.innerHTML = html;
-    (<HTMLInputElement> row.children[0].children[0]).focus()
+    (<HTMLInputElement[]> Array.from(document.getElementsByClassName("tableInput"))).forEach((input: HTMLInputElement) => {
+        input.addEventListener("blur", forceSet);
+    });
+    (<HTMLInputElement> row.children[0].children[0]).focus();
 }
 
 function setBus(icon: HTMLElement) {
@@ -31,6 +36,18 @@ function setBus(icon: HTMLElement) {
         ...busData
     });
 }
+
+function startTimeout(input: HTMLInputElement) {
+    const busNumber = (<HTMLInputElement> input.parentElement!.parentElement!.children[0].children[0]).value;
+    clearTimeout(timers.get(busNumber));
+    timers.set(busNumber, setTimeout(setBus(k), 3000));
+}
+
+// function cancelBus(icon: HTMLElement) {
+//     if (confirm("Are you sure you want to cancel bus creation?")) {
+//         icon.parentElement!.parentElement!.remove();
+//     }
+// }
 
 function removeBus(icon: HTMLElement) {
     const busNumber = (<HTMLInputElement> icon.parentElement!.parentElement!.children[0].children[0]).value;
@@ -53,6 +70,28 @@ function sort(busData: BusData) {
     // @ts-ignore
     const html = ejs.render(document.getElementById("getRender").getAttribute("populatedRow"), {data: busData});
     row.innerHTML = html;
+}
+
+function forceSet(event: FocusEvent) {
+    // console.log(document.activeElement);
+    // console.log(document.activeElement!.parentElement!.parentElement!);
+    // console.log(event.relatedTarg.parentElement!.parentElement!);
+    // console.log(event);
+    // console.log(event.target);
+    // console.log(document.activeElement);
+    if (!event.relatedTarget) {
+        console.log(2);
+        (<HTMLElement> event.target).blur();
+        alert("Save your changes before leaving row");
+        (<HTMLInputElement> event.target).focus();
+        
+    }
+    else if ((<HTMLInputElement> event.relatedTarget).parentElement!.parentElement! != (<HTMLInputElement> event.target).parentElement!.parentElement!) {
+        console.log(3);
+        (<HTMLElement> event.target).blur();
+        alert("Save your changes before leaving row");
+        (<HTMLInputElement> event.target).focus();
+    }
 }
 
 function statusChange(dropDown: HTMLSelectElement) {
