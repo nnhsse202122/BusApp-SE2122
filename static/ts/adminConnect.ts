@@ -24,8 +24,15 @@ function emitSet(icon: HTMLElement) {
     });
 }
 
-function emitDelete() {
-    
+function removeBus(icon: HTMLElement) {
+    const busNumber = (<HTMLInputElement> icon.parentElement!.parentElement!.children[0].children[0]).value;
+    if (confirm(`Are you sure you want to delete bus ${busNumber}?`)) {
+        icon.parentElement!.parentElement!.remove();
+        socket.emit("updateMain", {
+            type: "delete",
+            number: busNumber
+        });
+    }
 }
 
 function sort(busData: BusData) {

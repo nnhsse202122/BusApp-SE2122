@@ -11,6 +11,17 @@ function emitSet(icon) {
     busData.status = row.children[3].children[0].value;
     row.remove();
     sort(busData);
+    socket.emit("updateMain", Object.assign({ type: "set" }, busData));
+}
+function removeBus(icon) {
+    const busNumber = icon.parentElement.parentElement.children[0].children[0].value;
+    if (confirm(`Are you sure you want to delete bus ${busNumber}?`)) {
+        icon.parentElement.parentElement.remove();
+        socket.emit("updateMain", {
+            type: "delete",
+            number: busNumber
+        });
+    }
 }
 function emitDelete() {
 }
@@ -18,8 +29,6 @@ function sort(busData) {
     const tbody = document.getElementById("tbody");
     let i;
     for (i = 1; i < tbody.children.length; i++) {
-        console.log(tbody);
-        console.log(tbody.children[i].children[0].children[0].value);
         if (parseInt(busData.number) < parseInt(tbody.children[i].children[0].children[0].value))
             break;
     }
@@ -46,7 +55,8 @@ function sort(busData) {
 //     }
 //     socket.emit("updateMain", data);
 // }
-// socket.on("update", (data) => {
-//     const html = ejs.render(document.getElementById("getRender").getAttribute("render"), {data: data});
-//     document.getElementById("content").innerHTML = html;
-// });
+socket.on("updateBuses", (busData) => {
+    sort(busData);
+});
+socket.on("updateWeather", (weatherData) => {
+});

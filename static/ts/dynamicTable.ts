@@ -61,10 +61,6 @@ function addBus() {
     deleteBus.appendChild(deleteIcon);
 }
 
-// Deletes a bus from the admin table
-function removeBus(icon: HTMLElement) {
-    (<HTMLTableElement> (<HTMLElement> icon.parentElement).parentElement).remove();
-}
 
 function statusChange(dropDown: HTMLSelectElement) {
     const tr = <HTMLTableElement> (<HTMLElement> dropDown.parentElement).parentElement;
