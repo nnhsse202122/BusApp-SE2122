@@ -51,7 +51,7 @@ function addBus() {
     // Creates save button and adds it to the fifth cell
     const saveIcon = document.createElement("i");
     saveIcon.setAttribute("class", "fa-solid fa-check");
-    saveIcon.setAttribute("onclick", "setBus()"); //////////////////////// Dont forget
+    saveIcon.setAttribute("onclick", "emitSet(this)"); //////////////////////// Dont forget
     saveBus.appendChild(saveIcon);
 
     // Creates delete button and adds it to the sixth cell

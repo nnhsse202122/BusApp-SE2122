@@ -26,7 +26,7 @@ exports.router.get("/", (req, res) => {
     // Reads from data file and displays data
     res.render("index", {
         data: (0, ymlController_1.readData)(),
-        render: fs_1.default.readFileSync(path_1.default.resolve(__dirname, "../views/include/indexContent.ejs"))
+        render: fs_1.default.readFileSync(path_1.default.resolve(__dirname, "../views/include/indexContent.ejs")),
     });
 });
 // Login page. User authenticates here and then is redirected to admin (where they will be authorized)
@@ -60,7 +60,8 @@ exports.router.get("/admin", (req, res) => __awaiter(void 0, void 0, void 0, fun
     if (req.session.isAdmin) {
         res.render("admin", {
             data: (0, ymlController_1.readData)(),
-            render: fs_1.default.readFileSync(path_1.default.resolve(__dirname, "../views/include/adminContent.ejs"))
+            render: fs_1.default.readFileSync(path_1.default.resolve(__dirname, "../views/include/adminContent.ejs")),
+            row: fs_1.default.readFileSync(path_1.default.resolve(__dirname, "../views/include/adminRow.ejs"))
         });
     }
     else {

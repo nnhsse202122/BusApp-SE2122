@@ -8,7 +8,9 @@ function addBus() {
     const busChange = row.insertCell(1);
     const busArrival = row.insertCell(2);
     const busStatus = row.insertCell(3);
-    const deleteBus = row.insertCell(4);
+    const saveBus = row.insertCell(4);
+    saveBus.setAttribute("class", "saveBus");
+    const deleteBus = row.insertCell(5);
     deleteBus.setAttribute("class", "deleteBus");
     // Creates input element for bus number and adds it to the first cell
     const numberInput = document.createElement("input");
@@ -42,7 +44,12 @@ function addBus() {
     });
     statusSelect.setAttribute("onchange", "statusChange(this);onChange()");
     busStatus.appendChild(statusSelect);
-    // Creates delete button and adds it to the fourth cell
+    // Creates save button and adds it to the fifth cell
+    const saveIcon = document.createElement("i");
+    saveIcon.setAttribute("class", "fa-solid fa-check");
+    saveIcon.setAttribute("onclick", "emitSet(this)"); //////////////////////// Dont forget
+    saveBus.appendChild(saveIcon);
+    // Creates delete button and adds it to the sixth cell
     const deleteIcon = document.createElement("i");
     deleteIcon.setAttribute("class", "fas fa-times");
     deleteIcon.setAttribute("onclick", "removeBus(this);onChange()");

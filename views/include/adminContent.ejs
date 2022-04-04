@@ -11,31 +11,33 @@
             <col span="3">
             <col id="statusCol">
         </colgroup>
-        <tr>
-            <th>Bus Number</th>
-            <th>Bus Change</th>
-            <th>Bus Arrived</th>
-            <th>Status</th>
-            <th class="saveBus"></th>
-            <th class="deleteBus"></th>
-        </tr>
-    <% for(let i = 0; i < data.buses.length; i++) { %> 
-        <tr>
-            <td><input class="tableInput" type="number" name="busNumber" value=<%= data.buses[i].number %>></td>
-            <td><input class="tableInput" type="number" name="busChange" value=<%= data.buses[i].change %>></td>
-            <td><input class="tableInput" type="text" name="busArrival" value=<%= data.buses[i].arrival %>></td>
-            <td>
-                <select name="busStatus" onchange="statusChange(this)">
-                    <option value="NOT HERE" <%= data.buses[i].status == "NOT HERE"? "selected" : "" %>>NOT HERE</option>
-                    <option value="HERE" <%= data.buses[i].status == "HERE"? "selected" : "" %>>HERE</option>
-                    <option value="LOADING" <%= data.buses[i].status == "LOADING"? "selected" : ""%>>LOADING</option>
-                    <option value="GONE" <%= data.buses[i].status == "GONE"? "selected" : "" %>>GONE</option>
-                </select>
-            </td>
-            <td class="saveBus"><i class="fa-solid fa-check" onclick="emitSet(this)"></i></td>
-            <td class="deleteBus"><i class="fas fa-times" onclick="emitDelete(this);removeBus(this);"></i></td>
-        </tr>
-    <% } %> 
+        <tbody id="tbody">
+            <tr>
+                <th>Bus Number</th>
+                <th>Bus Change</th>
+                <th>Bus Arrived</th>
+                <th>Status</th>
+                <th class="saveBus"></th>
+                <th class="deleteBus"></th>
+            </tr>
+        <% for(let i = 0; i < data.buses.length; i++) { %> 
+            <tr>
+                <td><input class="tableInput" type="number" name="busNumber" value=<%= data.buses[i].number %>></td>
+                <td><input class="tableInput" type="number" name="busChange" value=<%= data.buses[i].change %>></td>
+                <td><input class="tableInput" type="text" name="busArrival" value=<%= data.buses[i].arrival %>></td>
+                <td>
+                    <select name="busStatus" onchange="statusChange(this)">
+                        <option value="NOT HERE" <%= data.buses[i].status == "NOT HERE"? "selected" : "" %>>NOT HERE</option>
+                        <option value="HERE" <%= data.buses[i].status == "HERE"? "selected" : "" %>>HERE</option>
+                        <option value="LOADING" <%= data.buses[i].status == "LOADING"? "selected" : ""%>>LOADING</option>
+                        <option value="GONE" <%= data.buses[i].status == "GONE"? "selected" : "" %>>GONE</option>
+                    </select>
+                </td>
+                <td class="saveBus"><i class="fa-solid fa-check" onclick="emitSet(this)"></i></td>
+                <td class="deleteBus"><i class="fas fa-times" onclick="emitDelete(this);removeBus(this);"></i></td>
+            </tr>
+        <% } %> 
+        </tbody>
     </table>
     <div id="weather">
         <p><%= data.weather.status %> </p>

@@ -1,0 +1,15 @@
+<tr>
+    <td><input class="tableInput" type="number" name="busNumber" value=<%= data.number %>></td>
+    <td><input class="tableInput" type="number" name="busChange" value=<%= data.change %>></td>
+    <td><input class="tableInput" type="text" name="busArrival" value=<%= data.arrival %>></td>
+    <td>
+        <select name="busStatus" onchange="statusChange(this)">
+            <option value="NOT HERE" <%= data.status == "NOT HERE"? "selected" : "" %>>NOT HERE</option>
+            <option value="HERE" <%= data.status == "HERE"? "selected" : "" %>>HERE</option>
+            <option value="LOADING" <%= data.status == "LOADING"? "selected" : ""%>>LOADING</option>
+            <option value="GONE" <%= data.status == "GONE"? "selected" : "" %>>GONE</option>
+        </select>
+    </td>
+    <td class="saveBus"><i class="fa-solid fa-check" onclick="emitSet(this)"></i></td>
+    <td class="deleteBus"><i class="fas fa-times" onclick="emitDelete(this);removeBus(this);"></i></td>
+</tr>

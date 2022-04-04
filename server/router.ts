@@ -14,7 +14,7 @@ router.get("/", (req: Request, res: Response) => {
     // Reads from data file and displays data
     res.render("index", {
         data: readData(),
-        render: fs.readFileSync(path.resolve(__dirname, "../views/include/indexContent.ejs"))
+        render: fs.readFileSync(path.resolve(__dirname, "../views/include/indexContent.ejs")), 
     });
 });
 
@@ -54,7 +54,8 @@ router.get("/admin", async (req: Request, res: Response) => {
     if (req.session.isAdmin) {
         res.render("admin", {
             data: readData(),
-            render: fs.readFileSync(path.resolve(__dirname, "../views/include/adminContent.ejs"))
+            render: fs.readFileSync(path.resolve(__dirname, "../views/include/adminContent.ejs")),
+            row: fs.readFileSync(path.resolve(__dirname, "../views/include/adminRow.ejs"))
         });
     }
     else {
