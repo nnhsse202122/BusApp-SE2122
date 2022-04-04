@@ -55,7 +55,8 @@ router.get("/admin", async (req: Request, res: Response) => {
         res.render("admin", {
             data: readData(),
             render: fs.readFileSync(path.resolve(__dirname, "../views/include/adminContent.ejs")),
-            row: fs.readFileSync(path.resolve(__dirname, "../views/sockets/adminRow.ejs"))
+            emptyRow: fs.readFileSync(path.resolve(__dirname, "../views/sockets/adminEmptyRow.ejs")),
+            populatedRow: fs.readFileSync(path.resolve(__dirname, "../views/sockets/adminPopulatedRow.ejs"))
         });
     }
     else {

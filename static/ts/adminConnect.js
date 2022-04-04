@@ -2,7 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const socket_io_client_1 = require("socket.io-client"); // Causes an error in broswer but it don't matter
 const socket = (0, socket_io_client_1.io)('/admin');
-function emitSet(icon) {
+function addBus() {
+    const row = document.getElementById("table").insertRow(1);
+    // @ts-ignore
+    const html = ejs.render(document.getElementById("getRender").getAttribute("emptyRow"));
+    row.innerHTML = html;
+    row.children[0].children[0].focus();
+}
+function setBus(icon) {
     const row = icon.parentElement.parentElement;
     const busData = {};
     busData.number = row.children[0].children[0].value;
@@ -23,8 +30,6 @@ function removeBus(icon) {
         });
     }
 }
-function emitDelete() {
-}
 function sort(busData) {
     const tbody = document.getElementById("tbody");
     let i;
@@ -34,27 +39,30 @@ function sort(busData) {
     }
     const row = document.getElementById("table").insertRow(i);
     // @ts-ignore
-    const html = ejs.render(document.getElementById("getRender").getAttribute("row"), { data: busData });
+    const html = ejs.render(document.getElementById("getRender").getAttribute("populatedRow"), { data: busData });
     row.innerHTML = html;
 }
-// let timeout;
-// function onChange() {
-//     clearTimeout(timeout);
-//     timeout = setTimeout(emit, 4000);
-// }
-// function emit() {
-//     const tableRows = document.getElementById("table").rows;
-//     const data = [];
-//     for(let i = 1; i < tableRows.length; i++) {
-//         data.push({
-//             "number": tableRows[i].children[0].children[0].value,
-//             "change": tableRows[i].children[1].children[0].value,
-//             "arrival": tableRows[i].children[2].children[0].value,
-//             "status": tableRows[i].children[3].children[0].value
-//         });
-//     }
-//     socket.emit("updateMain", data);
-// }
+function statusChange(dropDown) {
+    const tr = dropDown.parentElement.parentElement;
+    const busArrival = tr.querySelector(`input[name="busArrival"]`);
+    if (dropDown.value == "NOT HERE") {
+        busArrival.value = "";
+    }
+    else if (dropDown.value == "HERE") {
+        const date = new Date();
+        let hour = parseInt(date.toTimeString().substring(0, 3));
+        let minute = date.toTimeString().substring(3, 5);
+        let effix;
+        if (hour > 12) {
+            hour -= 12;
+            effix = "pm";
+        }
+        else {
+            effix = "am";
+        }
+        busArrival.value = `${hour}:${minute}${effix}`;
+    }
+}
 socket.on("updateBuses", (busData) => {
     sort(busData);
 });

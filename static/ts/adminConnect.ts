@@ -9,7 +9,15 @@ type BusData = {
     status: string
 };
 
-function emitSet(icon: HTMLElement) {
+function addBus() {
+    const row = (<HTMLTableElement> document.getElementById("table")).insertRow(1);
+    // @ts-ignore
+    const html = ejs.render(document.getElementById("getRender").getAttribute("emptyRow"));
+    row.innerHTML = html;
+    (<HTMLInputElement> row.children[0].children[0]).focus()
+}
+
+function setBus(icon: HTMLElement) {
     const row = icon.parentElement!.parentElement!;
     const busData = {} as BusData;
     busData.number = (<HTMLInputElement> row.children[0].children[0]).value;
@@ -43,31 +51,31 @@ function sort(busData: BusData) {
     }
     const row = (<HTMLTableElement> document.getElementById("table")).insertRow(i);
     // @ts-ignore
-    const html = ejs.render(document.getElementById("getRender").getAttribute("row"), {data: busData});
+    const html = ejs.render(document.getElementById("getRender").getAttribute("populatedRow"), {data: busData});
     row.innerHTML = html;
 }
 
-
-// let timeout;
-
-// function onChange() {
-//     clearTimeout(timeout);
-//     timeout = setTimeout(emit, 4000);
-// }
-
-// function emit() {
-//     const tableRows = document.getElementById("table").rows;
-//     const data = [];
-//     for(let i = 1; i < tableRows.length; i++) {
-//         data.push({
-//             "number": tableRows[i].children[0].children[0].value,
-//             "change": tableRows[i].children[1].children[0].value,
-//             "arrival": tableRows[i].children[2].children[0].value,
-//             "status": tableRows[i].children[3].children[0].value
-//         });
-//     }
-//     socket.emit("updateMain", data);
-// }
+function statusChange(dropDown: HTMLSelectElement) {
+    const tr = <HTMLTableElement> (<HTMLElement> dropDown.parentElement).parentElement;
+    const busArrival = <HTMLInputElement> tr.querySelector(`input[name="busArrival"]`);
+    if (dropDown.value == "NOT HERE") {
+        busArrival.value = "";
+    }
+    else if (dropDown.value == "HERE") {
+        const date = new Date();
+        let hour = parseInt(date.toTimeString().substring(0, 3));
+        let minute = date.toTimeString().substring(3, 5);
+        let effix: string;
+        if (hour > 12)  {
+            hour -= 12;
+            effix = "pm";
+        }    
+        else {
+            effix = "am";
+        }
+        busArrival.value = `${hour}:${minute}${effix}`;    
+    }
+}
 
 socket.on("updateBuses", (busData) => {
     sort(busData);

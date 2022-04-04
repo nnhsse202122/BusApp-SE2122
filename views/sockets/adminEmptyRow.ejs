@@ -1,0 +1,15 @@
+<tr>
+    <td><input class="tableInput" type="number" name="busNumber"></td>
+    <td><input class="tableInput" type="number" name="busChange"></td>
+    <td><input class="tableInput" type="text" name="busArrival"></td>
+    <td>
+        <select name="busStatus" onchange="statusChange(this)">
+            <option value="NOT HERE" selected>NOT HERE</option>
+            <option value="HERE">HERE</option>
+            <option value="LOADING">LOADING</option>
+            <option value="GONE">GONE</option>
+        </select>
+    </td>
+    <td class="saveBus"><i class="fa-solid fa-check" onclick="setBus(this)"></i></td>
+    <td class="deleteBus"><i class="fas fa-times" onclick=""></i></td>
+</tr>

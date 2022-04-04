@@ -22,7 +22,7 @@
             </tr>
         <% for(let i = 0; i < data.buses.length; i++) { %> 
             <tr>
-                <td><input class="tableInput" type="number" name="busNumber" value=<%= data.buses[i].number %>></td>
+                <td><input class="tableInput" type="number" name="busNumber" value=<%= data.buses[i].number %> readonly></td>
                 <td><input class="tableInput" type="number" name="busChange" value=<%= data.buses[i].change %>></td>
                 <td><input class="tableInput" type="text" name="busArrival" value=<%= data.buses[i].arrival %>></td>
                 <td>
@@ -33,8 +33,8 @@
                         <option value="GONE" <%= data.buses[i].status == "GONE"? "selected" : "" %>>GONE</option>
                     </select>
                 </td>
-                <td class="saveBus"><i class="fa-solid fa-check" onclick="emitSet(this)"></i></td>
-                <td class="deleteBus"><i class="fas fa-times" onclick="emitDelete(this);removeBus(this);"></i></td>
+                <td class="saveBus"><i class="fa-solid fa-check" onclick="setBus(this)"></i></td>
+                <td class="deleteBus"><i class="fas fa-times" onclick="removeBus(this);"></i></td>
             </tr>
         <% } %> 
         </tbody>
