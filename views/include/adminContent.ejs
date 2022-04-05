@@ -23,8 +23,8 @@
         <% for(let i = 0; i < data.buses.length; i++) { %> 
             <tr>
                 <td><input class="tableInput" type="number" value=<%= data.buses[i].number %> readonly></td>
-                <td><input class="tableInput" type="number" value=<%= data.buses[i].change %> oninput="startTimeout(this)"></td>
-                <td><input class="tableInput" type="text" value=<%= data.buses[i].arrival %> oninput="startTimeout(this)"></td>
+                <td><input class="tableInput" type="number" oninput="startTimeout(this)" value=<%= data.buses[i].change %> ></td>
+                <td><input class="tableInput" type="text" oninput="startTimeout(this)" value=<%= data.buses[i].arrival %> ></td>
                 <td>
                     <select class="tableInput" onchange="statusChange(this); startTimeout(this)">
                         <option value="NOT HERE" <%= data.buses[i].status == "NOT HERE"? "selected" : "" %>>NOT HERE</option>
