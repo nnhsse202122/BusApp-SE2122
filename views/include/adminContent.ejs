@@ -1,11 +1,15 @@
 <div id="content">
+    <div id="flexContainer">
     <div id="header">
-        
-    <div id="buttons">
+        <div id="weather">
+            <p><%= data.weather.status %> </p>
+            <img src=<%= data.weather.icon %>>
+            <p>Temperature: <%= data.weather.temperature %></p>
+            <p>Feels like: <%= data.weather.feelsLike %></p>
+        </div>
         <button><a href="/">Back to hompage</a></button>
         <button type="button" onclick="addBus();onChange()">Add Bus</button>
     </div>
-</div>
     <table id="table">
         <colgroup>
             <col span="3">
@@ -35,10 +39,5 @@
         </tr>
     <% } %> 
     </table>
-    <div id="weather">
-        <p><%= data.weather.status %> </p>
-        <img src=<%= data.weather.icon %>>
-        <p>Temperature: <%= data.weather.temperature %></p>
-        <p>Feels like: <%= data.weather.feelsLike %></p>
     </div>
 </div>
