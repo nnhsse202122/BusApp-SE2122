@@ -1,0 +1,10 @@
+{
+    "name":"Naperville North Bus App",
+    "short_name":"Bus App",
+    "icons": [
+        {
+            "src": "/img/busAppIcon.png",
+            "sizes": "128x128"
+        }
+    ]
+}

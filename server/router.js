@@ -67,3 +67,6 @@ exports.router.get("/admin", (req, res) => __awaiter(void 0, void 0, void 0, fun
         res.render("unauthorized");
     }
 }));
+exports.router.get("/sw/busapp.webmanifest", (req, res) => {
+    res.sendFile(path_1.default.resolve(__dirname, '../sw/busapp.webmanifest'));
+});
