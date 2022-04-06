@@ -24,7 +24,6 @@ const oAuth2 = new google_auth_library_1.OAuth2Client(CLIENT_ID);
 // Homepage. This is where students will view bus information from. 
 exports.router.get("/", (req, res) => {
     // Reads from data file and displays data
-    console.log((0, ymlController_1.readData)().buses[1].arrival);
     res.render("index", {
         data: (0, ymlController_1.readData)(),
         render: fs_1.default.readFileSync(path_1.default.resolve(__dirname, "../views/include/indexContent.ejs")),

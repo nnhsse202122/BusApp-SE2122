@@ -1,8 +1,8 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const socket_io_client_1 = require("socket.io-client"); // Causes an error in broswer but it don't matter
-const socket = (0, socket_io_client_1.io)('/admin');
+/// <reference path="./socket-io-client.d.ts"/>
+const socket = window.io('/admin');
 const timers = new Map();
+console.log(`here + ${timers}`);
 function getRow(element) {
     return element.parentElement.parentElement;
 }
@@ -23,6 +23,7 @@ function addBus() {
     row.children[0].children[0].focus();
 }
 function setBus(input) {
+    console.log(`started set bus for ${input}`);
     const row = getRow(input);
     const busData = {};
     busData.number = `${getBusNumber(row)}`;
@@ -39,17 +40,20 @@ function setBus(input) {
             return;
         }
     }
+    console.log(`cleared verification for ${input}`);
     busData.change = row.children[1].children[0].value;
     busData.arrival = row.children[2].children[0].value;
     busData.status = row.children[3].children[0].value;
     row.remove();
     sort(busData);
+    console.log(`sorted for ${input}`);
     socket.emit("updateMain", Object.assign({ type: "set" }, busData));
 }
 function startTimeout(input) {
     const row = getRow(input);
     clearTimeout(timers.get(row));
     timers.set(row, window.setTimeout(() => { setBus(input); }, 3000));
+    console.log(`Timer started for ${input}`);
 }
 // function cancelBus(icon: HTMLElement) {
 //     if (confirm("Are you sure you want to cancel bus creation?")) {

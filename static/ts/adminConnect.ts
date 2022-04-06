@@ -1,6 +1,6 @@
-import {io, Socket} from "socket.io-client"; // Causes an error in broswer but it don't matter
+/// <reference path="./socket-io-client.d.ts"/>
 
-const socket = io('/admin');
+const socket = window.io('/admin');
 
 type BusData = {
     number: string,
@@ -10,6 +10,7 @@ type BusData = {
 };
 
 const timers: Map<HTMLTableRowElement, number> = new Map();
+console.log(`here + ${timers}`);
 
 function getRow(element: Element) {
     return <HTMLTableRowElement> element.parentElement!.parentElement!;
@@ -34,27 +35,28 @@ function addBus() {
 }
 
 function setBus(input: HTMLInputElement) {
+    console.log(`started set bus for ${input}`);
     const row = getRow(input);
     const busData = {} as BusData;
     busData.number = `${getBusNumber(row)}`;
     if (!busData.number) {
         alert("Bus number is required");
-        startTimeout(input);
         return;
     }
     const tbody = document.getElementById("tbody")!;
     for (let i = 1; i < tbody.children.length; i++) {
         if (parseInt(busData.number) == getBusNumber(tbody.children[i])) {
             alert("Duplicate bus numbers are not allowed");
-            startTimeout(input);
             return;
         }
     }
+    console.log(`cleared verification for ${input}`);
     busData.change = (<HTMLInputElement> row.children[1].children[0]).value;
     busData.arrival = (<HTMLInputElement> row.children[2].children[0]).value;
     busData.status = (<HTMLInputElement> row.children[3].children[0]).value;
     row.remove();
     sort(busData);
+    console.log(`sorted for ${input}`);
     socket.emit("updateMain", {
         type: "set",
         ...busData
@@ -65,6 +67,7 @@ function startTimeout(input: HTMLInputElement) {
     const row = getRow(input);
     clearTimeout(timers.get(row));
     timers.set(row, window.setTimeout(() => {setBus(input)}, 3000));
+    console.log(`Timer started for ${input}`);
 }
 
 // function cancelBus(icon: HTMLElement) {
