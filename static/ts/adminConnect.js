@@ -1,114 +1,131 @@
 "use strict";
 /// <reference path="./socket-io-client.d.ts"/>
 const socket = window.io('/admin');
-const timers = new Map();
-console.log(`here + ${timers}`);
-function getRow(element) {
-    return element.parentElement.parentElement;
-}
-function getBusNumber(element) {
-    if (element instanceof HTMLTableRowElement) {
-        return parseInt(element.children[0].children[0].value);
+class BusRow {
+    constructor(rowVal) {
+        this.row = rowVal;
+        this.numberInput = this.row.children[0].children[0];
+        this.changeInput = this.row.children[1].children[0];
+        this.arrivalInput = this.row.children[2].children[0];
+        this.statusInput = this.row.children[3].children[0];
+        this.removeIcon = this.row.children[4].children[0];
+        this.updateValues();
     }
-    return parseInt(element.parentElement.parentElement.children[0].children[0].value);
+    updateValues() {
+        this.number = this.numberInput.value;
+        this.change = this.changeInput.value;
+        this.arrival = this.arrivalInput.value;
+        this.status = this.statusInput.value;
+    }
+}
+const buses = []; /// TODO: Add buses already in the table
+{
+    const table = document.getElementById("table");
+    const rows = [...table.rows];
+    rows.splice(0, 1);
+    rows.forEach((row) => {
+        buses.push(new BusRow(row));
+    });
+}
+console.log(buses);
+function getBusRow(key, attribute) {
+    if (!attribute) {
+        attribute = [...key.classList].find((htmlClass) => {
+            return ["numberInput", "changeInput", "arrivalInput", "changeInput"].includes(htmlClass);
+        });
+    }
+    const bus = buses.find((bus) => { return bus[attribute] == key; });
+    if (bus)
+        return bus;
+    throw "Bus not found";
 }
 function addBus() {
-    const row = document.getElementById("table").insertRow(1);
+    const bus = new BusRow(document.getElementById("table").insertRow(1));
+    buses.splice(0, 0, bus);
     // @ts-ignore
     const html = ejs.render(document.getElementById("getRender").getAttribute("emptyRow"));
-    row.innerHTML = html;
-    Array.from(document.getElementsByClassName("tableInput")).forEach((input) => {
-        // input.addEventListener("blur", forceSet);
-    });
-    row.children[0].children[0].focus();
+    bus.row.innerHTML = html;
+    bus.numberInput.focus();
+}
+function startTimeout(input) {
+    const bus = getBusRow(input);
+    bus.updateValues();
+    clearTimeout(bus.timer);
+    bus.timer = window.setTimeout(() => { setBus(input); }, 3000);
+    // console.log(`Timer started for ${input}`);
 }
 function setBus(input) {
-    console.log(`started set bus for ${input}`);
-    const row = getRow(input);
-    const busData = {};
-    busData.number = `${getBusNumber(row)}`;
-    if (!busData.number) {
+    // console.log(`started set bus for ${input}`);
+    const bus = getBusRow(input);
+    if (!bus.number) {
         alert("Bus number is required");
-        startTimeout(input);
         return;
     }
-    const tbody = document.getElementById("tbody");
-    for (let i = 1; i < tbody.children.length; i++) {
-        if (parseInt(busData.number) == getBusNumber(tbody.children[i])) {
+    for (let otherBus of buses) {
+        if (bus.number == otherBus.number) {
             alert("Duplicate bus numbers are not allowed");
-            startTimeout(input);
             return;
         }
     }
-    console.log(`cleared verification for ${input}`);
-    busData.change = row.children[1].children[0].value;
-    busData.arrival = row.children[2].children[0].value;
-    busData.status = row.children[3].children[0].value;
-    row.remove();
-    sort(busData);
-    console.log(`sorted for ${input}`);
-    socket.emit("updateMain", Object.assign({ type: "set" }, busData));
+    // console.log(`cleared verification for ${input}`);
+    bus.row.remove();
+    sort(bus);
+    // console.log(`sorted for ${input}`);
+    socket.emit("updateMain", {
+        type: "set",
+        number: bus.number,
+        change: bus.change,
+        arrival: bus.arrival,
+        status: bus.status
+    });
 }
-function startTimeout(input) {
-    const row = getRow(input);
-    clearTimeout(timers.get(row));
-    timers.set(row, window.setTimeout(() => { setBus(input); }, 3000));
-    console.log(`Timer started for ${input}`);
-}
-// function cancelBus(icon: HTMLElement) {
-//     if (confirm("Are you sure you want to cancel bus creation?")) {
-//         icon.parentElement!.parentElement!.remove();
-//     }
-// }
 function removeBus(icon) {
-    const busNumber = getBusNumber(icon);
-    if (confirm(`Are you sure you want to delete bus ${busNumber}?`)) {
-        getRow(icon).remove();
-        socket.emit("updateMain", {
-            type: "delete",
-            number: `${busNumber}`
-        });
+    const bus = getBusRow(icon, "removeIcon");
+    if (bus.number) {
+        if (confirm(`Are you sure you want to delete bus ${bus.number}?`)) {
+            clearTimeout(bus.timer);
+            bus.row.remove();
+            socket.emit("updateMain", {
+                type: "delete",
+                number: bus.number
+            });
+        }
+        buses.splice(buses.indexOf(bus), 1);
+        return;
     }
+    clearTimeout(bus.timer);
+    bus.row.remove();
+    buses.splice(buses.indexOf(bus), 1);
 }
-function sort(busData) {
-    const tbody = document.getElementById("tbody");
-    let i;
-    for (i = 1; i < tbody.children.length; i++) {
-        if (parseInt(busData.number) < getBusNumber(tbody.children[i]))
-            break;
+function sort(bus) {
+    const busBefore = buses.find((otherBus) => {
+        return bus.number < otherBus.number;
+    });
+    let index;
+    if (busBefore) {
+        index = buses.indexOf(busBefore) + 1;
     }
-    const row = document.getElementById("table").insertRow(i);
+    else {
+        index = buses.length + 1;
+    }
+    const row = document.getElementById("table").insertRow(index);
     // @ts-ignore
-    const html = ejs.render(document.getElementById("getRender").getAttribute("populatedRow"), { data: busData });
+    const html = ejs.render(document.getElementById("getRender").getAttribute("populatedRow"), {
+        data: {
+            number: bus.number,
+            change: bus.change,
+            arrival: bus.arrival,
+            status: bus.status
+        }
+    });
     row.innerHTML = html;
 }
-// function forceSet(event: FocusEvent) {
-//     // console.log(document.activeElement);
-//     // console.log(document.activeElement!.parentElement!.parentElement!);
-//     // console.log(event.relatedTarg.parentElement!.parentElement!);
-//     // console.log(event);
-//     // console.log(event.target);
-//     // console.log(document.activeElement);
-//     if (!event.relatedTarget) {
-//         console.log(2);
-//         (<HTMLElement> event.target).blur();
-//         alert("Save your changes before leaving row");
-//         (<HTMLInputElement> event.target).focus();
-//     }
-//     else if ((<HTMLInputElement> event.relatedTarget).parentElement!.parentElement! != (<HTMLInputElement> event.target).parentElement!.parentElement!) {
-//         console.log(3);
-//         (<HTMLElement> event.target).blur();
-//         alert("Save your changes before leaving row");
-//         (<HTMLInputElement> event.target).focus();
-//     }
-// }
 function statusChange(dropDown) {
-    const tr = dropDown.parentElement.parentElement;
-    const busArrival = tr.querySelector(`input[name="busArrival"]`);
-    if (dropDown.value == "NOT HERE") {
-        busArrival.value = "";
+    const bus = getBusRow(dropDown, "statusInput");
+    if (bus.statusInput.value == "NOT HERE") {
+        bus.arrivalInput.value = "";
     }
-    else if (dropDown.value == "HERE") {
+    else if (bus.statusInput.value == "HERE") {
         const date = new Date();
         let hour = parseInt(date.toTimeString().substring(0, 3));
         let minute = date.toTimeString().substring(3, 5);
@@ -120,7 +137,7 @@ function statusChange(dropDown) {
         else {
             effix = "am";
         }
-        busArrival.value = `${hour}:${minute}${effix}`;
+        bus.arrivalInput.value = `${hour}:${minute}${effix}`;
     }
 }
 socket.on("updateBuses", (busData) => {

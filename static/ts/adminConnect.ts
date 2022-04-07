@@ -16,6 +16,7 @@ class BusRow {
     timer: number | undefined;
 
     constructor(rowVal: HTMLTableRowElement) {
+        console.log(rowVal);
         this.row = rowVal;
         this.numberInput = <HTMLInputElement> this.row.children[0].children[0];
         this.changeInput = <HTMLInputElement> this.row.children[1].children[0];
@@ -35,6 +36,16 @@ class BusRow {
 
 const buses: BusRow[] = []; /// TODO: Add buses already in the table
 
+{
+    const table = <HTMLTableElement> document.getElementById("table");
+    const rows = [...table.rows];
+    rows.splice(0, 1);
+    rows.forEach((row) => {
+        buses.push(new BusRow(row));
+    });
+}
+// console.log(buses);
+
 type validAttribute = Exclude<keyof BusRow, "change" | "arrival" | "status" | "timer">
 
 function getBusRow(key: HTMLElement, attribute: validAttribute): BusRow;
@@ -52,6 +63,7 @@ function getBusRow(key: HTMLElement, attribute?: validAttribute) {
 
 function addBus() {
     const bus = new BusRow((<HTMLTableElement> document.getElementById("table")).insertRow(1));
+    console.log(bus);
     buses.splice(0, 0, bus);
     // @ts-ignore
     const html = ejs.render(document.getElementById("getRender").getAttribute("emptyRow"));
