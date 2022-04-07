@@ -2,13 +2,6 @@
 
 const socket = window.io('/admin');
 
-type BusData = {
-    number: string,
-    change: string,
-    arrival: string,
-    status: string
-};
-
 class BusRow {
     row: HTMLTableRowElement;
     numberInput: HTMLInputElement;
@@ -29,7 +22,7 @@ class BusRow {
         this.arrivalInput = <HTMLInputElement> this.row.children[2].children[0];
         this.statusInput = <HTMLInputElement> this.row.children[3].children[0];
         this.removeIcon = <HTMLElement> this.row.children[4].children[0];
-        this.updateValues;
+        this.updateValues();
     }
 
     updateValues() {
@@ -40,7 +33,7 @@ class BusRow {
     }
 }
 
-const buses: BusRow[] = [];
+const buses: BusRow[] = []; /// TODO: Add buses already in the table
 
 type validAttribute = Exclude<keyof BusRow, "change" | "arrival" | "status" | "timer">
 
@@ -142,8 +135,6 @@ function sort(bus: BusRow) {
     }});
     row.innerHTML = html;
 }
-
-
 
 function statusChange(dropDown: HTMLSelectElement) {
     const bus = getBusRow(dropDown, "statusInput");
