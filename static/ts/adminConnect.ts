@@ -9,125 +9,148 @@ type BusData = {
     status: string
 };
 
-const timers: Map<HTMLTableRowElement, number> = new Map();
-console.log(`here + ${timers}`);
+class BusRow {
+    row: HTMLTableRowElement;
+    numberInput: HTMLInputElement;
+    changeInput: HTMLInputElement;
+    arrivalInput: HTMLInputElement;
+    statusInput: HTMLInputElement;
+    removeIcon: HTMLElement;
+    number: string | undefined;
+    change: string | undefined;
+    arrival: string | undefined;
+    status: string | undefined;
+    timer: number | undefined;
 
-function getRow(element: Element) {
-    return <HTMLTableRowElement> element.parentElement!.parentElement!;
+    constructor(rowVal: HTMLTableRowElement) {
+        this.row = rowVal;
+        this.numberInput = <HTMLInputElement> this.row.children[0].children[0];
+        this.changeInput = <HTMLInputElement> this.row.children[1].children[0];
+        this.arrivalInput = <HTMLInputElement> this.row.children[2].children[0];
+        this.statusInput = <HTMLInputElement> this.row.children[3].children[0];
+        this.removeIcon = <HTMLElement> this.row.children[4].children[0];
+        this.updateValues;
+    }
+
+    updateValues() {
+        this.number = this.numberInput.value;
+        this.change = this.changeInput.value;
+        this.arrival = this.arrivalInput.value;
+        this.status = this.statusInput.value;
+    }
 }
 
-function getBusNumber(element: Element) {
-    if (element instanceof HTMLTableRowElement) {
-        return parseInt((<HTMLInputElement> element.children[0].children[0]).value);
+const buses: BusRow[] = [];
+
+type validAttribute = Exclude<keyof BusRow, "change" | "arrival" | "status" | "timer">
+
+function getBusRow(key: HTMLElement, attribute: validAttribute): BusRow;
+function getBusRow(key: HTMLInputElement): BusRow;
+function getBusRow(key: HTMLElement, attribute?: validAttribute) {
+    if (!attribute) {
+        attribute = (<string[]> [...key.classList]).find((htmlClass) => {
+            return ["numberInput", "changeInput", "arrivalInput", "changeInput"].includes(htmlClass)
+        }) as validAttribute;
     }
-    return parseInt((<HTMLInputElement> element.parentElement!.parentElement!.children[0].children[0]).value);
+    const bus = buses.find((bus) => {return bus[attribute!] == key});
+    if (bus) return bus;
+    throw "Bus not found";  
 }
 
 function addBus() {
-    const row = (<HTMLTableElement> document.getElementById("table")).insertRow(1);
+    const bus = new BusRow((<HTMLTableElement> document.getElementById("table")).insertRow(1));
+    buses.splice(0, 0, bus);
     // @ts-ignore
     const html = ejs.render(document.getElementById("getRender").getAttribute("emptyRow"));
-    row.innerHTML = html;
-    (<HTMLInputElement[]> Array.from(document.getElementsByClassName("tableInput"))).forEach((input: HTMLInputElement) => {
-        // input.addEventListener("blur", forceSet);
-    });
-    (<HTMLInputElement> row.children[0].children[0]).focus();
-}
-
-function setBus(input: HTMLInputElement) {
-    console.log(`started set bus for ${input}`);
-    const row = getRow(input);
-    const busData = {} as BusData;
-    busData.number = `${getBusNumber(row)}`;
-    if (!busData.number) {
-        alert("Bus number is required");
-        return;
-    }
-    const tbody = document.getElementById("tbody")!;
-    for (let i = 1; i < tbody.children.length; i++) {
-        if (parseInt(busData.number) == getBusNumber(tbody.children[i])) {
-            alert("Duplicate bus numbers are not allowed");
-            return;
-        }
-    }
-    console.log(`cleared verification for ${input}`);
-    busData.change = (<HTMLInputElement> row.children[1].children[0]).value;
-    busData.arrival = (<HTMLInputElement> row.children[2].children[0]).value;
-    busData.status = (<HTMLInputElement> row.children[3].children[0]).value;
-    row.remove();
-    sort(busData);
-    console.log(`sorted for ${input}`);
-    socket.emit("updateMain", {
-        type: "set",
-        ...busData
-    });
+    bus.row.innerHTML = html;
+    bus.numberInput.focus();
 }
 
 function startTimeout(input: HTMLInputElement) {
-    const row = getRow(input);
-    clearTimeout(timers.get(row));
-    timers.set(row, window.setTimeout(() => {setBus(input)}, 3000));
-    console.log(`Timer started for ${input}`);
+    const bus = getBusRow(input);
+    bus.updateValues();
+    clearTimeout(bus.timer);
+    bus.timer = window.setTimeout(() => {setBus(input)}, 3000)
+    // console.log(`Timer started for ${input}`);
 }
 
-// function cancelBus(icon: HTMLElement) {
-//     if (confirm("Are you sure you want to cancel bus creation?")) {
-//         icon.parentElement!.parentElement!.remove();
-//     }
-// }
+function setBus(input: HTMLInputElement) {
+    // console.log(`started set bus for ${input}`);
+    const bus = getBusRow(input);
+    
+    if (!bus.number) {
+        alert("Bus number is required");
+        return;
+    }
+    for (let otherBus of buses) {
+        if (bus.number == otherBus.number) {
+            alert("Duplicate bus numbers are not allowed");
+            return;
+        } 
+    }
+    // console.log(`cleared verification for ${input}`);
+    bus.row.remove();
+    sort(bus);
+    // console.log(`sorted for ${input}`);
+    socket.emit("updateMain", {
+        type: "set",
+        number: bus.number,
+        change: bus.change,
+        arrival: bus.arrival,
+        status: bus.status
+    });
+}
 
 function removeBus(icon: HTMLElement) {
-    const busNumber = getBusNumber(icon);
-    if (confirm(`Are you sure you want to delete bus ${busNumber}?`)) {
-        getRow(icon).remove();
-        socket.emit("updateMain", {
-            type: "delete",
-            number: `${busNumber}`
-        });
+    const bus = getBusRow(icon, "removeIcon");
+    if (bus.number) {
+        if (confirm(`Are you sure you want to delete bus ${bus.number}?`)) {
+            clearTimeout(bus.timer);
+            bus.row.remove();
+            socket.emit("updateMain", {
+                type: "delete",
+                number: bus.number
+            });
+        }
+        buses.splice(buses.indexOf(bus), 1);
+        return;
     }
+    clearTimeout(bus.timer);
+    bus.row.remove();
+    buses.splice(buses.indexOf(bus), 1);
 }
 
-function sort(busData: BusData) {
-    const tbody = document.getElementById("tbody")!;
-    let i;
-    for (i = 1; i < tbody.children.length; i++) {
-        if (parseInt(busData.number) < getBusNumber(tbody.children[i])) break;
+function sort(bus: BusRow) {
+    const busBefore = buses.find((otherBus) => {
+        return bus.number! < otherBus.number!;
+    });
+    let index: number;
+    if (busBefore) {
+        index = buses.indexOf(busBefore) + 1;
     }
-    const row = (<HTMLTableElement> document.getElementById("table")).insertRow(i);
+    else {
+        index = buses.length + 1;
+    }
+    const row = (<HTMLTableElement> document.getElementById("table")).insertRow(index);
     // @ts-ignore
-    const html = ejs.render(document.getElementById("getRender").getAttribute("populatedRow"), {data: busData});
+    const html = ejs.render(document.getElementById("getRender").getAttribute("populatedRow"), {
+        data: {
+            number: bus.number,
+            change: bus.change,
+            arrival: bus.arrival,
+            status: bus.status
+    }});
     row.innerHTML = html;
 }
 
-// function forceSet(event: FocusEvent) {
-//     // console.log(document.activeElement);
-//     // console.log(document.activeElement!.parentElement!.parentElement!);
-//     // console.log(event.relatedTarg.parentElement!.parentElement!);
-//     // console.log(event);
-//     // console.log(event.target);
-//     // console.log(document.activeElement);
-//     if (!event.relatedTarget) {
-//         console.log(2);
-//         (<HTMLElement> event.target).blur();
-//         alert("Save your changes before leaving row");
-//         (<HTMLInputElement> event.target).focus();
-        
-//     }
-//     else if ((<HTMLInputElement> event.relatedTarget).parentElement!.parentElement! != (<HTMLInputElement> event.target).parentElement!.parentElement!) {
-//         console.log(3);
-//         (<HTMLElement> event.target).blur();
-//         alert("Save your changes before leaving row");
-//         (<HTMLInputElement> event.target).focus();
-//     }
-// }
+
 
 function statusChange(dropDown: HTMLSelectElement) {
-    const tr = <HTMLTableElement> (<HTMLElement> dropDown.parentElement).parentElement;
-    const busArrival = <HTMLInputElement> tr.querySelector(`input[name="busArrival"]`);
-    if (dropDown.value == "NOT HERE") {
-        busArrival.value = "";
+    const bus = getBusRow(dropDown, "statusInput");
+    if (bus.statusInput.value == "NOT HERE") {
+        bus.arrivalInput.value = "";
     }
-    else if (dropDown.value == "HERE") {
+    else if (bus.statusInput.value == "HERE") {
         const date = new Date();
         let hour = parseInt(date.toTimeString().substring(0, 3));
         let minute = date.toTimeString().substring(3, 5);
@@ -139,7 +162,7 @@ function statusChange(dropDown: HTMLSelectElement) {
         else {
             effix = "am";
         }
-        busArrival.value = `${hour}:${minute}${effix}`;    
+        bus.arrivalInput.value = `${hour}:${minute}${effix}`;    
     }
 }
 

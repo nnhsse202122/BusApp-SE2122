@@ -1,9 +1,9 @@
 <tr>
-    <td><input class="tableInput" type="number" oninput="startTimeout(this)"></td>
-    <td><input class="tableInput" type="number" oninput="startTimeout(this)"></td>
-    <td><input class="tableInput" type="text" oninput="startTimeout(this)"></td>
+    <td><input class="tableInput numberInput" type="number" oninput="startTimeout(this)"></td>
+    <td><input class="tableInput changeInput" type="number" oninput="startTimeout(this)"></td>
+    <td><input class="tableInput arrivalInput" type="text" oninput="startTimeout(this)"></td>
     <td>
-        <select class="tableInput" onchange="statusChange(this); startTimeout(this)">
+        <select class="tableInput statusInput" onchange="statusChange(this); startTimeout(this)">
             <option value="NOT HERE" selected>NOT HERE</option>
             <option value="HERE">HERE</option>
             <option value="LOADING">LOADING</option>
