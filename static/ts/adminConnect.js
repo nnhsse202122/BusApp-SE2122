@@ -27,7 +27,6 @@ const buses = []; /// TODO: Add buses already in the table
         buses.push(new BusRow(row));
     });
 }
-console.log(buses);
 function getBusRow(key, attribute) {
     if (!attribute) {
         attribute = [...key.classList].find((htmlClass) => {
@@ -40,11 +39,12 @@ function getBusRow(key, attribute) {
     throw "Bus not found";
 }
 function addBus() {
-    const bus = new BusRow(document.getElementById("table").insertRow(1));
-    buses.splice(0, 0, bus);
+    const row = document.getElementById("table").insertRow(1);
     // @ts-ignore
     const html = ejs.render(document.getElementById("getRender").getAttribute("emptyRow"));
-    bus.row.innerHTML = html;
+    row.innerHTML = html;
+    const bus = new BusRow(row);
+    buses.splice(0, 0, bus);
     bus.numberInput.focus();
 }
 function startTimeout(input) {
