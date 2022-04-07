@@ -26,9 +26,10 @@ io.of("/").on("connection", (socket) => {
 //admin socket
 io.of("/admin").on("connection", (socket) => {
     socket.on("updateMain", (data) => {
-        writeBuses(data);
-        io.of("/").emit("update", readData());
-        socket.broadcast.emit("update", readData());
+        console.log(data);
+        // writeBuses(data);
+        // io.of("/").emit("update", readData());
+        // socket.broadcast.emit("update", readData());
     });
     socket.on("debug", (data) => {
         console.log(`debug(admin): ${data}`);

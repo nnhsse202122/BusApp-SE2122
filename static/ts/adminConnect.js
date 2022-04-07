@@ -30,9 +30,10 @@ const buses = []; /// TODO: Add buses already in the table
 function getBusRow(key, attribute) {
     if (!attribute) {
         attribute = [...key.classList].find((htmlClass) => {
-            return ["numberInput", "changeInput", "arrivalInput", "changeInput"].includes(htmlClass);
+            return ["numberInput", "changeInput", "arrivalInput", "statusInput"].includes(htmlClass);
         });
     }
+    console.log(attribute);
     const bus = buses.find((bus) => { return bus[attribute] == key; });
     if (bus)
         return bus;
@@ -52,10 +53,11 @@ function startTimeout(input) {
     bus.updateValues();
     clearTimeout(bus.timer);
     bus.timer = window.setTimeout(() => { setBus(input); }, 3000);
-    // console.log(`Timer started for ${input}`);
+    console.log(`Timer started for ${input}`);
 }
 function setBus(input) {
-    // console.log(`started set bus for ${input}`);
+    console.log(input);
+    console.log(`started set bus for ${input}`);
     const bus = getBusRow(input);
     if (!bus.number) {
         alert("Bus number is required");
@@ -67,10 +69,10 @@ function setBus(input) {
             return;
         }
     }
-    // console.log(`cleared verification for ${input}`);
+    console.log(`cleared verification for ${input}`);
     bus.row.remove();
     sort(bus);
-    // console.log(`sorted for ${input}`);
+    console.log(`sorted for ${input}`);
     socket.emit("updateMain", {
         type: "set",
         number: bus.number,
@@ -78,6 +80,7 @@ function setBus(input) {
         arrival: bus.arrival,
         status: bus.status
     });
+    console.log(`emitted for ${input}`);
 }
 function removeBus(icon) {
     const bus = getBusRow(icon, "removeIcon");
