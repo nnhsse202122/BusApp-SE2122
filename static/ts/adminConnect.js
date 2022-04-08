@@ -33,7 +33,6 @@ function getBusRow(key, attribute) {
             return ["numberInput", "changeInput", "arrivalInput", "statusInput"].includes(htmlClass);
         });
     }
-    console.log(attribute);
     const bus = buses.find((bus) => { return bus[attribute] == key; });
     if (bus)
         return bus;
@@ -56,7 +55,6 @@ function startTimeout(input) {
     console.log(`Timer started for ${input}`);
 }
 function setBus(input) {
-    console.log(input);
     console.log(`started set bus for ${input}`);
     const bus = getBusRow(input);
     if (!bus.number) {
@@ -64,7 +62,8 @@ function setBus(input) {
         return;
     }
     for (let otherBus of buses) {
-        if (bus.number == otherBus.number) {
+        // console.log(bus, otherBus);
+        if (bus != otherBus && bus.number == otherBus.number) {
             alert("Duplicate bus numbers are not allowed");
             return;
         }
@@ -101,15 +100,19 @@ function removeBus(icon) {
     buses.splice(buses.indexOf(bus), 1);
 }
 function sort(bus) {
-    const busBefore = buses.find((otherBus) => {
-        return bus.number < otherBus.number;
+    const busAfter = buses.find((otherBus) => {
+        // console.log(bus.number, otherBus.number);
+        // console.log(parseInt(bus.number!) > parseInt(otherBus.number!));
+        return parseInt(bus.number) < parseInt(otherBus.number);
     });
     let index;
-    if (busBefore) {
-        index = buses.indexOf(busBefore) + 1;
+    if (busAfter) {
+        console.log(busAfter.number);
+        index = buses.indexOf(busAfter);
     }
     else {
-        index = buses.length + 1;
+        console.log(2);
+        index = buses.length;
     }
     const row = document.getElementById("table").insertRow(index);
     // @ts-ignore

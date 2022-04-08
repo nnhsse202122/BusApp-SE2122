@@ -1,7 +1,7 @@
 <tr>
     <td><input class="tableInput numberInput" type="number" value=<%= data.number %> readonly></td>
-    <td><input class="tableInput changeInput" type="number" value=<%= data.change %> oninput="startTimeout(this)"></td>
-    <td><input class="tableInput arrivalInput" type="text" value=<%= data.arrival %> oninput="startTimeout(this)"></td>
+    <td><input class="tableInput changeInput" type="number" oninput="startTimeout(this)" value=<%= data.change %> ></td>
+    <td><input class="tableInput arrivalInput" type="text"  oninput="startTimeout(this)"value=<%= data.arrival %> ></td>
     <td>
         <select class="tableInput statusInput" onchange="statusChange(this); startTimeout(this)">
             <option value="NOT HERE" <%= data.status == "NOT HERE"? "selected" : "" %>>NOT HERE</option>
