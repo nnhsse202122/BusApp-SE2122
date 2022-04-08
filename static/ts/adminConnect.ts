@@ -94,6 +94,7 @@ function setBus(input: HTMLInputElement) {
     }
     console.log(`cleared verification for ${input}`);
     bus.row.remove();
+    buses.splice(buses.indexOf(bus), 1);
     sort(bus);
     console.log(`sorted for ${input}`);
     socket.emit("updateMain", {
@@ -127,22 +128,17 @@ function removeBus(icon: HTMLElement) {
 
 function sort(bus: BusRow) {
     const busAfter = buses.find((otherBus) => {
-        // console.log(bus.number, otherBus.number);
-        // console.log(parseInt(bus.number!) > parseInt(otherBus.number!));
         return parseInt(bus.number!) < parseInt(otherBus.number!);
     });
-    
     let index: number;
     if (busAfter) {
-        console.log(busAfter.number);
         index = buses.indexOf(busAfter);
-
     }
     else {
-        console.log(2);
         index = buses.length;
     }
-    const row = (<HTMLTableElement> document.getElementById("table")).insertRow(index);
+    buses.splice(index, 0, bus);
+    const row = (<HTMLTableElement> document.getElementById("table")).insertRow(index + 1);
     // @ts-ignore
     const html = ejs.render(document.getElementById("getRender").getAttribute("populatedRow"), {
         data: {
