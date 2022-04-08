@@ -61,3 +61,6 @@ router.get("/admin", async (req: Request, res: Response) => {
         res.render("unauthorized");
     }
 });
+router.get("/beans", async (req: Request, res: Response) => {
+    res.sendFile(path.resolve(__dirname, "../static/img/beans.jpg"));
+});
