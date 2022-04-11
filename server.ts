@@ -24,6 +24,8 @@ type BusCommand = {
     status?: string
 }
 
+const buses = readData().buses;
+
 //root socket
 io.of("/").on("connection", (socket) => {
     //console.log(`new connection on root (id:${socket.id})`);
@@ -35,10 +37,36 @@ io.of("/").on("connection", (socket) => {
 //admin socket
 io.of("/admin").on("connection", (socket) => {
     socket.on("updateMain", (command: BusCommand) => {
-        // console.log(data);
-        // writeBuses(data);
-        // io.of("/").emit("update", readData());
-        // socket.broadcast.emit("update", readData());
+        switch (command.type) {
+            case "add":
+                const busAfter = buses.find((otherBus) => {
+                    return parseInt(command.number) < parseInt(otherBus.number);
+                });
+                let index: number;
+                if (busAfter) {
+                    index = buses.indexOf(busAfter);
+                }
+                else {
+                    index = buses.length;
+                }
+                buses.splice(index, 0, {
+                    number: command.number,
+                    change: command.change!,
+                    arrival: command.arrival!,
+                    status: command.status!
+                });
+                writeBuses(buses);
+                break;
+            case "update":
+                buses[buses.indexOf(buses.find((bus) => {bus.number == command.number})!)]
+                break;
+            case "delete":
+                break;
+            default:
+                throw `Invalid bus command: ${command.type}`;
+        }
+        io.of("/").emit("updateBuses", command);
+        io.of("/admin").emit("updateBuses", command);
     });
     socket.on("debug", (data) => {
         console.log(`debug(admin): ${data}`);
