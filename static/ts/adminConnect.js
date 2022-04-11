@@ -33,7 +33,7 @@ function getBus(key, attribute) {
             return ["numberInput", "changeInput", "arrivalInput", "statusInput"].includes(htmlClass);
         });
     }
-    const bus = buses.find((bus) => { console.log(bus[attribute]); return bus[attribute] == key; });
+    const bus = buses.find((bus) => { return bus[attribute] == key; });
     if (bus)
         return bus;
     throw "Bus not found";
@@ -57,17 +57,14 @@ function startTimeout(input, type) {
     clearTimeout(bus.timer);
     const func = (type == "add") ? addBus : updateBus;
     bus.timer = window.setTimeout(() => { func(input); }, 3000);
-    console.log(`Timer started for ${input}`);
 }
 function addBus(input) {
-    console.log(`started set bus for ${input}`);
     const bus = getBus(input);
     if (!bus.number) {
         alert("Bus number is required");
         return;
     }
     for (let otherBus of buses) {
-        // console.log(bus, otherBus);
         if (bus != otherBus && bus.number == otherBus.number) {
             alert("Duplicate bus numbers are not allowed");
             return;
@@ -83,22 +80,27 @@ function addBus(input) {
     });
     socket.emit("updateMain", {
         type: "add",
-        number: bus.number,
-        change: bus.change,
-        arrival: bus.arrival,
-        status: bus.status
+        data: {
+            number: bus.number,
+            change: bus.change,
+            arrival: bus.arrival,
+            status: bus.status
+        }
     });
-    console.log(`emitted for ${input}`);
+    console.log("emitted add");
 }
 function updateBus(input) {
     const bus = getBus(input);
     socket.emit("updateMain", {
         type: "update",
-        number: bus.number,
-        change: bus.change,
-        arrival: bus.arrival,
-        status: bus.status
+        data: {
+            number: bus.number,
+            change: bus.change,
+            arrival: bus.arrival,
+            status: bus.status
+        }
     });
+    console.log("emitted update");
 }
 function cancelBus(icon) {
     const bus = getBus(icon, "removeIcon");
@@ -114,9 +116,12 @@ function removeBus(icon) {
         bus.row.remove();
         socket.emit("updateMain", {
             type: "delete",
-            number: bus.number
+            data: {
+                number: bus.number
+            }
         });
-        printBuses();
+        console.log("emitted delete");
+        // printBuses();
     }
 }
 function sort(bus) {
@@ -165,7 +170,7 @@ function statusChange(dropDown) {
     }
 }
 socket.on("updateBuses", (busData) => {
-    sort(busData);
+    // sort(busData);
 });
 socket.on("updateWeather", (weatherData) => {
 });

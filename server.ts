@@ -5,10 +5,9 @@ import fs from "fs";
 import bodyParser from "body-parser";
 import {createServer} from "http";
 import {Server} from "socket.io";
-import {readData, writeBuses, writeWeather} from "./server/ymlController";
+import {readData, writeBuses, writeWeather, BusData} from "./server/ymlController";
 import {startWeather} from "./server/weatherController";
 import session from "express-session";
-import fetch from "node-fetch";
 
 const app: Application = express();
 const httpServer = createServer(app);
@@ -18,10 +17,7 @@ const PORT = process.env.PORT || 5182;
 
 type BusCommand = {
     type: string
-    number: string,
-    change?: string,
-    arrival?: string,
-    status?: string
+    data: BusData
 }
 
 const buses = readData().buses;
@@ -40,7 +36,7 @@ io.of("/admin").on("connection", (socket) => {
         switch (command.type) {
             case "add":
                 const busAfter = buses.find((otherBus) => {
-                    return parseInt(command.number) < parseInt(otherBus.number);
+                    return parseInt(command.data.number) < parseInt(otherBus.number);
                 });
                 let index: number;
                 if (busAfter) {
@@ -49,22 +45,20 @@ io.of("/admin").on("connection", (socket) => {
                 else {
                     index = buses.length;
                 }
-                buses.splice(index, 0, {
-                    number: command.number,
-                    change: command.change!,
-                    arrival: command.arrival!,
-                    status: command.status!
-                });
-                writeBuses(buses);
+                buses.splice(index, 0, command.data);
                 break;
             case "update":
-                buses[buses.indexOf(buses.find((bus) => {bus.number == command.number})!)]
+                
+                buses[buses.indexOf(buses.find((bus) => {return bus.number == command.data.number})!)] = command.data;
                 break;
             case "delete":
+                buses.splice(buses.indexOf(buses.find((bus) => {return bus.number == command.data.number})!), 1);
                 break;
             default:
                 throw `Invalid bus command: ${command.type}`;
         }
+        writeBuses(buses);
+        buses.forEach((bus) => {console.log(bus.number)});
         io.of("/").emit("updateBuses", command);
         io.of("/admin").emit("updateBuses", command);
     });
@@ -99,8 +93,8 @@ function resetDatafile() {
     const busesDatafile = path.resolve(__dirname, "./data/buses.yml");
     const defaultBusesDatafile = path.resolve(__dirname, "./data/defaultBuses.txt");
     fs.writeFileSync(busesDatafile, fs.readFileSync(defaultBusesDatafile));
-    io.of("/").emit("update", readData());
-    io.of("/admin").emit("update", readData());
+    io.of("/").emit("updateBuses", readData());
+    io.of("/admin").emit("updateBuses", readData());
 }
 const midnight = new Date();
 midnight.setDate(midnight.getDate() + 1);

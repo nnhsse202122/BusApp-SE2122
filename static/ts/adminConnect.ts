@@ -9,10 +9,7 @@ class Bus {
     arrivalInput: HTMLInputElement;
     statusInput: HTMLInputElement;
     removeIcon: HTMLElement;
-    number: string | undefined;
-    change: string | undefined;
-    arrival: string | undefined;
-    status: string | undefined;
+    data: BusData;
     timer: number | undefined;
 
     constructor(rowVal: HTMLTableRowElement) {
@@ -22,19 +19,20 @@ class Bus {
         this.arrivalInput = <HTMLInputElement> this.row.children[2].children[0];
         this.statusInput = <HTMLInputElement> this.row.children[3].children[0];
         this.removeIcon = <HTMLElement> this.row.children[4].children[0];
+        this.data = {} as BusData;
         this.updateValues();
     }
 
     updateValues() {
-        this.number = this.numberInput.value;
-        this.change = this.changeInput.value;
-        this.arrival = this.arrivalInput.value;
-        this.status = this.statusInput.value;
+        this.data.number = this.numberInput.value;
+        this.data.change = this.changeInput.value;
+        this.data.arrival = this.arrivalInput.value;
+        this.data.status = this.statusInput.value;
     }
 }
 
 type BusData = {
-    number: string,
+    number: string | undefined,
     change: string | undefined,
     arrival: string | undefined,
     status: string | undefined
@@ -67,7 +65,7 @@ function getBus(key: HTMLElement, attribute?: validAttribute) {
 }
 
 function printBuses() {
-    buses.forEach((bus) => {console.log(bus.number)});
+    buses.forEach((bus) => {console.log(bus.data.number)});
 }
 
 function newBus() {
@@ -92,42 +90,33 @@ function startTimeout(input: HTMLInputElement, type: string) {
 function addBus(input: HTMLInputElement) {
     const bus = getBus(input);
     
-    if (!bus.number) {
+    if (!bus.data.number) {
         alert("Bus number is required");
         return;
     }
     for (let otherBus of buses) {
-        if (bus != otherBus && bus.number == otherBus.number) {
+        if (bus != otherBus && bus.data.number == otherBus.data.number) {
             alert("Duplicate bus numbers are not allowed");
             return;
         } 
     }
     bus.row.remove();
     buses.splice(buses.indexOf(bus), 1);
-    sort({
-        number: bus.number,
-        change: bus.change,
-        arrival: bus.arrival,
-        status: bus.status
-    });
+    sort(bus.data);
     socket.emit("updateMain", {
         type: "add",
-        number: bus.number,
-        change: bus.change,
-        arrival: bus.arrival,
-        status: bus.status
+        data: bus.data
     });
+    console.log("emitted add");
 }
 
 function updateBus(input: HTMLInputElement) {
     const bus = getBus(input);
     socket.emit("updateMain", {
         type: "update",
-        number: bus.number,
-        change: bus.change,
-        arrival: bus.arrival,
-        status: bus.status
+        data: bus.data
     });
+    console.log("emitted update");
 }
 
 function cancelBus(icon: HTMLElement) {
@@ -137,23 +126,30 @@ function cancelBus(icon: HTMLElement) {
     buses.splice(buses.indexOf(bus), 1);
 }
 
-function removeBus(icon: HTMLElement) {
+function confirmRemove(icon: HTMLElement) {
     const bus = getBus(icon, "removeIcon");
-    if (confirm(`Are you sure you want to delete bus ${bus.number}?`)) {
+    if (confirm(`Are you sure you want to delete bus ${bus.data.number}?`)) {
         clearTimeout(bus.timer);
         buses.splice(buses.indexOf(bus), 1);
         bus.row.remove();
         socket.emit("updateMain", {
             type: "delete",
-            number: bus.number
+            data: {
+                number: bus.data.number
+            }
         });
-        printBuses();
+        console.log("emitted delete");
+        // printBuses();
     } 
+}
+
+function removeBus(bus: Bus) {
+
 }
 
 function sort(bus: BusData) {
     const busAfter = buses.find((otherBus) => {
-        return parseInt(bus.number!) < parseInt(otherBus.number!);
+        return parseInt(bus.number!) < parseInt(otherBus.data.number!);
     });
     let index: number;
     if (busAfter) {
@@ -197,8 +193,25 @@ function statusChange(dropDown: HTMLSelectElement) {
     }
 }
 
-socket.on("updateBuses", (busData) => {
-    // sort(busData);
+type BusCommand = {
+    type: string
+    data: BusData
+}
+
+socket.on("updateBuses", (command) => {
+    switch (command.type) {
+        case "add":
+            sort(command.data);
+            break;
+        case "update":
+            
+            break;
+        case "delete":
+            
+            break;
+        default:
+            throw `Invalid bus command: ${command.type}`;
+    }
 });
 
 socket.on("updateWeather", (weatherData) => {
