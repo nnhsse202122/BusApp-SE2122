@@ -2,7 +2,7 @@
 
 const socket = window.io('/admin');
 
-class BusRow {
+class Bus {
     row: HTMLTableRowElement;
     numberInput: HTMLInputElement;
     changeInput: HTMLInputElement;
@@ -33,53 +33,66 @@ class BusRow {
     }
 }
 
-const buses: BusRow[] = []; /// TODO: Add buses already in the table
+type BusData = {
+    number: string,
+    change: string | undefined,
+    arrival: string | undefined,
+    status: string | undefined
+}
+
+const buses: Bus[] = []; /// TODO: Add buses already in the table
 
 {
     const table = <HTMLTableElement> document.getElementById("table");
     const rows = [...table.rows];
     rows.splice(0, 1);
     rows.forEach((row) => {
-        buses.push(new BusRow(row));
+        buses.push(new Bus(row));
     });
 }
 
-type validAttribute = Exclude<keyof BusRow, "change" | "arrival" | "status" | "timer">
+type validAttribute = Exclude<keyof Bus, "change" | "arrival" | "status" | "timer">
 
-function getBusRow(key: HTMLElement, attribute: validAttribute): BusRow;
-function getBusRow(key: HTMLInputElement): BusRow;
-function getBusRow(key: HTMLElement, attribute?: validAttribute) {
+function getBus(key: HTMLElement, attribute: validAttribute): Bus;
+function getBus(key: HTMLInputElement): Bus;
+function getBus(key: HTMLElement, attribute?: validAttribute) {
     if (!attribute) {
         attribute = (<string[]> [...key.classList]).find((htmlClass) => {
             return ["numberInput", "changeInput", "arrivalInput", "statusInput"].includes(htmlClass)
         }) as validAttribute;
     }
-    const bus = buses.find((bus) => {return bus[attribute!] == key});
+    const bus = buses.find((bus) => {console.log(bus[attribute!]); return bus[attribute!] == key});
     if (bus) return bus;
     throw "Bus not found";  
 }
 
-function addBus() {
+function printBuses() {
+    buses.forEach((bus) => {console.log(bus.number)});
+}
+
+function newBus() {
     const row = (<HTMLTableElement> document.getElementById("table")).insertRow(1);
     // @ts-ignore
     const html = ejs.render(document.getElementById("getRender").getAttribute("emptyRow"));
     row.innerHTML = html;
-    const bus = new BusRow(row);
+    const bus = new Bus(row);
     buses.splice(0, 0, bus);
     bus.numberInput.focus();
+    printBuses();
 }
 
-function startTimeout(input: HTMLInputElement) {
-    const bus = getBusRow(input);
+function startTimeout(input: HTMLInputElement, type: string) {
+    const bus = getBus(input);
     bus.updateValues();
     clearTimeout(bus.timer);
-    bus.timer = window.setTimeout(() => {setBus(input)}, 3000);
+    const func = (type == "add") ? addBus : updateBus;
+    bus.timer = window.setTimeout(() => {func(input)}, 3000);
     console.log(`Timer started for ${input}`);
 }
 
-function setBus(input: HTMLInputElement) {
+function addBus(input: HTMLInputElement) {
     console.log(`started set bus for ${input}`);
-    const bus = getBusRow(input);
+    const bus = getBus(input);
     
     if (!bus.number) {
         alert("Bus number is required");
@@ -92,13 +105,16 @@ function setBus(input: HTMLInputElement) {
             return;
         } 
     }
-    console.log(`cleared verification for ${input}`);
     bus.row.remove();
     buses.splice(buses.indexOf(bus), 1);
-    sort(bus);
-    console.log(`sorted for ${input}`);
+    sort({
+        number: bus.number,
+        change: bus.change,
+        arrival: bus.arrival,
+        status: bus.status
+    });
     socket.emit("updateMain", {
-        type: "set",
+        type: "add",
         number: bus.number,
         change: bus.change,
         arrival: bus.arrival,
@@ -107,26 +123,39 @@ function setBus(input: HTMLInputElement) {
     console.log(`emitted for ${input}`);
 }
 
-function removeBus(icon: HTMLElement) {
-    const bus = getBusRow(icon, "removeIcon");
-    if (bus.number) {
-        if (confirm(`Are you sure you want to delete bus ${bus.number}?`)) {
-            clearTimeout(bus.timer);
-            bus.row.remove();
-            socket.emit("updateMain", {
-                type: "delete",
-                number: bus.number
-            });
-        }
-        buses.splice(buses.indexOf(bus), 1);
-        return;
-    }
+function updateBus(input: HTMLInputElement) {
+    const bus = getBus(input);
+    socket.emit("updateMain", {
+        type: "update",
+        number: bus.number,
+        change: bus.change,
+        arrival: bus.arrival,
+        status: bus.status
+    });
+}
+
+function cancelBus(icon: HTMLElement) {
+    const bus = getBus(icon, "removeIcon");
     clearTimeout(bus.timer);
     bus.row.remove();
     buses.splice(buses.indexOf(bus), 1);
 }
 
-function sort(bus: BusRow) {
+function removeBus(icon: HTMLElement) {
+    const bus = getBus(icon, "removeIcon");
+    if (confirm(`Are you sure you want to delete bus ${bus.number}?`)) {
+        clearTimeout(bus.timer);
+        buses.splice(buses.indexOf(bus), 1);
+        bus.row.remove();
+        socket.emit("updateMain", {
+            type: "delete",
+            number: bus.number
+        });
+        printBuses();
+    } 
+}
+
+function sort(bus: BusData) {
     const busAfter = buses.find((otherBus) => {
         return parseInt(bus.number!) < parseInt(otherBus.number!);
     });
@@ -137,7 +166,6 @@ function sort(bus: BusRow) {
     else {
         index = buses.length;
     }
-    buses.splice(index, 0, bus);
     const row = (<HTMLTableElement> document.getElementById("table")).insertRow(index + 1);
     // @ts-ignore
     const html = ejs.render(document.getElementById("getRender").getAttribute("populatedRow"), {
@@ -148,10 +176,12 @@ function sort(bus: BusRow) {
             status: bus.status
     }});
     row.innerHTML = html;
+    buses.splice(index, 0, new Bus(row));
+    printBuses();
 }
 
 function statusChange(dropDown: HTMLSelectElement) {
-    const bus = getBusRow(dropDown, "statusInput");
+    const bus = getBus(dropDown, "statusInput");
     if (bus.statusInput.value == "NOT HERE") {
         bus.arrivalInput.value = "";
     }

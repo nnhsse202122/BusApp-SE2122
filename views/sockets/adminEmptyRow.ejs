@@ -1,14 +1,14 @@
 <tr>
-    <td><input class="tableInput numberInput" type="number" oninput="startTimeout(this)"></td>
-    <td><input class="tableInput changeInput" type="number" oninput="startTimeout(this)"></td>
-    <td><input class="tableInput arrivalInput" type="text" oninput="startTimeout(this)"></td>
+    <td><input class="tableInput numberInput" type="number" oninput="startTimeout(this, `add`)"></td>
+    <td><input class="tableInput changeInput" type="number" oninput="startTimeout(this, `add`)"></td>
+    <td><input class="tableInput arrivalInput" type="text" oninput="startTimeout(this, `add`)"></td>
     <td>
-        <select class="tableInput statusInput" onchange="statusChange(this); startTimeout(this)">
+        <select class="tableInput statusInput" onchange="statusChange(this); startTimeout(this, `add`)">
             <option value="NOT HERE" selected>NOT HERE</option>
             <option value="HERE">HERE</option>
             <option value="LOADING">LOADING</option>
             <option value="GONE">GONE</option>
         </select>
     </td>
-    <td class="deleteBus"><i class="fas fa-times" onclick="removeBus(this)"></i></td>
+    <td class="deleteBus"><i class="fas fa-times" onclick="cancelBus(this)"></i></td>
 </tr>
