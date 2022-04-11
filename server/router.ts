@@ -61,6 +61,7 @@ router.get("/admin", async (req: Request, res: Response) => {
         res.render("unauthorized");
     }
 });
-router.get("/sw/busapp.webmanifest", (req: Request, res: Response) => {
-    res.sendFile(path.resolve(__dirname,'../sw/busapp.webmanifest'))
-});
+// router.get("/sw/busapp.webmanifest", (req: Request, res: Response) => {
+//     res.sendFile(path.resolve(__dirname,'../sw/busapp.webmanifest'))
+// });
+router.use('/sw',express.static(path.resolve(__dirname,'../sw/')));
