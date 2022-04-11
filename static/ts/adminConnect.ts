@@ -61,7 +61,7 @@ function getBus(key: HTMLElement, attribute?: validAttribute) {
             return ["numberInput", "changeInput", "arrivalInput", "statusInput"].includes(htmlClass)
         }) as validAttribute;
     }
-    const bus = buses.find((bus) => {console.log(bus[attribute!]); return bus[attribute!] == key});
+    const bus = buses.find((bus) => {return bus[attribute!] == key});
     if (bus) return bus;
     throw "Bus not found";  
 }
@@ -87,11 +87,9 @@ function startTimeout(input: HTMLInputElement, type: string) {
     clearTimeout(bus.timer);
     const func = (type == "add") ? addBus : updateBus;
     bus.timer = window.setTimeout(() => {func(input)}, 3000);
-    console.log(`Timer started for ${input}`);
 }
 
 function addBus(input: HTMLInputElement) {
-    console.log(`started set bus for ${input}`);
     const bus = getBus(input);
     
     if (!bus.number) {
@@ -99,7 +97,6 @@ function addBus(input: HTMLInputElement) {
         return;
     }
     for (let otherBus of buses) {
-        // console.log(bus, otherBus);
         if (bus != otherBus && bus.number == otherBus.number) {
             alert("Duplicate bus numbers are not allowed");
             return;
@@ -120,7 +117,6 @@ function addBus(input: HTMLInputElement) {
         arrival: bus.arrival,
         status: bus.status
     });
-    console.log(`emitted for ${input}`);
 }
 
 function updateBus(input: HTMLInputElement) {
