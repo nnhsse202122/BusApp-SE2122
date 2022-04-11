@@ -198,7 +198,7 @@ function statusChange(dropDown: HTMLSelectElement) {
 }
 
 socket.on("updateBuses", (busData) => {
-    sort(busData);
+    // sort(busData);
 });
 
 socket.on("updateWeather", (weatherData) => {
