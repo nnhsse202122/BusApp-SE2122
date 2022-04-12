@@ -10,7 +10,6 @@ async function getWeather(io: Server) {
     writeWeather(await res.json());
     io.of("/").emit("update", readData());
     io.of("/admin").emit("updateWeather", readData().weather);
-    console.log("updated weather");
 }
 
 export function startWeather(io: Server) {

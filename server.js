@@ -28,7 +28,6 @@ io.of("/").on("connection", (socket) => {
 //admin socket
 io.of("/admin").on("connection", (socket) => {
     socket.on("updateMain", (command) => {
-        console.log(command);
         switch (command.type) {
             case "add":
                 const busAfter = buses.find((otherBus) => {

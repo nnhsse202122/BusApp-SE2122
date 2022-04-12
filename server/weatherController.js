@@ -23,7 +23,6 @@ function getWeather(io) {
         (0, ymlController_1.writeWeather)(yield res.json());
         io.of("/").emit("update", (0, ymlController_1.readData)());
         io.of("/admin").emit("updateWeather", (0, ymlController_1.readData)().weather);
-        console.log("updated weather");
     });
 }
 function startWeather(io) {

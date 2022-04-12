@@ -78,7 +78,7 @@ function addBus(input) {
         type: "add",
         data: bus.data
     });
-    console.log("emitted add");
+    // console.log("emitted add");
 }
 function updateBus(input) {
     const bus = getBus(input);
@@ -86,7 +86,7 @@ function updateBus(input) {
         type: "update",
         data: bus.data
     });
-    console.log("emitted update");
+    // console.log("emitted update");
 }
 function cancelBus(icon) {
     const bus = getBus(icon, "removeIcon");
@@ -102,7 +102,7 @@ function confirmRemove(icon) {
                 number: bus.data.number
             }
         });
-        console.log("emitted delete");
+        // console.log("emitted delete");
         // printBuses();
     }
 }
@@ -157,7 +157,6 @@ adminSocket.on("updateBuses", (command) => {
         case "update":
             bus = getBus(command.data.number, "number");
             const html = ejs.render(document.getElementById("getRender").getAttribute("populatedRow"), { data: command.data });
-            console.log(html);
             bus.row.innerHTML = html;
             buses[buses.indexOf(bus)] = new Bus(bus.row);
             break;
@@ -170,7 +169,6 @@ adminSocket.on("updateBuses", (command) => {
     }
 });
 adminSocket.on("updateWeather", (weather) => {
-    console.log(1);
     const html = ejs.render(document.getElementById("getRender").getAttribute("weather"), { weather: weather });
     document.getElementById("weather").innerHTML = html;
 });
