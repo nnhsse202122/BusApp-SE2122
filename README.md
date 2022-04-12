@@ -4,7 +4,7 @@ This is a web application that allows teachers in charge of bus commumincation t
 ## Features
 
 #### Student Experience
-Students will be able to enter the website url into a broswer in order to access. The home pages display a table with bus number, change, arrival time and status. Additionally a message about the weather is displayed below. Information updated by admins is live so students will not have to refresh to view new information.
+Students will be able to enter the website url into a broswer in order to access. The home pages displays a simple table with bus number, change, arrival time and status. Additionally a message about the weather is displayed below. Information updated by admins is live so students will not have to refresh to view new information.
 
 #### Admin Experience
 People that are on the whitelist have access to the admin page which allows them to edit bus information. To reach this page, go to the same page students view (by entering the url) and select "Login to edit buses". This will redirect them to a page where they can login with google and if their email address is on the whitelist, they will be given access to the admin page. 
