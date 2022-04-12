@@ -3,7 +3,7 @@
         
     <div id="buttons">
         <button><a href="/">Back to hompage</a></button>
-        <button type="button" onclick="addBus();onChange()">Add Bus</button>
+        <button type="button" onclick="newBus()">Add Bus</button>
     </div>
 </div>
     <table id="table">
@@ -11,34 +11,37 @@
             <col span="3">
             <col id="statusCol">
         </colgroup>
-        <tr>
-            <th>Bus Number</th>
-            <th>Bus Change</th>
-            <th>Bus Arrived</th>
-            <th>Status</th>
-            <th class="deleteBus"></th>
-        </tr>
-    <% for(let i = 0; i < data.buses.length; i++) { %> 
-        <tr>
-            <td><input class="tableInput" type="number" name="busNumber" oninput="onChange()" value=<%= data.buses[i].number %>></td>
-            <td><input class="tableInput" type="number" name="busChange" oninput="onChange()" value=<%= data.buses[i].change %>></td>
-            <td><input class="tableInput" type="text" name="busArrival" oninput="onChange()" value=<%= data.buses[i].arrival %>></td>
-            <td>
-                <select name="busStatus" onchange="statusChange(this);onChange();">
-                    <option value="NOT HERE" <%= data.buses[i].status == "NOT HERE"? "selected" : "" %>>NOT HERE</option>
-                    <option value="HERE" <%= data.buses[i].status == "HERE"? "selected" : "" %>>HERE</option>
-                    <option value="LOADING" <%= data.buses[i].status == "LOADING"? "selected" : ""%>>LOADING</option>
-                    <option value="GONE" <%= data.buses[i].status == "GONE"? "selected" : "" %>>GONE</option>
-                </select>
-            </td>
-            <td class="deleteBus"><i class="fas fa-times" onclick="removeBus(this);onChange();"></i></td>
-        </tr>
-    <% } %> 
+        <tbody id="tbody">
+            <tr>
+                <th>Bus Number</th>
+                <th>Bus Change</th>
+                <th>Status</th>
+                <th>Time</th>
+                <th class="deleteBus"></th>
+            </tr>
+        <% for(let i = 0; i < data.buses.length; i++) { %> 
+            <tr>
+                <td><input class="tableInput numberInput" type="number" value=<%= data.buses[i].number %> readonly></td>
+                <td><input class="tableInput changeInput" type="number" oninput="startTimeout(this)" value=<%= data.buses[i].change %> ></td>
+                <td>
+                    <select class="tableInput statusInput" onchange="statusChange(this); startTimeout(this)">
+                        <option value="NOT HERE" <%= data.buses[i].status == "NOT HERE"? "selected" : "" %>>NOT HERE</option>
+                        <option value="HERE" <%= data.buses[i].status == "HERE"? "selected" : "" %>>HERE</option>
+                        <option value="LOADING" <%= data.buses[i].status == "LOADING"? "selected" : ""%>>LOADING</option>
+                        <option value="GONE" <%= data.buses[i].status == "GONE"? "selected" : "" %>>GONE</option>
+                    </select>
+                </td>
+                <td><input class="tableInput arrivalInput" type="text" oninput="startTimeout(this)" value=<%= data.buses[i].arrival %> ></td>
+                
+                <td class="deleteBus"><i class="fas fa-times" onclick="confirmRemove(this);"></i></td>
+            </tr>
+        <% } %> 
+        </tbody>
     </table>
     <div id="weather">
         <p><%= data.weather.status %> </p>
         <img src=<%= data.weather.icon %>>
-        <p>Temperature: <%= data.weather.temperature %></p>
-        <p>Feels like: <%= data.weather.feelsLike %></p>
+        <p>Temperature: <%= data.weather.temperature %>°F</p>
+        <p>Feels like: <%= data.weather.feelsLike %>°F</p>
     </div>
 </div>

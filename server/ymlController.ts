@@ -8,7 +8,7 @@ const weatherDatafile = path.resolve(__dirname, "../data/weather.yml");
 const defaultWeatherDatafile = path.resolve(__dirname, "../data/defaultWeather.txt");
 const whitelist = path.resolve(__dirname, "../data/whitelist.yml");
 
-type Bus = {number: string, change: string, arrival: string, status: string};
+export type BusData = {number: string, change: string | undefined, arrival: string | undefined, status: string | undefined};
 type Weather = {status: string, icon: string, temperature: string, feelsLike: string}
 
 // Load data file. If no file exists creates one
@@ -20,12 +20,12 @@ export function readData() {
     if (!fs.existsSync(weatherDatafile)) {
         fs.writeFileSync(weatherDatafile, fs.readFileSync(defaultWeatherDatafile));
     }
-    const buses = <{buses: Bus[]}> yaml.load(fs.readFileSync(busesDatafile, "utf-8"));
+    const buses = <{buses: BusData[]}> yaml.load(fs.readFileSync(busesDatafile, "utf-8"));
     const weather = <{weather: Weather}> yaml.load(fs.readFileSync(weatherDatafile, "utf-8"));
     return {...buses, ...weather};
 }
 
-export function writeBuses(data: Bus[]){
+export function writeBuses(data: BusData[]){
     fs.writeFileSync(busesDatafile, yaml.dump({buses: data}));
 }
 

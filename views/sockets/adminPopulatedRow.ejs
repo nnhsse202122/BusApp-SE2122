@@ -1,0 +1,14 @@
+<tr>
+    <td><input class="tableInput numberInput" type="number" value=<%= data.number %> readonly></td>
+    <td><input class="tableInput changeInput" type="number" oninput="startTimeout(this)" value=<%= data.change %> ></td>
+    <td>
+        <select class="tableInput statusInput" onchange="statusChange(this); startTimeout(this)">
+            <option value="NOT HERE" <%= data.status == "NOT HERE"? "selected" : "" %>>NOT HERE</option>
+            <option value="HERE" <%= data.status == "HERE"? "selected" : "" %>>HERE</option>
+            <option value="LOADING" <%= data.status == "LOADING"? "selected" : ""%>>LOADING</option>
+            <option value="GONE" <%= data.status == "GONE"? "selected" : "" %>>GONE</option>
+        </select>
+    </td>
+    <td><input class="tableInput arrivalInput" type="text"  oninput="startTimeout(this)"value=<%= data.arrival %> ></td>
+    <td class="deleteBus"><i class="fas fa-times" onclick="confirmRemove(this);"></i></td>
+</tr>

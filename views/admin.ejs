@@ -11,9 +11,8 @@
     <body>
         <%- include("include/adminContent") %>
         <script src="js/ejs.js"></script>
-        <script src="js/manageBuses.js"></script>
         <script src="/socket.io/socket.io.js"></script>
-        <script id="getRender" render="<%= render %>" src='js/adminConnect.js'></script>
+        <script id="getRender" emptyRow="<%= emptyRow %>" populatedRow="<%= populatedRow %>" weather="<%= weather %>" src='js/adminConnect.js'></script>
         <script src="js/formVerification.js"></script>
     </body>
 </html>

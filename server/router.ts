@@ -1,6 +1,6 @@
 import express, {Request, Response} from "express";
 import {OAuth2Client, TokenPayload} from "google-auth-library";
-import {readData, writeBuses, readWhitelist} from "./ymlController";
+import {readData, readWhitelist} from "./ymlController";
 import path from "path";
 import fs from "fs";
 
@@ -14,7 +14,7 @@ router.get("/", (req: Request, res: Response) => {
     // Reads from data file and displays data
     res.render("index", {
         data: readData(),
-        render: fs.readFileSync(path.resolve(__dirname, "../views/include/indexContent.ejs"))
+        render: fs.readFileSync(path.resolve(__dirname, "../views/include/indexContent.ejs")), 
     });
 });
 
@@ -31,30 +31,33 @@ router.post("/auth/v1/google", async (req: Request, res: Response) => {
         idToken: token,
         audience: CLIENT_ID
     });
-    req.session!.userEmail = <string> (<TokenPayload> ticket.getPayload()).email; // Store email in session
+    req.session.userEmail = ticket.getPayload()!.email!; // Store email in session
     res.status(201).end();
 });
 
 // Checks if the user's email is in the whitelist and authorizes accordingly
 function authorize(req: Request) {
-    req.session!.isAdmin = readWhitelist().admins.includes(req.session!.userEmail); 
+    req.session.isAdmin = readWhitelist().admins.includes(<string> req.session.userEmail); 
 }
 
 /* Admin page. This is where bus information can be updated from
 Reads from data file and displays data */
 router.get("/admin", async (req: Request, res: Response) => {
     // If user is not authenticated (email is not is session) redirects to login page
-    if (!req.session!.userEmail) {
+    if (!req.session.userEmail) {
         res.redirect("/login");
         return;
     }
     
     // Authorizes user, then either displays admin page or unauthorized page
     authorize(req);
-    if (req.session!.isAdmin) {
+    if (req.session.isAdmin) {
         res.render("admin", {
             data: readData(),
-            render: fs.readFileSync(path.resolve(__dirname, "../views/include/adminContent.ejs"))
+            render: fs.readFileSync(path.resolve(__dirname, "../views/include/adminContent.ejs")),
+            emptyRow: fs.readFileSync(path.resolve(__dirname, "../views/sockets/adminEmptyRow.ejs")),
+            populatedRow: fs.readFileSync(path.resolve(__dirname, "../views/sockets/adminPopulatedRow.ejs")),
+            weather: fs.readFileSync(path.resolve(__dirname, "../views/sockets/weather.ejs"))
         });
     }
     else {

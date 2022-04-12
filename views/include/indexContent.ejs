@@ -5,8 +5,8 @@
             <div id="weather">    
                 <img src=<%= data.weather.icon %>>
                 <p><%= data.weather.status %> </p>
-                <p>Temperature: <%= data.weather.temperature %></p>
-                <p>Feels like: <%= data.weather.feelsLike %></p>
+                <p>Temperature: <%= data.weather.temperature %>°F</p>
+                <p>Feels like: <%= data.weather.feelsLike %>°F</p>
             </div>
             <div id="login"><a href="/admin">Login as editor</a></div>
         </div>
@@ -17,15 +17,15 @@
             <tr>
                 <th>Bus Number</th>
                 <th>Bus Change</th>
-                <th>Bus Arrived</th>
                 <th>Status</th>
+                <th>Time</th>
             </tr>
         <% for(let i = 0; i < data.buses.length; i++) { %> 
             <tr>
                 <td><%= data.buses[i].number %></td>
                 <td><%= data.buses[i].change %></td>
-                <td><%= data.buses[i].arrival %></td>
                 <td><%= data.buses[i].status %></td>
+                <td><%= data.buses[i].arrival %></td>                
             </tr>
         <% } %> 
         </table>

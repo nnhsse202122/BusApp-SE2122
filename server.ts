@@ -5,15 +5,22 @@ import fs from "fs";
 import bodyParser from "body-parser";
 import {createServer} from "http";
 import {Server} from "socket.io";
-import {readData, writeBuses, writeWeather} from "./server/ymlController";
+import {readData, writeBuses, BusData} from "./server/ymlController";
+import {startWeather} from "./server/weatherController";
 import session from "express-session";
-import fetch from "node-fetch";
 
 const app: Application = express();
 const httpServer = createServer(app);
 const io  = new Server(httpServer);
 
 const PORT = process.env.PORT || 5182;
+
+type BusCommand = {
+    type: string
+    data: BusData
+}
+
+const buses = readData().buses;
 
 //root socket
 io.of("/").on("connection", (socket) => {
@@ -25,10 +32,35 @@ io.of("/").on("connection", (socket) => {
 
 //admin socket
 io.of("/admin").on("connection", (socket) => {
-    socket.on("updateMain", (data) => {
-        writeBuses(data);
+    socket.on("updateMain", (command: BusCommand) => {
+        switch (command.type) {
+            case "add":
+                const busAfter = buses.find((otherBus) => {
+                    return parseInt(command.data.number) < parseInt(otherBus.number);
+                });
+                let index: number;
+                if (busAfter) {
+                    index = buses.indexOf(busAfter);
+                }
+                else {
+                    index = buses.length;
+                }
+                buses.splice(index, 0, command.data);
+                break;
+            case "update":
+                
+                buses[buses.indexOf(buses.find((bus) => {return bus.number == command.data.number})!)] = command.data;
+                break;
+            case "delete":
+                buses.splice(buses.indexOf(buses.find((bus) => {return bus.number == command.data.number})!), 1);
+                break;
+            default:
+                throw `Invalid bus command: ${command.type}`;
+        }
+        writeBuses(buses);
+        // buses.forEach((bus) => {console.log(bus.number)});
         io.of("/").emit("update", readData());
-        socket.broadcast.emit("update", readData());
+        socket.broadcast.emit("updateBuses", command);
     });
     socket.on("debug", (data) => {
         console.log(`debug(admin): ${data}`);
@@ -50,17 +82,7 @@ app.use("/css", express.static(path.resolve(__dirname, "static/css")));
 app.use("/js", express.static(path.resolve(__dirname, "static/ts")));
 app.use("/img", express.static(path.resolve(__dirname, "static/img")));
 
-// Code to update weather automcatically every 5 minutes
-async function getWeather() {
-    const res = await fetch("http://api.weatherapi.com/v1/current.json?" 
-        + new URLSearchParams([["key", "8afcf03c285047a1b6e201401222202"], ["q", "60540"]]
-    ));
-    writeWeather(await res.json());
-    io.of("/").emit("update", readData());
-    io.of("/admin").emit("update", readData());
-}
-getWeather();
-setInterval(getWeather, 300000);
+startWeather(io);
 
 // Code to reset bus list automatically at midnight
 function resetBuses() {
@@ -72,7 +94,7 @@ function resetDatafile() {
     const defaultBusesDatafile = path.resolve(__dirname, "./data/defaultBuses.txt");
     fs.writeFileSync(busesDatafile, fs.readFileSync(defaultBusesDatafile));
     io.of("/").emit("update", readData());
-    io.of("/admin").emit("update", readData());
+    io.of("/admin").emit("updateBuses", readData()); // Yeaaah this isnt going to work
 }
 const midnight = new Date();
 midnight.setDate(midnight.getDate() + 1);
