@@ -21,8 +21,9 @@ function getWeather(io) {
         const res = yield (0, node_fetch_1.default)("http://api.weatherapi.com/v1/current.json?"
             + new URLSearchParams([["key", "8afcf03c285047a1b6e201401222202"], ["q", "60540"]]));
         (0, ymlController_1.writeWeather)(yield res.json());
-        io.of("/").emit("updat", (0, ymlController_1.readData)());
+        io.of("/").emit("update", (0, ymlController_1.readData)());
         io.of("/admin").emit("updateWeather", (0, ymlController_1.readData)().weather);
+        console.log("updated weather");
     });
 }
 function startWeather(io) {

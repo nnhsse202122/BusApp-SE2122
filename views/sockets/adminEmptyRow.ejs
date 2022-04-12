@@ -1,7 +1,6 @@
 <tr>
     <td><input class="tableInput numberInput" type="number" oninput="startTimeout(this, `add`)"></td>
     <td><input class="tableInput changeInput" type="number" oninput="startTimeout(this, `add`)"></td>
-    <td><input class="tableInput arrivalInput" type="text" oninput="startTimeout(this, `add`)"></td>
     <td>
         <select class="tableInput statusInput" onchange="statusChange(this); startTimeout(this, `add`)">
             <option value="NOT HERE" selected>NOT HERE</option>
@@ -10,5 +9,6 @@
             <option value="GONE">GONE</option>
         </select>
     </td>
+    <td><input class="tableInput arrivalInput" type="text" oninput="startTimeout(this, `add`)"></td>
     <td class="deleteBus"><i class="fas fa-times" onclick="cancelBus(this)"></i></td>
 </tr>

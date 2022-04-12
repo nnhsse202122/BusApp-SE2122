@@ -17,8 +17,8 @@ class Bus {
         this.row = rowVal;
         this.numberInput = <HTMLInputElement> this.row.children[0].children[0];
         this.changeInput = <HTMLInputElement> this.row.children[1].children[0];
-        this.arrivalInput = <HTMLInputElement> this.row.children[2].children[0];
-        this.statusInput = <HTMLInputElement> this.row.children[3].children[0];
+        this.statusInput = <HTMLInputElement> this.row.children[2].children[0];
+        this.arrivalInput = <HTMLInputElement> this.row.children[3].children[0];        
         this.removeIcon = <HTMLElement> this.row.children[4].children[0];
         this.data = {} as BusData;
         this.updateValues();
@@ -169,7 +169,7 @@ function statusChange(dropDown: HTMLSelectElement) {
     if (bus.statusInput.value == "NOT HERE") {
         bus.arrivalInput.value = "";
     }
-    else if (bus.statusInput.value == "HERE") {
+    else {
         const date = new Date();
         let hour = parseInt(date.toTimeString().substring(0, 3));
         let minute = date.toTimeString().substring(3, 5);
@@ -214,6 +214,7 @@ adminSocket.on("updateBuses", (command) => {
 });
 
 adminSocket.on("updateWeather", (weather) => {
+    console.log(1);
     const html = ejs.render(document.getElementById("getRender")!.getAttribute("weather")!, {weather: weather});
     document.getElementById("weather")!.innerHTML = html;
 });

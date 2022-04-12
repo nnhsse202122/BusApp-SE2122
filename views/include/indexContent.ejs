@@ -17,15 +17,15 @@
             <tr>
                 <th>Bus Number</th>
                 <th>Bus Change</th>
-                <th>Bus Arrived</th>
                 <th>Status</th>
+                <th>Time</th>
             </tr>
         <% for(let i = 0; i < data.buses.length; i++) { %> 
             <tr>
                 <td><%= data.buses[i].number %></td>
                 <td><%= data.buses[i].change %></td>
-                <td><%= data.buses[i].arrival %></td>
                 <td><%= data.buses[i].status %></td>
+                <td><%= data.buses[i].arrival %></td>                
             </tr>
         <% } %> 
         </table>

@@ -15,15 +15,14 @@
             <tr>
                 <th>Bus Number</th>
                 <th>Bus Change</th>
-                <th>Bus Arrived</th>
                 <th>Status</th>
+                <th>Time</th>
                 <th class="deleteBus"></th>
             </tr>
         <% for(let i = 0; i < data.buses.length; i++) { %> 
             <tr>
                 <td><input class="tableInput numberInput" type="number" value=<%= data.buses[i].number %> readonly></td>
                 <td><input class="tableInput changeInput" type="number" oninput="startTimeout(this)" value=<%= data.buses[i].change %> ></td>
-                <td><input class="tableInput arrivalInput" type="text" oninput="startTimeout(this)" value=<%= data.buses[i].arrival %> ></td>
                 <td>
                     <select class="tableInput statusInput" onchange="statusChange(this); startTimeout(this)">
                         <option value="NOT HERE" <%= data.buses[i].status == "NOT HERE"? "selected" : "" %>>NOT HERE</option>
@@ -32,6 +31,8 @@
                         <option value="GONE" <%= data.buses[i].status == "GONE"? "selected" : "" %>>GONE</option>
                     </select>
                 </td>
+                <td><input class="tableInput arrivalInput" type="text" oninput="startTimeout(this)" value=<%= data.buses[i].arrival %> ></td>
+                
                 <td class="deleteBus"><i class="fas fa-times" onclick="confirmRemove(this);"></i></td>
             </tr>
         <% } %> 
