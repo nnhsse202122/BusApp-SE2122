@@ -1,6 +1,6 @@
 "use strict";
 /// <reference path="./socket-io-client.d.ts"/>
-const socket = window.io('/admin');
+const adminSocket = window.io('/admin'); // This line and the line above is how you get ts types to work on clientside... cursed
 class Bus {
     constructor(rowVal) {
         this.row = rowVal;
@@ -45,7 +45,6 @@ function printBuses() {
 }
 function newBus() {
     const row = document.getElementById("table").insertRow(1);
-    // @ts-ignore
     const html = ejs.render(document.getElementById("getRender").getAttribute("emptyRow"));
     row.innerHTML = html;
     const bus = new Bus(row);
@@ -75,7 +74,7 @@ function addBus(input) {
     bus.row.remove();
     buses.splice(buses.indexOf(bus), 1);
     sort(bus.data);
-    socket.emit("updateMain", {
+    adminSocket.emit("updateMain", {
         type: "add",
         data: bus.data
     });
@@ -83,7 +82,7 @@ function addBus(input) {
 }
 function updateBus(input) {
     const bus = getBus(input);
-    socket.emit("updateMain", {
+    adminSocket.emit("updateMain", {
         type: "update",
         data: bus.data
     });
@@ -97,7 +96,7 @@ function confirmRemove(icon) {
     const bus = getBus(icon, "removeIcon");
     if (confirm(`Are you sure you want to delete bus ${bus.data.number}?`)) {
         removeBus(bus);
-        socket.emit("updateMain", {
+        adminSocket.emit("updateMain", {
             type: "delete",
             data: {
                 number: bus.data.number
@@ -124,7 +123,6 @@ function sort(bus) {
         index = buses.length;
     }
     const row = document.getElementById("table").insertRow(index + 1);
-    // @ts-ignore
     const html = ejs.render(document.getElementById("getRender").getAttribute("populatedRow"), { data: bus });
     row.innerHTML = html;
     buses.splice(index, 0, new Bus(row));
@@ -150,7 +148,7 @@ function statusChange(dropDown) {
         bus.arrivalInput.value = `${hour}:${minute}${effix}`;
     }
 }
-socket.on("updateBuses", (command) => {
+adminSocket.on("updateBuses", (command) => {
     let bus;
     switch (command.type) {
         case "add":
@@ -158,7 +156,6 @@ socket.on("updateBuses", (command) => {
             break;
         case "update":
             bus = getBus(command.data.number, "number");
-            // @ts-ignore
             const html = ejs.render(document.getElementById("getRender").getAttribute("populatedRow"), { data: command.data });
             console.log(html);
             bus.row.innerHTML = html;
@@ -172,5 +169,7 @@ socket.on("updateBuses", (command) => {
             throw `Invalid bus command: ${command.type}`;
     }
 });
-socket.on("updateWeather", (weatherData) => {
+adminSocket.on("updateWeather", (weather) => {
+    const html = ejs.render(document.getElementById("getRender").getAttribute("weather"), { weather: weather });
+    document.getElementById("weather").innerHTML = html;
 });

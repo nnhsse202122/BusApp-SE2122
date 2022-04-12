@@ -8,8 +8,8 @@ async function getWeather(io: Server) {
         + new URLSearchParams([["key", "8afcf03c285047a1b6e201401222202"], ["q", "60540"]]
     ));
     writeWeather(await res.json());
-    io.of("/").emit("updateWeather", readData());
-    io.of("/admin").emit("updateWeather", readData());
+    io.of("/").emit("updat", readData());
+    io.of("/admin").emit("updateWeather", readData().weather);
 }
 
 export function startWeather(io: Server) {

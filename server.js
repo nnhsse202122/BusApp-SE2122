@@ -54,7 +54,7 @@ io.of("/admin").on("connection", (socket) => {
         }
         (0, ymlController_1.writeBuses)(buses);
         // buses.forEach((bus) => {console.log(bus.number)});
-        io.of("/").emit("updateBuses", command);
+        io.of("/").emit("update", (0, ymlController_1.readData)());
         socket.broadcast.emit("updateBuses", command);
     });
     socket.on("debug", (data) => {
@@ -83,8 +83,8 @@ function resetDatafile() {
     const busesDatafile = path_1.default.resolve(__dirname, "./data/buses.yml");
     const defaultBusesDatafile = path_1.default.resolve(__dirname, "./data/defaultBuses.txt");
     fs_1.default.writeFileSync(busesDatafile, fs_1.default.readFileSync(defaultBusesDatafile));
-    io.of("/").emit("updateBuses", (0, ymlController_1.readData)());
-    io.of("/admin").emit("updateBuses", (0, ymlController_1.readData)());
+    io.of("/").emit("update", (0, ymlController_1.readData)());
+    io.of("/admin").emit("updateBuses", (0, ymlController_1.readData)()); // Yeaaah this isnt going to work
 }
 const midnight = new Date();
 midnight.setDate(midnight.getDate() + 1);
