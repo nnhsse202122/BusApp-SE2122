@@ -9,13 +9,15 @@ class Bus {
         this.arrivalInput = this.row.children[2].children[0];
         this.statusInput = this.row.children[3].children[0];
         this.removeIcon = this.row.children[4].children[0];
+        this.data = {};
         this.updateValues();
     }
     updateValues() {
         this.number = this.numberInput.value;
-        this.change = this.changeInput.value;
-        this.arrival = this.arrivalInput.value;
-        this.status = this.statusInput.value;
+        this.data.number = this.numberInput.value;
+        this.data.change = this.changeInput.value;
+        this.data.arrival = this.arrivalInput.value;
+        this.data.status = this.statusInput.value;
     }
 }
 const buses = []; /// TODO: Add buses already in the table
@@ -39,7 +41,7 @@ function getBus(key, attribute) {
     throw "Bus not found";
 }
 function printBuses() {
-    buses.forEach((bus) => { console.log(bus.number); });
+    buses.forEach((bus) => { console.log(bus.data.number); });
 }
 function newBus() {
     const row = document.getElementById("table").insertRow(1);
@@ -49,7 +51,7 @@ function newBus() {
     const bus = new Bus(row);
     buses.splice(0, 0, bus);
     bus.numberInput.focus();
-    printBuses();
+    // printBuses();
 }
 function startTimeout(input, type) {
     const bus = getBus(input);
@@ -60,32 +62,22 @@ function startTimeout(input, type) {
 }
 function addBus(input) {
     const bus = getBus(input);
-    if (!bus.number) {
+    if (!bus.data.number) {
         alert("Bus number is required");
         return;
     }
     for (let otherBus of buses) {
-        if (bus != otherBus && bus.number == otherBus.number) {
+        if (bus != otherBus && bus.data.number == otherBus.data.number) {
             alert("Duplicate bus numbers are not allowed");
             return;
         }
     }
     bus.row.remove();
     buses.splice(buses.indexOf(bus), 1);
-    sort({
-        number: bus.number,
-        change: bus.change,
-        arrival: bus.arrival,
-        status: bus.status
-    });
+    sort(bus.data);
     socket.emit("updateMain", {
         type: "add",
-        data: {
-            number: bus.number,
-            change: bus.change,
-            arrival: bus.arrival,
-            status: bus.status
-        }
+        data: bus.data
     });
     console.log("emitted add");
 }
@@ -93,40 +85,36 @@ function updateBus(input) {
     const bus = getBus(input);
     socket.emit("updateMain", {
         type: "update",
-        data: {
-            number: bus.number,
-            change: bus.change,
-            arrival: bus.arrival,
-            status: bus.status
-        }
+        data: bus.data
     });
     console.log("emitted update");
 }
 function cancelBus(icon) {
     const bus = getBus(icon, "removeIcon");
-    clearTimeout(bus.timer);
-    bus.row.remove();
-    buses.splice(buses.indexOf(bus), 1);
+    removeBus(bus);
 }
-function removeBus(icon) {
+function confirmRemove(icon) {
     const bus = getBus(icon, "removeIcon");
-    if (confirm(`Are you sure you want to delete bus ${bus.number}?`)) {
-        clearTimeout(bus.timer);
-        buses.splice(buses.indexOf(bus), 1);
-        bus.row.remove();
+    if (confirm(`Are you sure you want to delete bus ${bus.data.number}?`)) {
+        removeBus(bus);
         socket.emit("updateMain", {
             type: "delete",
             data: {
-                number: bus.number
+                number: bus.data.number
             }
         });
         console.log("emitted delete");
         // printBuses();
     }
 }
+function removeBus(bus) {
+    clearTimeout(bus.timer);
+    bus.row.remove();
+    buses.splice(buses.indexOf(bus), 1);
+}
 function sort(bus) {
     const busAfter = buses.find((otherBus) => {
-        return parseInt(bus.number) < parseInt(otherBus.number);
+        return parseInt(bus.number) < parseInt(otherBus.data.number);
     });
     let index;
     if (busAfter) {
@@ -137,17 +125,10 @@ function sort(bus) {
     }
     const row = document.getElementById("table").insertRow(index + 1);
     // @ts-ignore
-    const html = ejs.render(document.getElementById("getRender").getAttribute("populatedRow"), {
-        data: {
-            number: bus.number,
-            change: bus.change,
-            arrival: bus.arrival,
-            status: bus.status
-        }
-    });
+    const html = ejs.render(document.getElementById("getRender").getAttribute("populatedRow"), { data: bus });
     row.innerHTML = html;
     buses.splice(index, 0, new Bus(row));
-    printBuses();
+    // printBuses();
 }
 function statusChange(dropDown) {
     const bus = getBus(dropDown, "statusInput");
@@ -169,8 +150,27 @@ function statusChange(dropDown) {
         bus.arrivalInput.value = `${hour}:${minute}${effix}`;
     }
 }
-socket.on("updateBuses", (busData) => {
-    // sort(busData);
+socket.on("updateBuses", (command) => {
+    let bus;
+    switch (command.type) {
+        case "add":
+            sort(command.data);
+            break;
+        case "update":
+            bus = getBus(command.data.number, "number");
+            // @ts-ignore
+            const html = ejs.render(document.getElementById("getRender").getAttribute("populatedRow"), { data: command.data });
+            console.log(html);
+            bus.row.innerHTML = html;
+            buses[buses.indexOf(bus)] = new Bus(bus.row);
+            break;
+        case "delete":
+            bus = getBus(command.data.number, "number");
+            removeBus(bus);
+            break;
+        default:
+            throw `Invalid bus command: ${command.type}`;
+    }
 });
 socket.on("updateWeather", (weatherData) => {
 });

@@ -5,7 +5,7 @@ import fs from "fs";
 import bodyParser from "body-parser";
 import {createServer} from "http";
 import {Server} from "socket.io";
-import {readData, writeBuses, writeWeather, BusData} from "./server/ymlController";
+import {readData, writeBuses, BusData} from "./server/ymlController";
 import {startWeather} from "./server/weatherController";
 import session from "express-session";
 
@@ -33,6 +33,7 @@ io.of("/").on("connection", (socket) => {
 //admin socket
 io.of("/admin").on("connection", (socket) => {
     socket.on("updateMain", (command: BusCommand) => {
+        console.log(command);
         switch (command.type) {
             case "add":
                 const busAfter = buses.find((otherBus) => {
@@ -58,9 +59,9 @@ io.of("/admin").on("connection", (socket) => {
                 throw `Invalid bus command: ${command.type}`;
         }
         writeBuses(buses);
-        buses.forEach((bus) => {console.log(bus.number)});
+        // buses.forEach((bus) => {console.log(bus.number)});
         io.of("/").emit("updateBuses", command);
-        io.of("/admin").emit("updateBuses", command);
+        socket.broadcast.emit("updateBuses", command);
     });
     socket.on("debug", (data) => {
         console.log(`debug(admin): ${data}`);

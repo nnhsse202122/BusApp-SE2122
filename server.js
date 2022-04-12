@@ -28,6 +28,7 @@ io.of("/").on("connection", (socket) => {
 //admin socket
 io.of("/admin").on("connection", (socket) => {
     socket.on("updateMain", (command) => {
+        console.log(command);
         switch (command.type) {
             case "add":
                 const busAfter = buses.find((otherBus) => {
@@ -52,9 +53,9 @@ io.of("/admin").on("connection", (socket) => {
                 throw `Invalid bus command: ${command.type}`;
         }
         (0, ymlController_1.writeBuses)(buses);
-        buses.forEach((bus) => { console.log(bus.number); });
+        // buses.forEach((bus) => {console.log(bus.number)});
         io.of("/").emit("updateBuses", command);
-        io.of("/admin").emit("updateBuses", command);
+        socket.broadcast.emit("updateBuses", command);
     });
     socket.on("debug", (data) => {
         console.log(`debug(admin): ${data}`);
@@ -82,8 +83,8 @@ function resetDatafile() {
     const busesDatafile = path_1.default.resolve(__dirname, "./data/buses.yml");
     const defaultBusesDatafile = path_1.default.resolve(__dirname, "./data/defaultBuses.txt");
     fs_1.default.writeFileSync(busesDatafile, fs_1.default.readFileSync(defaultBusesDatafile));
-    io.of("/").emit("update", (0, ymlController_1.readData)());
-    io.of("/admin").emit("update", (0, ymlController_1.readData)());
+    io.of("/").emit("updateBuses", (0, ymlController_1.readData)());
+    io.of("/admin").emit("updateBuses", (0, ymlController_1.readData)());
 }
 const midnight = new Date();
 midnight.setDate(midnight.getDate() + 1);

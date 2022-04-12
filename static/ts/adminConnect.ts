@@ -9,6 +9,7 @@ class Bus {
     arrivalInput: HTMLInputElement;
     statusInput: HTMLInputElement;
     removeIcon: HTMLElement;
+    number: string | undefined;
     data: BusData;
     timer: number | undefined;
 
@@ -24,6 +25,7 @@ class Bus {
     }
 
     updateValues() {
+        this.number = this.numberInput.value;
         this.data.number = this.numberInput.value;
         this.data.change = this.changeInput.value;
         this.data.arrival = this.arrivalInput.value;
@@ -49,7 +51,7 @@ const buses: Bus[] = []; /// TODO: Add buses already in the table
     });
 }
 
-type validAttribute = Exclude<keyof Bus, "change" | "arrival" | "status" | "timer">
+type validAttribute = Exclude<keyof Bus, "data" | "timer">
 
 function getBus(key: HTMLElement, attribute: validAttribute): Bus;
 function getBus(key: HTMLInputElement): Bus;
@@ -76,7 +78,7 @@ function newBus() {
     const bus = new Bus(row);
     buses.splice(0, 0, bus);
     bus.numberInput.focus();
-    printBuses();
+    // printBuses();
 }
 
 function startTimeout(input: HTMLInputElement, type: string) {
@@ -121,17 +123,13 @@ function updateBus(input: HTMLInputElement) {
 
 function cancelBus(icon: HTMLElement) {
     const bus = getBus(icon, "removeIcon");
-    clearTimeout(bus.timer);
-    bus.row.remove();
-    buses.splice(buses.indexOf(bus), 1);
+    removeBus(bus);
 }
 
 function confirmRemove(icon: HTMLElement) {
     const bus = getBus(icon, "removeIcon");
     if (confirm(`Are you sure you want to delete bus ${bus.data.number}?`)) {
-        clearTimeout(bus.timer);
-        buses.splice(buses.indexOf(bus), 1);
-        bus.row.remove();
+        removeBus(bus);
         socket.emit("updateMain", {
             type: "delete",
             data: {
@@ -144,7 +142,9 @@ function confirmRemove(icon: HTMLElement) {
 }
 
 function removeBus(bus: Bus) {
-
+    clearTimeout(bus.timer);
+    bus.row.remove();
+    buses.splice(buses.indexOf(bus), 1);   
 }
 
 function sort(bus: BusData) {
@@ -160,16 +160,10 @@ function sort(bus: BusData) {
     }
     const row = (<HTMLTableElement> document.getElementById("table")).insertRow(index + 1);
     // @ts-ignore
-    const html = ejs.render(document.getElementById("getRender").getAttribute("populatedRow"), {
-        data: {
-            number: bus.number,
-            change: bus.change,
-            arrival: bus.arrival,
-            status: bus.status
-    }});
+    const html = ejs.render(document.getElementById("getRender").getAttribute("populatedRow"), {data: bus});
     row.innerHTML = html;
     buses.splice(index, 0, new Bus(row));
-    printBuses();
+    // printBuses();
 }
 
 function statusChange(dropDown: HTMLSelectElement) {
@@ -199,15 +193,22 @@ type BusCommand = {
 }
 
 socket.on("updateBuses", (command) => {
+    let bus: Bus;
     switch (command.type) {
         case "add":
             sort(command.data);
             break;
         case "update":
-            
+            bus = getBus(command.data.number, "number");
+            // @ts-ignore
+            const html = ejs.render(document.getElementById("getRender").getAttribute("populatedRow"), {data: command.data});
+            console.log(html);
+            bus.row.innerHTML = html;
+            buses[buses.indexOf(bus)] = new Bus(bus.row);
             break;
         case "delete":
-            
+            bus = getBus(command.data.number, "number");
+            removeBus(bus);
             break;
         default:
             throw `Invalid bus command: ${command.type}`;
