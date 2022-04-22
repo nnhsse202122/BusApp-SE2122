@@ -40,7 +40,7 @@ type BusData = {
     status: string | undefined
 }
 
-const buses: Bus[] = []; /// TODO: Add buses already in the table
+const buses: Bus[] = []; 
 
 {
     const table = <HTMLTableElement> document.getElementById("table");
@@ -51,17 +51,28 @@ const buses: Bus[] = []; /// TODO: Add buses already in the table
     });
 }
 
+const newBuses: Bus[] = [];
+
 type validAttribute = Exclude<keyof Bus, "data" | "timer">
 
 function getBus(key: HTMLElement, attribute: validAttribute): Bus;
 function getBus(key: HTMLInputElement): Bus;
 function getBus(key: HTMLElement, attribute?: validAttribute) {
     if (!attribute) {
-        attribute = (<string[]> [...key.classList]).find((htmlClass) => {
-            return ["numberInput", "changeInput", "arrivalInput", "statusInput"].includes(htmlClass)
+        attribute = ["numberInput", "changeInput", "arrivalInput", "statusInput"].find((htmlClass) => {
+            return key.classList.contains(htmlClass);
         }) as validAttribute;
     }
     const bus = buses.find((bus) => {return bus[attribute!] == key});
+    if (bus) return bus;
+    throw "Bus not found";  
+}
+
+function getNewBus(key: HTMLInputElement) {
+    const attribute = ["numberInput", "changeInput", "arrivalInput", "statusInput"].find((htmlClass) => {
+        return key.classList.contains(htmlClass);
+    }) as validAttribute;
+    const bus = newBuses.find((bus) => {return bus[attribute!] == key});
     if (bus) return bus;
     throw "Bus not found";  
 }
@@ -75,13 +86,19 @@ function newBus() {
     const html = ejs.render(document.getElementById("getRender")!.getAttribute("emptyRow")!);
     row.innerHTML = html;
     const bus = new Bus(row);
-    buses.splice(0, 0, bus);
+    newBuses.splice(0, 0, bus);
     bus.numberInput.focus();
     // printBuses();
 }
 
 function startTimeout(input: HTMLInputElement, type: string) {
-    const bus = getBus(input);
+    let bus;
+    if (type == "add") {
+        bus = getNewBus(input);
+    }
+    else {
+        bus = getBus(input);
+    }
     bus.updateValues();
     clearTimeout(bus.timer);
     const func = (type == "add") ? addBus : updateBus;
@@ -102,7 +119,7 @@ function addBus(input: HTMLInputElement) {
         } 
     }
     bus.row.remove();
-    buses.splice(buses.indexOf(bus), 1);
+    newBuses.splice(newBuses.indexOf(bus), 1);
     sort(bus.data);
     adminSocket.emit("updateMain", {
         type: "add",
