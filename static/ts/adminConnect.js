@@ -20,7 +20,7 @@ class Bus {
         this.data.status = this.statusInput.value;
     }
 }
-const buses = []; /// TODO: Add buses already in the table
+const buses = [];
 {
     const table = document.getElementById("table");
     const rows = [...table.rows];
@@ -29,13 +29,25 @@ const buses = []; /// TODO: Add buses already in the table
         buses.push(new Bus(row));
     });
 }
+const newBuses = [];
 function getBus(key, attribute) {
     if (!attribute) {
-        attribute = [...key.classList].find((htmlClass) => {
-            return ["numberInput", "changeInput", "arrivalInput", "statusInput"].includes(htmlClass);
+        attribute = ["numberInput", "changeInput", "arrivalInput", "statusInput"].find((htmlClass) => {
+            return key.classList.contains(htmlClass);
         });
     }
     const bus = buses.find((bus) => { return bus[attribute] == key; });
+    if (bus)
+        return bus;
+    throw "Bus not found";
+}
+function getNewBus(key, attribute) {
+    if (!attribute) {
+        attribute = ["numberInput", "changeInput", "arrivalInput", "statusInput"].find((htmlClass) => {
+            return key.classList.contains(htmlClass);
+        });
+    }
+    const bus = newBuses.find((bus) => { return bus[attribute] == key; });
     if (bus)
         return bus;
     throw "Bus not found";
@@ -48,19 +60,17 @@ function newBus() {
     const html = ejs.render(document.getElementById("getRender").getAttribute("emptyRow"));
     row.innerHTML = html;
     const bus = new Bus(row);
-    buses.splice(0, 0, bus);
+    newBuses.splice(0, 0, bus);
     bus.numberInput.focus();
-    // printBuses();
 }
 function startTimeout(input, type) {
-    const bus = getBus(input);
+    const bus = (type == "add") ? getNewBus(input) : getBus(input);
     bus.updateValues();
     clearTimeout(bus.timer);
     const func = (type == "add") ? addBus : updateBus;
-    bus.timer = window.setTimeout(() => { func(input); }, 3000);
+    bus.timer = window.setTimeout(() => { func(bus); }, 3000);
 }
-function addBus(input) {
-    const bus = getBus(input);
+function addBus(bus) {
     if (!bus.data.number) {
         alert("Bus number is required");
         return;
@@ -72,25 +82,24 @@ function addBus(input) {
         }
     }
     bus.row.remove();
-    buses.splice(buses.indexOf(bus), 1);
+    newBuses.splice(newBuses.indexOf(bus), 1);
     sort(bus.data);
     adminSocket.emit("updateMain", {
         type: "add",
         data: bus.data
     });
-    // console.log("emitted add");
 }
-function updateBus(input) {
-    const bus = getBus(input);
+function updateBus(bus) {
     adminSocket.emit("updateMain", {
         type: "update",
         data: bus.data
     });
-    // console.log("emitted update");
 }
 function cancelBus(icon) {
-    const bus = getBus(icon, "removeIcon");
-    removeBus(bus);
+    const bus = getNewBus(icon, "removeIcon");
+    clearTimeout(bus.timer);
+    bus.row.remove();
+    newBuses.splice(newBuses.indexOf(bus), 1);
 }
 function confirmRemove(icon) {
     const bus = getBus(icon, "removeIcon");
@@ -102,8 +111,6 @@ function confirmRemove(icon) {
                 number: bus.data.number
             }
         });
-        // console.log("emitted delete");
-        // printBuses();
     }
 }
 function removeBus(bus) {
@@ -115,18 +122,20 @@ function sort(bus) {
     const busAfter = buses.find((otherBus) => {
         return parseInt(bus.number) < parseInt(otherBus.data.number);
     });
-    let index;
+    let rowIndex;
+    let busIndex;
     if (busAfter) {
-        index = buses.indexOf(busAfter);
+        rowIndex = busAfter.row.rowIndex;
+        busIndex = buses.indexOf(busAfter);
     }
     else {
-        index = buses.length;
+        rowIndex = document.getElementById("table").rows.length;
+        busIndex = buses.length;
     }
-    const row = document.getElementById("table").insertRow(index + 1);
+    const row = document.getElementById("table").insertRow(rowIndex);
     const html = ejs.render(document.getElementById("getRender").getAttribute("populatedRow"), { data: bus });
     row.innerHTML = html;
-    buses.splice(index, 0, new Bus(row));
-    // printBuses();
+    buses.splice(busIndex, 0, new Bus(row));
 }
 function statusChange(dropDown) {
     const bus = getBus(dropDown, "statusInput");

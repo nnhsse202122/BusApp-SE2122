@@ -68,10 +68,14 @@ function getBus(key: HTMLElement, attribute?: validAttribute) {
     throw "Bus not found";  
 }
 
-function getNewBus(key: HTMLInputElement) {
-    const attribute = ["numberInput", "changeInput", "arrivalInput", "statusInput"].find((htmlClass) => {
-        return key.classList.contains(htmlClass);
-    }) as validAttribute;
+function getNewBus(key: HTMLElement, attribute: validAttribute): Bus;
+function getNewBus(key: HTMLInputElement): Bus;
+function getNewBus(key: HTMLElement, attribute?: validAttribute) {
+    if (!attribute) {
+        attribute = ["numberInput", "changeInput", "arrivalInput", "statusInput"].find((htmlClass) => {
+            return key.classList.contains(htmlClass);
+        }) as validAttribute;
+    }
     const bus = newBuses.find((bus) => {return bus[attribute!] == key});
     if (bus) return bus;
     throw "Bus not found";  
@@ -88,26 +92,17 @@ function newBus() {
     const bus = new Bus(row);
     newBuses.splice(0, 0, bus);
     bus.numberInput.focus();
-    // printBuses();
 }
 
 function startTimeout(input: HTMLInputElement, type: string) {
-    let bus;
-    if (type == "add") {
-        bus = getNewBus(input);
-    }
-    else {
-        bus = getBus(input);
-    }
+    const bus = (type == "add") ? getNewBus(input) : getBus(input);
     bus.updateValues();
     clearTimeout(bus.timer);
     const func = (type == "add") ? addBus : updateBus;
-    bus.timer = window.setTimeout(() => {func(input)}, 3000);
+    bus.timer = window.setTimeout(() => {func(bus)}, 3000);
 }
 
-function addBus(input: HTMLInputElement) {
-    const bus = getBus(input);
-    
+function addBus(bus: Bus) {
     if (!bus.data.number) {
         alert("Bus number is required");
         return;
@@ -125,21 +120,20 @@ function addBus(input: HTMLInputElement) {
         type: "add",
         data: bus.data
     });
-    // console.log("emitted add");
 }
 
-function updateBus(input: HTMLInputElement) {
-    const bus = getBus(input);
+function updateBus(bus: Bus) {
     adminSocket.emit("updateMain", {
         type: "update",
         data: bus.data
     });
-    // console.log("emitted update");
 }
 
 function cancelBus(icon: HTMLElement) {
-    const bus = getBus(icon, "removeIcon");
-    removeBus(bus);
+    const bus = getNewBus(icon, "removeIcon");
+    clearTimeout(bus.timer);
+    bus.row.remove();
+    newBuses.splice(newBuses.indexOf(bus), 1);   
 }
 
 function confirmRemove(icon: HTMLElement) {
@@ -152,8 +146,6 @@ function confirmRemove(icon: HTMLElement) {
                 number: bus.data.number
             }
         });
-        // console.log("emitted delete");
-        // printBuses();
     } 
 }
 
@@ -164,21 +156,23 @@ function removeBus(bus: Bus) {
 }
 
 function sort(bus: BusData) {
-    const busAfter = buses.find((otherBus) => { // Sorting does not work when there is another new bus
+    const busAfter = buses.find((otherBus) => {
         return parseInt(bus.number!) < parseInt(otherBus.data.number!);
     });
-    let index: number;
+    let rowIndex: number;
+    let busIndex: number;
     if (busAfter) {
-        index = buses.indexOf(busAfter);
+        rowIndex = busAfter.row.rowIndex;
+        busIndex = buses.indexOf(busAfter);
     }
     else {
-        index = buses.length;
+        rowIndex = (<HTMLTableElement> document.getElementById("table")).rows.length;
+        busIndex = buses.length;
     }
-    const row = (<HTMLTableElement> document.getElementById("table")).insertRow(index + 1);
+    const row = (<HTMLTableElement> document.getElementById("table")).insertRow(rowIndex);
     const html = ejs.render(document.getElementById("getRender")!.getAttribute("populatedRow")!, {data: bus});
     row.innerHTML = html;
-    buses.splice(index, 0, new Bus(row));
-    // printBuses();
+    buses.splice(busIndex, 0, new Bus(row));
 }
 
 function statusChange(dropDown: HTMLSelectElement) {
@@ -215,7 +209,6 @@ adminSocket.on("updateBuses", (command) => {
             break;
         case "update":
             bus = getBus(command.data.number, "number");
-            
             const html = ejs.render(document.getElementById("getRender")!.getAttribute("populatedRow")!, {data: command.data});
             bus.row.innerHTML = html;
             buses[buses.indexOf(bus)] = new Bus(bus.row);
