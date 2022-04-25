@@ -64,10 +64,10 @@ function newBus() {
     bus.numberInput.focus();
 }
 function startTimeout(input, type) {
-    const bus = (type == "add") ? getNewBus(input) : getBus(input);
+    const bus = (type == "new") ? getNewBus(input) : getBus(input);
     bus.updateValues();
     clearTimeout(bus.timer);
-    const func = (type == "add") ? addBus : updateBus;
+    const func = (type == "new") ? addBus : updateBus;
     bus.timer = window.setTimeout(() => { func(bus); }, 3000);
 }
 function addBus(bus) {
@@ -137,8 +137,8 @@ function sort(bus) {
     row.innerHTML = html;
     buses.splice(busIndex, 0, new Bus(row));
 }
-function statusChange(dropDown) {
-    const bus = getBus(dropDown, "statusInput");
+function statusChange(dropDown, type) {
+    const bus = (type == "new") ? getNewBus(dropDown, "statusInput") : getBus(dropDown, "statusInput");
     if (bus.statusInput.value == "NOT HERE") {
         bus.arrivalInput.value = "";
     }
