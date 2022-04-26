@@ -4,6 +4,10 @@ socket.on("update", (data) => {
     const html = ejs.render(document.getElementById("getRender").getAttribute("render"), {data: data});
     document.getElementById("content").innerHTML = html;
 });
-if('serviceWorker' in navigator){
-    navigator.serviceWorker.register('/sw/sw.js')
+const registerWorker = async ()=>{
+    if('serviceWorker' in navigator){
+        const registration =  await navigator.serviceWorker.register('/sw/sw.js')
+        
+    }
+    
 }
