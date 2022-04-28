@@ -126,3 +126,9 @@ select{
         font-size: 2em;
     }
 }
+
+#contactInfo {
+    font-size: 25px;
+    margin: 30px 30px 30px 30px;
+    text-align: center;
+}
