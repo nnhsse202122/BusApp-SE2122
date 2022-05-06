@@ -2,6 +2,10 @@
 
 const adminSocket = window.io('/admin'); // This line and the line above is how you get ts types to work on clientside... cursed
 
+window.addEventListener("focus", () => {
+    location.reload();
+});
+
 class Bus {
     row: HTMLTableRowElement;
     numberInput: HTMLInputElement;
@@ -186,11 +190,21 @@ function statusChange(dropDown: HTMLSelectElement, type?: string) {
         let minute = date.toTimeString().substring(3, 5);
         let effix: string;
         if (hour > 12)  {
+            if (hour == 24) {
+                effix = "am";
+            }
+            else {
+                effix = "pm";
+            }
             hour -= 12;
-            effix = "pm";
         }    
         else {
-            effix = "am";
+            if (hour == 12) {
+                effix = "pm";
+            }
+            else {
+                effix = "am";
+            }
         }
         bus.arrivalInput.value = `${hour}:${minute}${effix}`;    
     }

@@ -1,6 +1,9 @@
 "use strict";
 /// <reference path="./socket-io-client.d.ts"/>
 const adminSocket = window.io('/admin'); // This line and the line above is how you get ts types to work on clientside... cursed
+window.addEventListener("focus", () => {
+    location.reload();
+});
 class Bus {
     constructor(rowVal) {
         this.row = rowVal;
@@ -144,15 +147,26 @@ function statusChange(dropDown, type) {
     }
     else {
         const date = new Date();
+        date.setHours(24);
         let hour = parseInt(date.toTimeString().substring(0, 3));
         let minute = date.toTimeString().substring(3, 5);
         let effix;
         if (hour > 12) {
+            if (hour == 24) {
+                effix = "am";
+            }
+            else {
+                effix = "pm";
+            }
             hour -= 12;
-            effix = "pm";
         }
         else {
-            effix = "am";
+            if (hour == 12) {
+                effix = "pm";
+            }
+            else {
+                effix = "am";
+            }
         }
         bus.arrivalInput.value = `${hour}:${minute}${effix}`;
     }
