@@ -22,9 +22,8 @@ type BusCommand = {
 
 const busesDatafile = path.resolve(__dirname, "./data/buses.yml");
 const defaultBusesDatafile = path.resolve(__dirname, "./data/defaultBuses.txt");
-fs.writeFileSync(busesDatafile, fs.readFileSync(defaultBusesDatafile));
-
-const buses = readData().buses;
+let buses: BusData[];
+resetBuses();
 
 //root socket
 io.of("/").on("connection", (socket) => {
@@ -95,8 +94,9 @@ function resetBuses() {
 }
 function resetDatafile() {
     fs.writeFileSync(busesDatafile, fs.readFileSync(defaultBusesDatafile));
+    buses = readData().buses;
     io.of("/").emit("update", readData());
-    io.of("/admin").emit("updateBuses", readData()); // Yeaaah this isnt going to work
+    io.of("/admin").emit("updateBuses", readData());
 }
 const midnight = new Date();
 midnight.setDate(midnight.getDate() + 1);

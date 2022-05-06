@@ -17,7 +17,10 @@ const app = (0, express_1.default)();
 const httpServer = (0, http_1.createServer)(app);
 const io = new socket_io_1.Server(httpServer);
 const PORT = process.env.PORT || 5182;
-const buses = (0, ymlController_1.readData)().buses;
+const busesDatafile = path_1.default.resolve(__dirname, "./data/buses.yml");
+const defaultBusesDatafile = path_1.default.resolve(__dirname, "./data/defaultBuses.txt");
+let buses;
+resetBuses();
 //root socket
 io.of("/").on("connection", (socket) => {
     //console.log(`new connection on root (id:${socket.id})`);
@@ -79,11 +82,10 @@ function resetBuses() {
     setInterval(resetDatafile, 86400000);
 }
 function resetDatafile() {
-    const busesDatafile = path_1.default.resolve(__dirname, "./data/buses.yml");
-    const defaultBusesDatafile = path_1.default.resolve(__dirname, "./data/defaultBuses.txt");
     fs_1.default.writeFileSync(busesDatafile, fs_1.default.readFileSync(defaultBusesDatafile));
+    buses = (0, ymlController_1.readData)().buses;
     io.of("/").emit("update", (0, ymlController_1.readData)());
-    io.of("/admin").emit("updateBuses", (0, ymlController_1.readData)()); // Yeaaah this isnt going to work
+    io.of("/admin").emit("updateBuses", (0, ymlController_1.readData)());
 }
 const midnight = new Date();
 midnight.setDate(midnight.getDate() + 1);
