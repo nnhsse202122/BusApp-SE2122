@@ -20,6 +20,10 @@ type BusCommand = {
     data: BusData
 }
 
+const busesDatafile = path.resolve(__dirname, "./data/buses.yml");
+const defaultBusesDatafile = path.resolve(__dirname, "./data/defaultBuses.txt");
+fs.writeFileSync(busesDatafile, fs.readFileSync(defaultBusesDatafile));
+
 const buses = readData().buses;
 
 //root socket
@@ -90,8 +94,6 @@ function resetBuses() {
     setInterval(resetDatafile, 86400000);
 }
 function resetDatafile() {
-    const busesDatafile = path.resolve(__dirname, "./data/buses.yml");
-    const defaultBusesDatafile = path.resolve(__dirname, "./data/defaultBuses.txt");
     fs.writeFileSync(busesDatafile, fs.readFileSync(defaultBusesDatafile));
     io.of("/").emit("update", readData());
     io.of("/admin").emit("updateBuses", readData()); // Yeaaah this isnt going to work
