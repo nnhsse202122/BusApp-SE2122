@@ -9,7 +9,7 @@ export const router = express.Router();
 const CLIENT_ID = "319647294384-m93pfm59lb2i07t532t09ed5165let11.apps.googleusercontent.com"
 const oAuth2 = new OAuth2Client(CLIENT_ID);
 
-// Homepage. This is where students will view bus information from. 
+// Homepage. Also known as index or student view. This is where students will view bus information from. 
 router.get("/", (req: Request, res: Response) => {
     // Reads from data file and displays data
     res.render("index", {
@@ -40,8 +40,7 @@ function authorize(req: Request) {
     req.session.isAdmin = readWhitelist().admins.includes(<string> req.session.userEmail); 
 }
 
-/* Admin page. This is where bus information can be updated from
-Reads from data file and displays data */
+// Admin page. This is where bus information can be updated from 
 router.get("/admin", async (req: Request, res: Response) => {
     // If user is not authenticated (email is not is session) redirects to login page
     if (!req.session.userEmail) {
@@ -50,6 +49,7 @@ router.get("/admin", async (req: Request, res: Response) => {
     }
     
     // Authorizes user, then either displays admin page or unauthorized page
+    // Sends a lot of ejs files so that updates to the page can be done with ejs client side
     authorize(req);
     if (req.session.isAdmin) {
         res.render("admin", {
@@ -64,6 +64,8 @@ router.get("/admin", async (req: Request, res: Response) => {
         res.render("unauthorized");
     }
 });
+
+// :)
 router.get("/beans", async (req: Request, res: Response) => {
     res.sendFile(path.resolve(__dirname, "../static/img/beans.jpg"));
 });
