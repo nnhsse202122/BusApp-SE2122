@@ -118,8 +118,24 @@ textarea{
     align-items: center;
 }
 
-@media only screen and (max-width: 500px) {
+@media screen and (max-device-width: 500px) {
     button{
-        width:50%;
+        width:48%;
+        height:20%;
+        padding-right:none;
+        padding-left:none;
+    }
+    button:hover{
+        box-shadow:none;
+    }
+    #weather{
+        width:100%;
+    }
+    #header
+    {
+        width:100%;
+    }
+    table{
+        width:100%;
     }
 }
