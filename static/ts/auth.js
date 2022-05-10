@@ -4,14 +4,14 @@ gapi.load("auth2", () => {
     });
     document.querySelector("#google-login").addEventListener("click", doLogin); 
 
-    async function doLogin() { //add click listener to #google-login button which will do the login
+    async function doLogin() { // Adds click listener to #google-login button which will do the login
         try {
-            var googleUser = await gapi.auth2.getAuthInstance().signIn(); //prompt the user to sign in with google and get a GoogleUser corresponding to them
+            var googleUser = await gapi.auth2.getAuthInstance().signIn(); // Prompts the user to sign in with google and get a GoogleUser corresponding to them
         } catch (e) {
-            console.log("error with login prompt:", e); //if there is an error (eg. closed the prompt, something else went wrong) log it and don't continue
+            console.log("error with login prompt:", e); // If there is an error (eg. closed the prompt, something else went wrong) log it and don't continue
             return;
         }
-        await fetch("/auth/v1/google", { //send the googleUser's id_token which has all the data we want to the server with a POST request
+        await fetch("/auth/v1/google", { // Sends the googleUser's id_token which has all the data we want to the server with a POST request
             method: "POST",
             body: JSON.stringify({
                 token: googleUser.getAuthResponse().id_token
@@ -20,6 +20,7 @@ gapi.load("auth2", () => {
                 "Content-Type": "application/json"
             }
         });
+        // Redirects user to admin page regardless of authorization. The /admin route takes care of authorization
         window.location = "/admin";
     }
 });
