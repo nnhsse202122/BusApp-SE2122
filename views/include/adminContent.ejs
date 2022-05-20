@@ -2,9 +2,10 @@
     <div id="header">
         
     <div id="buttons">
-        <button><a href="/">Back to hompage</a></button>
-        <button type="button" onclick="newBus()">Add Bus</button>
-        <input id="weatherPlan" type="checkbox">
+        <button onclick:="window.location.replace('/')" id='back'><a href="/">Back to hompage</a></button>
+        <button type="button" onclick="newBus()" id='add'>Add Bus</button>
+        <div id="weatherPlanContainer"><input id="weatherPlan" type="checkbox">
+        <label for="weatherPlan">Weather Plan</label></div>
     </div>
 </div>
     <table id="table">
