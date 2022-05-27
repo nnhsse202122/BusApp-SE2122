@@ -1,21 +1,13 @@
-## Overview
-This is a web application that allows teachers in charge of bus commumincation to post information regarding that stauts of buses that can be accessed online and therefore from a students phone.
+## Overview and Purpose.
+The bus app is a web application that allows admins in charge of bus communication to post information regarding the status of buses for pickup after school. Students can access this information from their phone remotely. The purpose of the app is to make communication easier which makes it easier for admins, makes students less likely to miss their bus or bus changes and allows students to do things after school without fear of missing their bus. 
 
-## Features
+## Intended Experience
+To access the bus app, all users should enter the website url (https://busapp.nnhsse.org/) into a browser. For convenience, it is recommended that users save this website to their phone’s homepage. 
 
-#### Student Experience
-Students will be able to enter the website url into a broswer in order to access. The home pages displays a simple table with bus number, change, arrival time and status. Additionally a message about the weather is displayed below. Information updated by admins is live so students will not have to refresh to view new information.
+The below lists are the intended experiences for both admins and students:
 
 #### Admin Experience
-People that are on the whitelist have access to the admin page which allows them to edit bus information. To reach this page, go to the same page students view (by entering the url) and select "Login to edit buses". This will redirect them to a page where they can login with google and if their email address is on the whitelist, they will be given access to the admin page. 
+From the homepage, admins should click the “Login as editor” button in the top right and complete authentication via google on the login page. If they are on the whitelist, they will be redirected to the admin page.  …
 
-On this page, teachers are able to add and remove buses, edit bus number, change, arrival time and status, and enter a message to describe the current weather in the bus lot. Edited information will not be visable to students and other teachers until the save button is pressed and if multiple teacher are editing at the same time changes by other teachers will not be visable until the page is refreshed (We plan on making this more convinenet).
-
-If a user tries to access the admin page directly, this will be redirected to the login page and if they login to an account not on the whitelist, they will be redirected to an unauthorized page.
-
-## Project Setup
-To get started, clone this repo onto your computer. Then run the command `npm i` to install dependencies. To run the server on localhost run the command `npm run buildStart` this will complie the typescript and start the server on port `localhost:5182`.
-
-## Project Overview
-This project is written using a combination of javascript, typescript, ejs, yaml and css. To get an understand of typescript read these documents [ts setup](https://docs.google.com/document/d/1Nz-GhLjmN0Ouh1HqJKd14x_Rf_aChft_tl6PNyOLsHA/edit?usp=sharing), [ts crash course](https://docs.google.com/document/d/1KSmqDuMzLxKAVosLv3uDOzb63P3wa08IcdHxCy8rYwo/edit?usp=sharing). This application is a web server using express and typescript. The start point for the project is `server.ts`. Lots of things are done in this file but the most important is creating a new express app (`const app: Application = express();` and running it on the localhost (`httpServer.listen(PORT, () => {console.log(`Server is running on port ${PORT}\`)});`)
-
+#### Student Experience 
+On the home page, students have access to all the information they need. The page consists of  a bus table displaying Bus Number, Bus Change, Status and Time. Additionally, a panel displaying the weather is visible in the top right. Students should first check for a bus change when opening the app and then periodically check the status of their bus to make sure they catch it. Information updated by admins is live so students will not have to refresh to view new information.
