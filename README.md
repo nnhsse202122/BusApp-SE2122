@@ -31,8 +31,63 @@ Follow these steps to setup the Bus App project
 #### On Local Host
 To run the Bus App on local host, run `npm run buildStart` using a terminal currently in the home directory of the project. This compiles the typescript and starts the server. After you see the message `Server is running on port 5182` you’ve started the server successfully. Now go to `http://localhost:5182/` to start development.
 
-#### On Production
-/// Mr. Schmit write here
+### Production Server Deployment
+1. Create a new EC2 instance used on Ubuntu.
+2. Open ports for HTTP and HTTPS when walking through the EC2 wizard.
+3. Generate a key pair for this EC2 instance. Download and save the private key, which is needed to connect to the instance in the future.
+4. After the EC2 instance is running, click on the Connect button the EC2 Management Console for instructions on how to ssh into the instance.
+5. On the EC2 instance, [install](https://github.com/nodesource/distributions/blob/master/README.md) Node.js v17
+
+```
+curl -fsSL https://deb.nodesource.com/setup_17.x | sudo -E bash -
+sudo apt-get install -y nodejs
+```
+
+6. On the EC2 instance, install nginx: `sudo apt-get -y install nginx`
+7. Create a reverse proxy for the Intelligent Grouping App node server. In the file /etc/nginx/sites-enabled/busApp:
+
+```
+server {
+	# listen on port 80 (http)
+	listen 80;
+	server_name busapp.nnhsse.org;
+
+	# write access and error logs to /var/log
+	access_log /var/log/busapp_access.log;
+	error_log /var/log/busapp_error.log;
+
+	location / {
+		# forward application requests to the node server
+		proxy_pass http://localhost:5182;
+		proxy_redirect off;
+		proxy_set_header Host $host;
+		proxy_set_header X-Real-IP $remote_addr;
+		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+	}
+}
+```
+
+8. Restart the nginx server: `sudo service nginx reload`
+9. Install and configure [certbot](https://certbot.eff.org/lets-encrypt/ubuntufocal-nginx)
+10. Clone this repository from GitHub.
+11. Inside of the directory for this repository install the node dependencies: `npm install`
+12. Update Google Cloud Platform is allow connections from new domain (busapp.nnhsse.org)
+13. Install Production Manager 2, which is used to keep the node server running:
+
+```
+sudo npm install pm2 -g
+sudo pm2 --name busapp start "npm run buildStart"
+```
+
+14. Verify that the node server is running: `sudo pm2 list`
+15. Configure pm2 to automatically run when the EC2 instance restarts: `sudo pm2 startup`
+16. Add a crontab entry to pull from GitHub every 15 minutes: `crontab -e`
+
+```
+*/15 * * * * cd /home/ubuntu/BusApp-SE2122 && git pull
+```
+
+17. Restart the node server: `sudo pm2 restart index`
 
 ## Working with the Bus App
 
