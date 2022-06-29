@@ -73,3 +73,4 @@ exports.router.get("/admin", (req, res) => __awaiter(void 0, void 0, void 0, fun
 exports.router.get("/beans", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.sendFile(path_1.default.resolve(__dirname, "../static/img/beans.jpg"));
 }));
+//# sourceMappingURL=router.js.map

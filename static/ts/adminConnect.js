@@ -194,3 +194,4 @@ adminSocket.on("updateWeather", (weather) => {
     const html = ejs.render(document.getElementById("getRender").getAttribute("weather"), { weather: weather });
     document.getElementById("weather").innerHTML = html;
 });
+//# sourceMappingURL=adminConnect.js.map

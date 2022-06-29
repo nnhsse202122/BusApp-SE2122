@@ -45,3 +45,4 @@ function readWhitelist() {
     return js_yaml_1.default.load(fs_1.default.readFileSync(whitelist, "utf-8"));
 }
 exports.readWhitelist = readWhitelist;
+//# sourceMappingURL=ymlController.js.map

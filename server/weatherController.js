@@ -30,3 +30,4 @@ function startWeather(io) {
     setInterval(() => { getWeather(io); }, 300000);
 }
 exports.startWeather = startWeather;
+//# sourceMappingURL=weatherController.js.map

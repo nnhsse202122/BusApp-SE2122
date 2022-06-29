@@ -93,3 +93,4 @@ midnight.setHours(5, 0, 0, 0);
 setTimeout(resetBuses, midnight.valueOf() - new Date().valueOf());
 // Starts server
 httpServer.listen(PORT, () => { console.log(`Server is running on port ${PORT}`); });
+//# sourceMappingURL=server.js.map

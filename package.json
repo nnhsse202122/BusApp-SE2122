@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.ts",
+    "dev": "nodemon --exec \"node --require ts-node/register --inspect server.ts\"",
     "build": "tsc -p .",
-    "devstart": "tsc -p . nodemon server.ts",
+    "devstart": "tsc -p . && nodemon --exec \"node --require ts-node/register --inspect server.ts\"",
     "buildStart": "tsc -p . && node server.js"
   },
   "author": "",
