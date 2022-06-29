@@ -31,6 +31,9 @@ Follow these steps to setup the Bus App project
 #### On Local Host
 To run the Bus App on local host, run `npm run buildStart` using a terminal currently in the home directory of the project. This compiles the typescript and starts the server. After you see the message `Server is running on port 5182` you’ve started the server successfully. Now go to `http://localhost:5182/` to start development.
 
+#### Debugging
+To debug the Bus App on your development system, run `npm run devstart` using a terminal currently in the home directory of the project. Then choose the "Start Debugging" menu item in the "Run" menu. You can now set breakpoints in the typescript files.
+
 ### Production Server Deployment
 1. Create a new EC2 instance used on Ubuntu.
 2. Open ports for HTTP and HTTPS when walking through the EC2 wizard.
