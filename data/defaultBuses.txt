@@ -5,7 +5,17 @@ buses:
         arrival: ''
         status: 'NOT HERE'
     -
+        number: '14'
+        change: ''
+        arrival: ''
+        status: 'NOT HERE'
+    -
         number: '23'
+        change: ''
+        arrival: ''
+        status: 'NOT HERE'
+    -
+        number: '24'
         change: ''
         arrival: ''
         status: 'NOT HERE'
@@ -35,17 +45,17 @@ buses:
         arrival: ''
         status: 'NOT HERE'
     -
+        number: '42'
+        change: ''
+        arrival: ''
+        status: 'NOT HERE'
+    -
         number: '46'
         change: ''
         arrival: ''
         status: 'NOT HERE'
     -
         number: '47'
-        change: ''
-        arrival: ''
-        status: 'NOT HERE'
-    -
-        number: '51'
         change: ''
         arrival: ''
         status: 'NOT HERE'
@@ -80,17 +90,12 @@ buses:
         arrival: ''
         status: 'NOT HERE'
     -
+        number: '78'
+        change: ''
+        arrival: ''
+        status: 'NOT HERE'
+    -
         number: '79'
-        change: ''
-        arrival: ''
-        status: 'NOT HERE'
-    -
-        number: '81'
-        change: ''
-        arrival: ''
-        status: 'NOT HERE'
-    -
-        number: '83'
         change: ''
         arrival: ''
         status: 'NOT HERE'
@@ -100,7 +105,7 @@ buses:
         arrival: ''
         status: 'NOT HERE'
     -
-        number: '106'
+        number: '112'
         change: ''
         arrival: ''
         status: 'NOT HERE'
@@ -110,18 +115,9 @@ buses:
         arrival: ''
         status: 'NOT HERE'
     -
-        number: '128'
-        change: ''
-        arrival: ''
-        status: 'NOT HERE'
-    -
-        number: '129'
-        change: ''
-        arrival: ''
-        status: 'NOT HERE'
-    -
         number: '130'
         change: ''
         arrival: ''
         status: 'NOT HERE'
+
 
