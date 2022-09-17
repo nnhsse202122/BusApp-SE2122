@@ -6,7 +6,8 @@ const busesDatafile = path.resolve(__dirname, "../data/buses.yml");
 const defaultBusesDatafile = path.resolve(__dirname, "../data/defaultBuses.txt");
 const weatherDatafile = path.resolve(__dirname, "../data/weather.yml");
 const defaultWeatherDatafile = path.resolve(__dirname, "../data/defaultWeather.txt");
-const whitelist = path.resolve(__dirname, "../data/whitelist.yml");
+const whitelistDatafile = path.resolve(__dirname, "../data/whitelist.yml");
+const busListDatafile = path.resolve(__dirname, "../data/busList.yml");
 
 export type BusData = {number: string, change: string | undefined, arrival: string | undefined, status: string | undefined};
 type Weather = {status: string, icon: string, temperature: string, feelsLike: string}
@@ -41,5 +42,9 @@ export function writeWeather(weather: any) {
 
 // Reads a list of users who are allowed access to the admin page
 export function readWhitelist() {
-    return <{admins: string[]}> yaml.load(fs.readFileSync(whitelist, "utf-8"));
+    return <{admins: string[]}> yaml.load(fs.readFileSync(whitelistDatafile, "utf-8"));
+}
+
+export function readBusList() {
+    return <{busList: string[]}> yaml.load(fs.readFileSync(busListDatafile, "utf-8"));
 }
