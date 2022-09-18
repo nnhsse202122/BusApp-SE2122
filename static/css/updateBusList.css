@@ -4,9 +4,7 @@ body {
 
 /* Table */
 .buslist-table {
-    position: absolute;
-    left: 50%;
-    margin: 25px 0;
+    margin: 30px auto;
 
     border-collapse: collapse;
     font-size: 0.9em;

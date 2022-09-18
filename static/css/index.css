@@ -1,0 +1,36 @@
+.bus-table {
+    margin: 30px auto;
+
+    border-collapse: collapse;
+    font-size: 0.9em;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.bus-table thead tr {
+    background-color: #327fa8;
+    color: #ffffff;
+    text-align: left;
+    font-weight: bold;;
+}
+
+.bus-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.bus-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.bus-table tbody tr:last-of-type {
+    border-bottom: 2px solid #327fa8;
+}
+
+.bus-table tbody tr:hover {
+    background-color: #c3ccd3;
+}
+
+.bus-table th,
+.bus-table td {
+    padding: 12px 15px;
+    width: 75px;
+}

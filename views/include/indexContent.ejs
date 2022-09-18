@@ -1,25 +1,27 @@
 <div id="content">
-    <div id="flexContainer">
-        <div id="spacer"></div>
-        <div id="header">
-            <div id="weather">    
-                <img src=<%= data.weather.icon %>>
-                <p><%= data.weather.status %> </p>
-                <p>Temperature: <%= data.weather.temperature %>°F</p>
-                <p>Feels like: <%= data.weather.feelsLike %>°F</p>
-            </div>
-            <div id="login"><a href="/admin">Login as editor</a></div>
+    <!-- <div id="spacer"></div> -->
+    <!-- <div id="header">
+        <div id="weather">    
+            <img src=<%= data.weather.icon %>>
+            <p><%= data.weather.status %> </p>
+            <p>Temperature: <%= data.weather.temperature %>°F</p>
+            <p>Feels like: <%= data.weather.feelsLike %>°F</p>
         </div>
-        <table id="table">
-            <colgroup>
-                <col span="3">
-            </colgroup>
+        <div id="login"><a href="/admin">Login as editor</a></div>
+    </div> -->
+    <table class="bus-table">
+        <!-- <colgroup>
+            <col span="3">
+        </colgroup> -->
+        <thead>
             <tr>
                 <th>Bus Number</th>
                 <th>Bus Change</th>
                 <th>Status</th>
                 <th>Time</th>
             </tr>
+        </thead>
+        <tbody>
         <% for(let i = 0; i < data.buses.length; i++) { %> 
             <tr>
                 <td><%= data.buses[i].number %></td>
@@ -28,10 +30,11 @@
                 <td><%= data.buses[i].arrival %></td>                
             </tr>
         <% } %> 
-        </table>
-        <p id="contactInfo">
-            If you have feedback, feature requests or bugs to report please contact busappnnhsse@gmail.com. 
-            Please include the topic of the email in the subject.
-        </p>
-    </div>
+        </tbody>
+    
+    </table>
+    <!-- <p id="contactInfo">
+        If you have feedback, feature requests or bugs to report please contact busappnnhsse@gmail.com. 
+        Please include the topic of the email in the subject.
+    </p> -->
 </div>
