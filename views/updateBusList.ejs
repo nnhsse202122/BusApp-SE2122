@@ -13,13 +13,13 @@
             <thead> 
                 <tr>
                     <th>Buses</th>
-                    <th></th>
+                    <th class="remove-col"></th>
                 </tr>                
             </thead>
             <% for(i = 0; i <data.busList.length; i++) { %>
                 <tr>
                     <td><%= data.busList[i]%></td>
-                    <td class="deleteBus"><i class="fas fa-times" onclick=""></i></td>
+                    <td class="remove-col"><i class="fas fa-times remove-button" onclick=""></i></td>
                 </tr>
             <% } %> 
         </table>
