@@ -9,7 +9,9 @@
         
     </head>
     <body>
-        <%- include("include/indexContent") %>
+        <div id="content">
+            <%- include("include/indexContent") %>
+        </div>
         <script src="js/ejs.js"></script>
         <script src="/socket.io/socket.io.js"></script>
         <script id="getRender" render="<%= render %>" src='js/indexConnect.js'></script>

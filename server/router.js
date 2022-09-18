@@ -84,7 +84,6 @@ exports.router.get("/admin/updateBusList", (req, res) => {
     // Authorizes user, then either displays admin page or unauthorized page
     authorize(req);
     if (req.session.isAdmin) {
-        console.log((0, ymlController_1.readBusList)());
         res.render("updateBusList", {
             data: (0, ymlController_1.readBusList)()
         });

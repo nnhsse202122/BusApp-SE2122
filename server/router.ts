@@ -81,7 +81,6 @@ router.get("/admin/updateBusList", (req: Request, res: Response) => {
     // Authorizes user, then either displays admin page or unauthorized page
     authorize(req);
     if (req.session.isAdmin) {
-        console.log(readBusList());
         res.render("updateBusList",
         {
             data: readBusList()
