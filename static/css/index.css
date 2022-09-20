@@ -11,6 +11,7 @@ body {
 .login-button {
     font-family: 'Montserrat', sans-serif;
     text-decoration: none;
+    font-size: 2em;
     background-color: #327fa8;
     color: #ffffff;
     padding: 15px;
@@ -20,9 +21,9 @@ body {
 /* Table */
 .bus-table {
     margin: 30px auto;
-
+    width: 90%;
     border-collapse: collapse;
-    font-size: 1em;
+    font-size: 2.2em;
     font-family: 'Montserrat', sans-serif;
 }
 
@@ -34,18 +35,18 @@ body {
 }
 
 .bus-table tbody tr {
-    border-bottom: 1px solid #dddddd;
+    border-bottom: 2px solid #dddddd;
 }
 
 .bus-table tbody tr:nth-of-type(even) {
-    background-color: #f3f3f3;
+    background-color: #e7e6e6;
 }
 .bus-table tbody tr:nth-of-type(odd) {
     background-color: #ffffff;
 }
 
 .bus-table tbody tr:last-of-type {
-    border-bottom: 2px solid #327fa8;
+    border-bottom: 4px solid #327fa8;
 }
 
 .bus-table tbody tr:hover {
@@ -54,6 +55,6 @@ body {
 
 .bus-table th,
 .bus-table td {
-    padding: 4px 15px;
-    width: 90px;
+    padding: 0.6% 2%;
+    width: 25%;
 }
