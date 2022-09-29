@@ -1,11 +1,15 @@
 <div class="header">
-    <a class="login-button" href="/admin">Login as editor</a>
-</div>
-<div id="weather">    
-    <!-- <img src=<%= data.weather.icon %>>
-    <p><%= data.weather.status %> </p>
-    <p>Temperature: <%= data.weather.temperature %>°F</p>
-    <p>Feels like: <%= data.weather.feelsLike %>°F</p> -->
+    <div class="weather-container">
+        <div class="weather-panel">    
+            <p><%= data.weather.temperature %>°F</p>
+            <p><%= data.weather.status %> </p>
+            <!-- <p>Feels like: <%= data.weather.feelsLike %>°F</p> -->
+            <img src=<%= data.weather.icon %>>
+        </div>
+    </div>
+    <div class="login-container">
+        <a class="login-button" href="/admin">Login as editor</a>
+    </div>
 </div>
 <table class="bus-table">
     <thead>
