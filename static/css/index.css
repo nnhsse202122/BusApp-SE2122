@@ -80,6 +80,7 @@ body {
 .bus-table {
     margin: 0 auto 3%;
     width: 90%;
+    height: 87%;
     border-collapse: collapse;
     font-size: 2.2em;
     font-family: 'Montserrat', sans-serif;
