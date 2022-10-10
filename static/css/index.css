@@ -37,7 +37,7 @@ body {
 }
 
 .weather-temperature > * {
-    padding: 12% 0 0;
+    padding: 13% 0 0;
 }
 
 .weather-status {
@@ -116,4 +116,26 @@ body {
 .bus-table td {
     padding: 0.6% 2%;
     width: 25%;
+}
+
+@media (orientation: portrait) {
+
+}
+
+@media (orientation: landscape) {
+    .login-button {
+        font-size: 3vh
+    }
+    .bus-table {
+        width: 70%;
+        font-size: 1em;
+    }
+
+    .weather-temperature > *{
+        padding: 5% 0 0;
+    }
+
+    .weather-status > *{
+        padding: 0 0 3%;
+    }
 }
