@@ -4,32 +4,67 @@ body {
 
 /* Login Button */
 .header {
-    display: flex;
-    padding: 5% 5%;
+    display: grid;
+    grid-template-columns: 7fr 5fr 6fr;
+    grid-template-rows: 1fr 1fr;
+    padding: 3% 5%;
+    height: 7%;
 }
 
 .weather-container {
-    width: 50%;
-    text-align: left;
+    grid-column: 1/2;
+    grid-row: 1/3;
+
+    background-color: rgb(208, 207, 188);
+    border: rgb(208, 207, 188);;
+    border-radius: 10px;
+    
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 2fr 1fr;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.weather-container * {
+    margin: 0;
+}
+
+.weather-temperature {
+    grid-column: 1/2;
+    grid-row: 1/2;
+    text-align: center;
+    font-size: 2.4vh;
+}
+
+.weather-temperature > * {
+    padding: 12% 0 0;
+}
+
+.weather-status {
+    grid-column: 1/2;
+    grid-row: 2/3;    
+    text-align: center;
+    font-size: 1.5vh;
+}
+
+.weather-status > * {
+    padding: 0 0 5%;
+}
+
+.weather-img {
+    text-align: center;
+    grid-column: 2/3;
+    grid-row: 1/3;
+}
+
+.weather-img > * {
+    height: 100%;
 }
 
 .login-container {
-    
-    width: 50%;
     text-align: right;
-}
-
-.weather-panel {
-    background-color: gray;
-    display: flex;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 2em;
-}
-
-.weather-panel * {
-    vertical-align: middle;
-    padding: 2%;
-    margin: 2% 0;
+    grid-column: 3/4;
+    grid-row: 1/2;
 }
 
 .login-button {
@@ -38,8 +73,7 @@ body {
     font-size: 2em;
     background-color: #327fa8;
     color: #ffffff;
-    padding: 1.6%;
-    /* margin: 0 2%; */
+    padding: 4%;
 }
 
 /* Table */
