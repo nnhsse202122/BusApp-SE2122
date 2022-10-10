@@ -1,6 +1,6 @@
 import express, {Request, Response} from "express";
 import {OAuth2Client, TokenPayload} from "google-auth-library";
-import {readData, readWhitelist} from "./ymlController";
+import {readData, readWhitelist, readBusList} from "./ymlController";
 import path from "path";
 import fs from "fs";
 
@@ -42,7 +42,7 @@ function authorize(req: Request) {
 
 /* Admin page. This is where bus information can be updated from
 Reads from data file and displays data */
-router.get("/admin", async (req: Request, res: Response) => {
+router.get("/admin", (req: Request, res: Response) => {
     // If user is not authenticated (email is not is session) redirects to login page
     if (!req.session.userEmail) {
         res.redirect("/login");
@@ -64,6 +64,29 @@ router.get("/admin", async (req: Request, res: Response) => {
         res.render("unauthorized");
     }
 });
+
 router.get("/beans", async (req: Request, res: Response) => {
     res.sendFile(path.resolve(__dirname, "../static/img/beans.jpg"));
+});
+
+/* Admin page. This is where bus information can be updated from
+Reads from data file and displays data */
+router.get("/admin/updateBusList", (req: Request, res: Response) => {
+    // If user is not authenticated (email is not is session) redirects to login page
+    if (!req.session.userEmail) {
+        res.redirect("/login");
+        return;
+    }
+    
+    // Authorizes user, then either displays admin page or unauthorized page
+    authorize(req);
+    if (req.session.isAdmin) {
+        res.render("updateBusList",
+        {
+            data: readBusList()
+        });
+    }
+    else {
+        res.render("unauthorized");
+    }
 });

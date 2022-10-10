@@ -46,6 +46,7 @@ io.of("/admin").on("connection", (socket) => {
                 buses.splice(index, 0, command.data);
                 break;
             case "update":
+                console.log(1);
                 buses[buses.indexOf(buses.find((bus) => { return bus.number == command.data.number; }))] = command.data;
                 break;
             case "delete":

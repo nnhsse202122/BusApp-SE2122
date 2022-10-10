@@ -1,51 +1,49 @@
-<div id="content">
-    <div id="header">
-        
-    <div id="buttons">
-        <button><a href="/">Back to hompage</a></button>
-        <button type="button" onclick="newBus()">Add Bus</button>
-    </div>
+<div id="header">
+    
+<div id="buttons">
+    <button><a href="/">Back to hompage</a></button>
+    <button type="button" onclick="newBus()">Add Bus</button>
 </div>
-    <table id="table">
-        <colgroup>
-            <col span="3">
-            <col id="statusCol">
-        </colgroup>
-        <tbody id="tbody">
-            <tr>
-                <th>Bus Number</th>
-                <th>Bus Change</th>
-                <th>Status</th>
-                <th>Time</th>
-                <th class="deleteBus"></th>
-            </tr>
-        <% for(let i = 0; i < data.buses.length; i++) { %> 
-            <tr>
-                <td><input class="tableInput numberInput" type="number" value=<%= data.buses[i].number %> readonly></td>
-                <td><input class="tableInput changeInput" type="number" oninput="startTimeout(this)" value=<%= data.buses[i].change %> ></td>
-                <td>
-                    <select class="tableInput statusInput" onchange="statusChange(this); startTimeout(this)">
-                        <option value="NOT HERE" <%= data.buses[i].status == "NOT HERE"? "selected" : "" %>>NOT HERE</option>
-                        <option value="HERE" <%= data.buses[i].status == "HERE"? "selected" : "" %>>HERE</option>
-                        <option value="LOADING" <%= data.buses[i].status == "LOADING"? "selected" : ""%>>LOADING</option>
-                        <option value="GONE" <%= data.buses[i].status == "GONE"? "selected" : "" %>>GONE</option>
-                    </select>
-                </td>
-                <td><input class="tableInput arrivalInput" type="text" oninput="startTimeout(this)" value=<%= data.buses[i].arrival %> ></td>
-                
-                <td class="deleteBus"><i class="fas fa-times" onclick="confirmRemove(this);"></i></td>
-            </tr>
-        <% } %> 
-        </tbody>
-    </table>
-    <div id="weather">
-        <p><%= data.weather.status %> </p>
-        <img src=<%= data.weather.icon %>>
-        <p>Temperature: <%= data.weather.temperature %>°F</p>
-        <p>Feels like: <%= data.weather.feelsLike %>°F</p>
-    </div>
-    <p id="contactInfo">
-        If you have feedback, feature requests or bugs to report please contact busappnnhsse@gmail.com. 
-        Please include the topic of the email in the subject.
-    </p>
 </div>
+<table id="table">
+    <colgroup>
+        <col span="3">
+        <col id="statusCol">
+    </colgroup>
+    <tbody id="tbody">
+        <tr>
+            <th>Bus Number</th>
+            <th>Bus Change</th>
+            <th>Status</th>
+            <th>Time</th>
+            <th class="deleteBus"></th>
+        </tr>
+    <% for(let i = 0; i < data.buses.length; i++) { %> 
+        <tr>
+            <td><input class="tableInput numberInput" type="number" value=<%= data.buses[i].number %> readonly></td>
+            <td><input class="tableInput changeInput" type="number" oninput="startTimeout(this)" value=<%= data.buses[i].change %> ></td>
+            <td>
+                <select class="tableInput statusInput" onchange="statusChange(this); startTimeout(this)">
+                    <option value="Not Here" <%= data.buses[i].status == "Not Here"? "selected" : "" %>>Not Here</option>
+                    <option value="Next Wave" <%= data.buses[i].status == "Next Wave"? "selected" : "" %>>Next Wave</option>
+                    <option value="Loading" <%= data.buses[i].status == "Loading"? "selected" : ""%>>Loading</option>
+                    <option value="Gone" <%= data.buses[i].status == "Gone"? "selected" : "" %>>Gone</option>
+                </select>
+            </td>
+            <td><input class="tableInput arrivalInput" type="text" oninput="startTimeout(this)" value=<%= data.buses[i].arrival %> ></td>
+            
+            <td class="deleteBus"><i class="fas fa-times" onclick="confirmRemove(this);"></i></td>
+        </tr>
+    <% } %> 
+    </tbody>
+</table>
+<div id="weather">
+    <p><%= data.weather.status %> </p>
+    <img src=<%= data.weather.icon %>>
+    <p>Temperature: <%= data.weather.temperature %>°F</p>
+    <p>Feels like: <%= data.weather.feelsLike %>°F</p>
+</div>
+<p id="contactInfo">
+    If you have feedback, feature requests or bugs to report please contact busappnnhsse@gmail.com. 
+    Please include the topic of the email in the subject.
+</p>

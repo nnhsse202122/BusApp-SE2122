@@ -142,7 +142,7 @@ function sort(bus) {
 }
 function statusChange(dropDown, type) {
     const bus = (type == "new") ? getNewBus(dropDown, "statusInput") : getBus(dropDown, "statusInput");
-    if (bus.statusInput.value == "NOT HERE") {
+    if (bus.statusInput.value == "Not Here") {
         bus.arrivalInput.value = "";
     }
     else {

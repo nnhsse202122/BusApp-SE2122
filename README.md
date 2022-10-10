@@ -9,7 +9,7 @@ The below are the intended experiences for both admins and students:
 #### Admin Experience
 From the homepage, admins should click the “Login as editor” button in the top right and complete authentication via google on the login page. If they are on the whitelist, they will be redirected to the admin page.
 
-From this page admins are able to edit bus changes, status (NOT HERE, HERE, LOADING or GONE) and time. Time will update automatically when status is changed. Additionally, they can add or remove buses.
+From this page admins are able to edit bus changes, status (Not Here, Next Wave, Loading or Gone) and time. Time will update automatically when status is changed. Additionally, they can add or remove buses.
 
 Administrator Handbook: https://docs.google.com/document/d/1MaySGjV3I7LIaNLHDQCaPODoN7ZUI3aYht6oijkWy_4/edit?usp=sharing
 
