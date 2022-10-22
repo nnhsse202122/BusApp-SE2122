@@ -76,8 +76,10 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 })); // Allows use of req.session
-app.use(bodyParser.urlencoded({extended: true})); // Allows html forms to be accessed with req.body
-app.use(bodyParser.json()); // Allows use of json format for req.body
+// app.use(bodyParser.urlencoded({extended: true})); // Allows html forms to be accessed with req.body
+// app.use(express.urlencoded({ extended: true }));
+// app.use(bodyParser.json()); // Allows use of json format for req.body
+app.use(express.json());
 
 app.use("/", router); // Imports routes from server/router.ts
 

@@ -75,21 +75,28 @@ exports.router.get("/beans", (req, res) => __awaiter(void 0, void 0, void 0, fun
 }));
 /* Admin page. This is where bus information can be updated from
 Reads from data file and displays data */
-exports.router.get("/admin/updateBusList", (req, res) => {
-    // If user is not authenticated (email is not is session) redirects to login page
-    if (!req.session.userEmail) {
-        res.redirect("/login");
-        return;
-    }
-    // Authorizes user, then either displays admin page or unauthorized page
-    authorize(req);
-    if (req.session.isAdmin) {
-        res.render("updateBusList", {
-            data: (0, ymlController_1.readBusList)()
-        });
-    }
-    else {
-        res.render("unauthorized");
-    }
+exports.router.get("/updateBusList", (req, res) => {
+    res.render("updateBusList", {
+        data: (0, ymlController_1.readBusList)()
+    });
+    // // If user is not authenticated (email is not is session) redirects to login page
+    // if (!req.session.userEmail) {
+    //     res.redirect("/login");
+    //     return;
+    // }
+    // // Authorizes user, then either displays admin page or unauthorized page
+    // authorize(req);
+    // if (req.session.isAdmin) {
+    //     res.render("updateBusList",
+    //     {
+    //         data: readBusList()
+    //     });
+    // }
+    // else {
+    //     res.render("unauthorized");
+    // }
+});
+exports.router.get("/busList", (req, res) => {
+    res.json((0, ymlController_1.readBusList)().busList);
 });
 //# sourceMappingURL=router.js.map

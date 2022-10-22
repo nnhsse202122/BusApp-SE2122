@@ -71,22 +71,30 @@ router.get("/beans", async (req: Request, res: Response) => {
 
 /* Admin page. This is where bus information can be updated from
 Reads from data file and displays data */
-router.get("/admin/updateBusList", (req: Request, res: Response) => {
-    // If user is not authenticated (email is not is session) redirects to login page
-    if (!req.session.userEmail) {
-        res.redirect("/login");
-        return;
-    }
-    
-    // Authorizes user, then either displays admin page or unauthorized page
-    authorize(req);
-    if (req.session.isAdmin) {
-        res.render("updateBusList",
+router.get("/updateBusList", (req: Request, res: Response) => {
+    res.render("updateBusList",
         {
             data: readBusList()
         });
-    }
-    else {
-        res.render("unauthorized");
-    }
+    // // If user is not authenticated (email is not is session) redirects to login page
+    // if (!req.session.userEmail) {
+    //     res.redirect("/login");
+    //     return;
+    // }
+    
+    // // Authorizes user, then either displays admin page or unauthorized page
+    // authorize(req);
+    // if (req.session.isAdmin) {
+    //     res.render("updateBusList",
+    //     {
+    //         data: readBusList()
+    //     });
+    // }
+    // else {
+    //     res.render("unauthorized");
+    // }
+});
+
+router.get("/busList", (req: Request, res: Response) => {
+    res.json(readBusList().busList);
 });
