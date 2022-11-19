@@ -2,7 +2,7 @@ import express, {Request, Response} from "express";
 import {OAuth2Client, TokenPayload} from "google-auth-library";
 import {readData, readWhitelist, readBusList} from "./ymlController";
 import path from "path";
-import fs from "fs";
+import fs, { appendFile, readFileSync } from "fs";
 
 export const router = express.Router();
 
@@ -96,5 +96,5 @@ router.get("/updateBusList", (req: Request, res: Response) => {
 });
 
 router.get("/busList", (req: Request, res: Response) => {
-    res.json(readBusList().busList);
+    res.type("json").send(readFileSync(path.resolve(__dirname, "../data/busList.json")));
 });

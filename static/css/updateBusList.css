@@ -14,7 +14,7 @@ body {
 
 /* Table */
 .buslist-table {
-    margin: 5% auto;
+    margin: 5%;
 
     border-collapse: collapse;
     font-size: 1em;
@@ -48,6 +48,11 @@ body {
 .buslist-table td {
     padding: 12px 15px;
     width: 75px;
+}
+
+.add-bus-row {
+    color: rgb(84, 122, 187);
+    background-color: rgb(132, 158, 203);;
 }
 
 .buslist-table .remove-button {
