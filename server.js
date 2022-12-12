@@ -3,13 +3,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.resetDatafile = void 0;
 const express_1 = __importDefault(require("express"));
 const router_1 = require("./server/router");
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 const http_1 = require("http");
 const socket_io_1 = require("socket.io");
-const ymlController_1 = require("./server/ymlController");
+const jsonHandler_1 = require("./server/jsonHandler");
 const weatherController_1 = require("./server/weatherController");
 const express_session_1 = __importDefault(require("express-session"));
 const app = (0, express_1.default)();
@@ -54,9 +55,9 @@ io.of("/admin").on("connection", (socket) => {
             default:
                 throw `Invalid bus command: ${command.type}`;
         }
-        (0, ymlController_1.writeBuses)(buses);
+        (0, jsonHandler_1.writeBuses)(buses);
         // buses.forEach((bus) => {console.log(bus.number)});
-        io.of("/").emit("update", (0, ymlController_1.readData)());
+        io.of("/").emit("update", (0, jsonHandler_1.readData)());
         socket.broadcast.emit("updateBuses", command);
     });
     socket.on("debug", (data) => {
@@ -84,11 +85,14 @@ function resetBuses() {
     setInterval(resetDatafile, 86400000);
 }
 function resetDatafile() {
-    fs_1.default.writeFileSync(busesDatafile, fs_1.default.readFileSync(defaultBusesDatafile));
-    buses = (0, ymlController_1.readData)().buses;
-    io.of("/").emit("update", (0, ymlController_1.readData)());
-    io.of("/admin").emit("updateBuses", (0, ymlController_1.readData)());
+    let newBuses = [];
+    (0, jsonHandler_1.readBusList)().forEach((number) => newBuses.push({ number: number, change: "", time: "", status: "Not Here" }));
+    fs_1.default.writeFileSync(busesDatafile, JSON.stringify(newBuses));
+    buses = newBuses;
+    io.of("/").emit("update", (0, jsonHandler_1.readData)());
+    io.of("/admin").emit("updateBuses", (0, jsonHandler_1.readData)());
 }
+exports.resetDatafile = resetDatafile;
 const midnight = new Date();
 midnight.setDate(midnight.getDate() + 1);
 midnight.setHours(5, 0, 0, 0);

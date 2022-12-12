@@ -38,7 +38,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.router = void 0;
 const express_1 = __importDefault(require("express"));
 const google_auth_library_1 = require("google-auth-library");
-const ymlController_1 = require("./ymlController");
+const jsonHandler_1 = require("./jsonHandler");
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importStar(require("fs"));
 exports.router = express_1.default.Router();
@@ -48,7 +48,7 @@ const oAuth2 = new google_auth_library_1.OAuth2Client(CLIENT_ID);
 exports.router.get("/", (req, res) => {
     // Reads from data file and displays data
     res.render("index", {
-        data: (0, ymlController_1.readData)(),
+        data: (0, jsonHandler_1.readData)(),
         render: fs_1.default.readFileSync(path_1.default.resolve(__dirname, "../views/include/indexContent.ejs")),
     });
 });
@@ -68,7 +68,7 @@ exports.router.post("/auth/v1/google", (req, res) => __awaiter(void 0, void 0, v
 }));
 // Checks if the user's email is in the whitelist and authorizes accordingly
 function authorize(req) {
-    req.session.isAdmin = (0, ymlController_1.readWhitelist)().admins.includes(req.session.userEmail);
+    req.session.isAdmin = (0, jsonHandler_1.readWhitelist)().includes(req.session.userEmail);
 }
 /* Admin page. This is where bus information can be updated from
 Reads from data file and displays data */
@@ -82,7 +82,7 @@ exports.router.get("/admin", (req, res) => {
     authorize(req);
     if (req.session.isAdmin) {
         res.render("admin", {
-            data: (0, ymlController_1.readData)(),
+            data: (0, jsonHandler_1.readData)(),
             render: fs_1.default.readFileSync(path_1.default.resolve(__dirname, "../views/include/adminContent.ejs")),
             emptyRow: fs_1.default.readFileSync(path_1.default.resolve(__dirname, "../views/sockets/adminEmptyRow.ejs")),
             populatedRow: fs_1.default.readFileSync(path_1.default.resolve(__dirname, "../views/sockets/adminPopulatedRow.ejs")),
@@ -100,7 +100,7 @@ exports.router.get("/beans", (req, res) => __awaiter(void 0, void 0, void 0, fun
 Reads from data file and displays data */
 exports.router.get("/updateBusList", (req, res) => {
     res.render("updateBusList", {
-        data: (0, ymlController_1.readBusList)()
+        data: (0, jsonHandler_1.readBusList)()
     });
     // // If user is not authenticated (email is not is session) redirects to login page
     // if (!req.session.userEmail) {

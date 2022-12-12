@@ -94,7 +94,7 @@ function resetBuses() {
     resetDatafile();
     setInterval(resetDatafile, 86400000);
 }
-function resetDatafile() {
+export function resetDatafile() {
     let newBuses: BusData[] = [];
     readBusList().forEach((number) => newBuses.push({number: number, change: "", time: "", status: "Not Here"}))
     fs.writeFileSync(busesDatafile, JSON.stringify(newBuses));

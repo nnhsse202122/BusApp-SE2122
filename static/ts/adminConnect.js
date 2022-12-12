@@ -10,7 +10,7 @@ class Bus {
         this.numberInput = this.row.children[0].children[0];
         this.changeInput = this.row.children[1].children[0];
         this.statusInput = this.row.children[2].children[0];
-        this.arrivalInput = this.row.children[3].children[0];
+        this.timeInput = this.row.children[3].children[0];
         this.removeIcon = this.row.children[4].children[0];
         this.data = {};
         this.updateValues();
@@ -19,7 +19,7 @@ class Bus {
         this.number = this.numberInput.value;
         this.data.number = this.numberInput.value;
         this.data.change = this.changeInput.value;
-        this.data.arrival = this.arrivalInput.value;
+        this.data.time = this.timeInput.value;
         this.data.status = this.statusInput.value;
     }
 }
@@ -35,7 +35,7 @@ const buses = [];
 const newBuses = [];
 function getBus(key, attribute) {
     if (!attribute) {
-        attribute = ["numberInput", "changeInput", "arrivalInput", "statusInput"].find((htmlClass) => {
+        attribute = ["numberInput", "changeInput", "timeInput", "statusInput"].find((htmlClass) => {
             return key.classList.contains(htmlClass);
         });
     }
@@ -46,7 +46,7 @@ function getBus(key, attribute) {
 }
 function getNewBus(key, attribute) {
     if (!attribute) {
-        attribute = ["numberInput", "changeInput", "arrivalInput", "statusInput"].find((htmlClass) => {
+        attribute = ["numberInput", "changeInput", "timeInput", "statusInput"].find((htmlClass) => {
             return key.classList.contains(htmlClass);
         });
     }
@@ -143,7 +143,7 @@ function sort(bus) {
 function statusChange(dropDown, type) {
     const bus = (type == "new") ? getNewBus(dropDown, "statusInput") : getBus(dropDown, "statusInput");
     if (bus.statusInput.value == "Not Here") {
-        bus.arrivalInput.value = "";
+        bus.timeInput.value = "";
     }
     else {
         const date = new Date();
@@ -167,7 +167,7 @@ function statusChange(dropDown, type) {
                 effix = "am";
             }
         }
-        bus.arrivalInput.value = `${hour}:${minute}${effix}`;
+        bus.timeInput.value = `${hour}:${minute}${effix}`;
     }
 }
 adminSocket.on("updateBuses", (command) => {
