@@ -5,7 +5,7 @@ import fs from "fs";
 import bodyParser from "body-parser";
 import {createServer} from "http";
 import {Server} from "socket.io";
-import {readData, writeBuses, BusData, readBusList} from "./server/ymlController";
+import {readData, writeBuses, BusData, readBusList} from "./server/jsonHandler";
 import {startWeather} from "./server/weatherController";
 import session from "express-session";
 
@@ -97,8 +97,8 @@ function resetBuses() {
 function resetDatafile() {
     let newBuses: BusData[] = [];
     readBusList().forEach((number) => newBuses.push({number: number, change: "", time: "", status: "Not Here"}))
-    fs.writeFileSync(busesDatafile, fs.readFileSync(defaultBusesDatafile));
-    buses = readData().buses;
+    fs.writeFileSync(busesDatafile, JSON.stringify(newBuses));
+    buses = newBuses;
     io.of("/").emit("update", readData());
     io.of("/admin").emit("updateBuses", readData());
 }
