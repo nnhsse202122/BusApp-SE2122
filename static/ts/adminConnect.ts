@@ -10,7 +10,7 @@ class Bus {
     row: HTMLTableRowElement;
     numberInput: HTMLInputElement;
     changeInput: HTMLInputElement;
-    arrivalInput: HTMLInputElement;
+    timeInput: HTMLInputElement;
     statusInput: HTMLInputElement;
     removeIcon: HTMLElement;
     number: string | undefined;
@@ -22,7 +22,7 @@ class Bus {
         this.numberInput = <HTMLInputElement> this.row.children[0].children[0];
         this.changeInput = <HTMLInputElement> this.row.children[1].children[0];
         this.statusInput = <HTMLInputElement> this.row.children[2].children[0];
-        this.arrivalInput = <HTMLInputElement> this.row.children[3].children[0];        
+        this.timeInput = <HTMLInputElement> this.row.children[3].children[0];        
         this.removeIcon = <HTMLElement> this.row.children[4].children[0];
         this.data = {} as BusData;
         this.updateValues();
@@ -32,7 +32,7 @@ class Bus {
         this.number = this.numberInput.value;
         this.data.number = this.numberInput.value;
         this.data.change = this.changeInput.value;
-        this.data.arrival = this.arrivalInput.value;
+        this.data.time = this.timeInput.value;
         this.data.status = this.statusInput.value;
     }
 }
@@ -40,7 +40,7 @@ class Bus {
 type BusData = {
     number: string | undefined,
     change: string | undefined,
-    arrival: string | undefined,
+    time: string | undefined,
     status: string | undefined
 }
 
@@ -63,7 +63,7 @@ function getBus(key: HTMLElement, attribute: validAttribute): Bus;
 function getBus(key: HTMLInputElement): Bus;
 function getBus(key: HTMLElement, attribute?: validAttribute) {
     if (!attribute) {
-        attribute = ["numberInput", "changeInput", "arrivalInput", "statusInput"].find((htmlClass) => {
+        attribute = ["numberInput", "changeInput", "timeInput", "statusInput"].find((htmlClass) => {
             return key.classList.contains(htmlClass);
         }) as validAttribute;
     }
@@ -76,7 +76,7 @@ function getNewBus(key: HTMLElement, attribute: validAttribute): Bus;
 function getNewBus(key: HTMLInputElement): Bus;
 function getNewBus(key: HTMLElement, attribute?: validAttribute) {
     if (!attribute) {
-        attribute = ["numberInput", "changeInput", "arrivalInput", "statusInput"].find((htmlClass) => {
+        attribute = ["numberInput", "changeInput", "timeInput", "statusInput"].find((htmlClass) => {
             return key.classList.contains(htmlClass);
         }) as validAttribute;
     }
@@ -182,7 +182,7 @@ function sort(bus: BusData) {
 function statusChange(dropDown: HTMLSelectElement, type?: string) {
     const bus = (type == "new") ? getNewBus(dropDown, "statusInput") : getBus(dropDown, "statusInput");
     if (bus.statusInput.value == "Not Here") {
-        bus.arrivalInput.value = "";
+        bus.timeInput.value = "";
     }
     else {
         const date = new Date();
@@ -206,7 +206,7 @@ function statusChange(dropDown: HTMLSelectElement, type?: string) {
                 effix = "am";
             }
         }
-        bus.arrivalInput.value = `${hour}:${minute}${effix}`;    
+        bus.timeInput.value = `${hour}:${minute}${effix}`;    
     }
 }
 
