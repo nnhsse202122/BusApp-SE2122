@@ -42,10 +42,14 @@ export function writeWeather(weather: any) {
 }
 
 // Reads a list of users who are allowed access to the admin page
-export function readWhitelist(): string[] {
-    return JSON.parse(fs.readFileSync(whitelistDatafile, "utf-8"));
+export function readWhitelist(): {admins: string[]} {
+    return {admins: JSON.parse(fs.readFileSync(whitelistDatafile, "utf-8"))};
 }
 
-export function readBusList(): string[] {
-    return JSON.parse(fs.readFileSync(busListDatafile, "utf-8"));
+export function readBusList(): {busList: string[]} {
+    return {busList: JSON.parse(fs.readFileSync(busListDatafile, "utf-8"))};
+}
+
+export function writeBusList(data: string[]) {
+    fs.writeFileSync(busListDatafile, JSON.stringify(data));
 }

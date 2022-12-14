@@ -1,5 +1,5 @@
 body {
-    background-color:white;
+    background-color: #a1b5be;
 }
 
 .button {
@@ -32,6 +32,10 @@ body {
     border-bottom: 1px solid #dddddd;
 }
 
+.buslist-table tbody tr:nth-of-type(odd) {
+    background-color: white;
+}
+
 .buslist-table tbody tr:nth-of-type(even) {
     background-color: #f3f3f3;
 }
@@ -50,9 +54,15 @@ body {
     width: 75px;
 }
 
-.add-bus-row {
-    color: rgb(84, 122, 187);
-    background-color: rgb(132, 158, 203);;
+.buslist-table add-bus-row {
+    color: #327fa8;
+    font-weight: bold;
+    /* background-color: rgb(109, 200, 170) !important; */
+    text-align: center;
+}
+
+.buslist-table .fa-plus:hover {
+    background-color: #55a6d1;
 }
 
 .buslist-table .remove-button {

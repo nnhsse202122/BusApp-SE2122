@@ -20,7 +20,7 @@ type BusCommand = {
     data: BusData
 }
 
-const busesDatafile = path.resolve(__dirname, "./data/buses.yml");
+const busesDatafile = path.resolve(__dirname, "./data/buses.json");
 const defaultBusesDatafile = path.resolve(__dirname, "./data/defaultBuses.txt");
 let buses: BusData[];
 resetBuses();
@@ -96,7 +96,7 @@ function resetBuses() {
 }
 export function resetDatafile() {
     let newBuses: BusData[] = [];
-    readBusList().forEach((number) => newBuses.push({number: number, change: "", time: "", status: "Not Here"}))
+    readBusList().busList.forEach((number) => newBuses.push({number: number, change: "", time: "", status: "Not Here"}))
     fs.writeFileSync(busesDatafile, JSON.stringify(newBuses));
     buses = newBuses;
     io.of("/").emit("update", readData());

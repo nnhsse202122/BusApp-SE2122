@@ -1,6 +1,6 @@
 import express, {Request, Response} from "express";
 import {OAuth2Client, TokenPayload} from "google-auth-library";
-import {readData, readWhitelist, readBusList} from "./jsonHandler";
+import {readData, readWhitelist, readBusList, writeBusList} from "./jsonHandler";
 import path from "path";
 import fs, { appendFile, readFileSync } from "fs";
 
@@ -37,7 +37,7 @@ router.post("/auth/v1/google", async (req: Request, res: Response) => {
 
 // Checks if the user's email is in the whitelist and authorizes accordingly
 function authorize(req: Request) {
-    req.session.isAdmin = readWhitelist().includes(<string> req.session.userEmail); 
+    req.session.isAdmin = readWhitelist().admins.includes(<string> req.session.userEmail); 
 }
 
 /* Admin page. This is where bus information can be updated from
@@ -93,6 +93,10 @@ router.get("/updateBusList", (req: Request, res: Response) => {
     // else {
     //     res.render("unauthorized");
     // }
+});
+
+router.post("/updateBusList", (req: Request, res: Response) => {
+
 });
 
 router.get("/busList", (req: Request, res: Response) => {

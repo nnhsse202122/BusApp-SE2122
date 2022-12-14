@@ -68,7 +68,7 @@ exports.router.post("/auth/v1/google", (req, res) => __awaiter(void 0, void 0, v
 }));
 // Checks if the user's email is in the whitelist and authorizes accordingly
 function authorize(req) {
-    req.session.isAdmin = (0, jsonHandler_1.readWhitelist)().includes(req.session.userEmail);
+    req.session.isAdmin = (0, jsonHandler_1.readWhitelist)().admins.includes(req.session.userEmail);
 }
 /* Admin page. This is where bus information can be updated from
 Reads from data file and displays data */
@@ -118,6 +118,8 @@ exports.router.get("/updateBusList", (req, res) => {
     // else {
     //     res.render("unauthorized");
     // }
+});
+exports.router.post("/updateBusList", (req, res) => {
 });
 exports.router.get("/busList", (req, res) => {
     res.type("json").send((0, fs_1.readFileSync)(path_1.default.resolve(__dirname, "../data/busList.json")));

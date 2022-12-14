@@ -17,7 +17,7 @@ const app = (0, express_1.default)();
 const httpServer = (0, http_1.createServer)(app);
 const io = new socket_io_1.Server(httpServer);
 const PORT = process.env.PORT || 5182;
-const busesDatafile = path_1.default.resolve(__dirname, "./data/buses.yml");
+const busesDatafile = path_1.default.resolve(__dirname, "./data/buses.json");
 const defaultBusesDatafile = path_1.default.resolve(__dirname, "./data/defaultBuses.txt");
 let buses;
 resetBuses();
@@ -86,7 +86,7 @@ function resetBuses() {
 }
 function resetDatafile() {
     let newBuses = [];
-    (0, jsonHandler_1.readBusList)().forEach((number) => newBuses.push({ number: number, change: "", time: "", status: "Not Here" }));
+    (0, jsonHandler_1.readBusList)().busList.forEach((number) => newBuses.push({ number: number, change: "", time: "", status: "Not Here" }));
     fs_1.default.writeFileSync(busesDatafile, JSON.stringify(newBuses));
     buses = newBuses;
     io.of("/").emit("update", (0, jsonHandler_1.readData)());

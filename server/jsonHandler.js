@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.readBusList = exports.readWhitelist = exports.writeWeather = exports.writeBuses = exports.readData = void 0;
+exports.writeBusList = exports.readBusList = exports.readWhitelist = exports.writeWeather = exports.writeBuses = exports.readData = void 0;
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 const server_1 = require("../server");
@@ -43,11 +43,15 @@ function writeWeather(weather) {
 exports.writeWeather = writeWeather;
 // Reads a list of users who are allowed access to the admin page
 function readWhitelist() {
-    return JSON.parse(fs_1.default.readFileSync(whitelistDatafile, "utf-8"));
+    return { admins: JSON.parse(fs_1.default.readFileSync(whitelistDatafile, "utf-8")) };
 }
 exports.readWhitelist = readWhitelist;
 function readBusList() {
-    return JSON.parse(fs_1.default.readFileSync(busListDatafile, "utf-8"));
+    return { busList: JSON.parse(fs_1.default.readFileSync(busListDatafile, "utf-8")) };
 }
 exports.readBusList = readBusList;
+function writeBusList(data) {
+    fs_1.default.writeFileSync(busListDatafile, JSON.stringify(data));
+}
+exports.writeBusList = writeBusList;
 //# sourceMappingURL=jsonHandler.js.map
