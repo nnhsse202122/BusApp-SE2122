@@ -6,16 +6,18 @@ body {
     font-family: 'Montserrat', sans-serif;
     border: none;
     text-decoration: none;
-    font-size: 1em;
+    font-size: 0.8em;
     background-color: #327fa8;
     color: #ffffff;
-    padding: 4%;
+    padding: 1.5%;
+    width: 20%;
 }
 
 /* Table */
 .buslist-table {
-    margin: 5%;
-
+    margin: 0 auto 3%;
+    /* margin: 5%; */
+    width: 30%;
     border-collapse: collapse;
     font-size: 1em;
     font-family: 'Montserrat', sans-serif;
@@ -50,32 +52,25 @@ body {
 
 .buslist-table th,
 .buslist-table td {
-    padding: 12px 15px;
-    width: 75px;
-}
-
-.buslist-table add-bus-row {
-    color: #327fa8;
-    font-weight: bold;
-    /* background-color: rgb(109, 200, 170) !important; */
-    text-align: center;
-}
-
-.buslist-table .fa-plus:hover {
-    background-color: #55a6d1;
+    padding: 1.8% 8%;
+    width: 50%;
 }
 
 .buslist-table .remove-button {
-    padding: 8px 10px;
+    padding: 5% 8%;
     border-radius: 5px;
 }
 
-.buslist-table .remove-button:hover {
+.buslist-table .add-bus-button {
+    padding: 4% 40%;
+    border-radius: 5px;
+}
+
+.buslist-table .remove-button:hover, .add-bus-button:hover{
     background-color: #55a6d1;
 }
 
-.buslist-table .remove-col {
-    width: 30px;
+.buslist-table .remove-col, .add-bus-cell {
     text-align: center;
 }
 
