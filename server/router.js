@@ -119,7 +119,8 @@ exports.router.get("/updateBusList", (req, res) => {
     //     res.render("unauthorized");
     // }
 });
-exports.router.post("/updateBusList", (req, res) => {
+exports.router.get("/updateBusListEmptyRow", (req, res) => {
+    res.sendFile(path_1.default.resolve(__dirname, "../views/sockets/updateBusListEmptyRow.ejs"));
 });
 exports.router.get("/busList", (req, res) => {
     res.type("json").send((0, fs_1.readFileSync)(path_1.default.resolve(__dirname, "../data/busList.json")));

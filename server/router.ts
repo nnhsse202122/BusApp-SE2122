@@ -95,8 +95,8 @@ router.get("/updateBusList", (req: Request, res: Response) => {
     // }
 });
 
-router.post("/updateBusList", (req: Request, res: Response) => {
-
+router.get("/updateBusListEmptyRow", (req: Request, res: Response) => {
+    res.sendFile(path.resolve(__dirname, "../views/sockets/updateBusListEmptyRow.ejs"));
 });
 
 router.get("/busList", (req: Request, res: Response) => {
