@@ -16,7 +16,6 @@ body {
 /* Table */
 .buslist-table {
     margin: 0 auto 3%;
-    /* margin: 5%; */
     width: 30%;
     border-collapse: collapse;
     font-size: 1em;
