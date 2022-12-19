@@ -26,7 +26,7 @@ function addBus_busList(confirmButton) {
         index = busList.length;
     busList.splice(index, 0, number);
     row.remove();
-    const newRow = document.getElementsByClassName("buslist-table")[0].insertRow(index + 1);
+    const newRow = document.getElementsByClassName("buslist-table")[0].insertRow(index + 2);
     const html = ejs.render(newBusRow, { number: number });
     newRow.innerHTML = html;
 }

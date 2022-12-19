@@ -2,6 +2,16 @@ body {
     background-color: #a1b5be;
 }
 
+.back-button-div {
+    display: grid;
+}
+
+.back-button {
+    justify-self: right;
+    margin: 1% 1%;
+    text-align: center;
+}
+
 .button {
     font-family: 'Montserrat', sans-serif;
     border: none;
