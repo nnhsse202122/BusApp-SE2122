@@ -1,28 +1,37 @@
 "use strict";
 // /// <reference path="./socket-io-client.d.ts"/>
 // const updateBusListSocket = window.io('/updateBusList');
-// class Bus_busList {
-//     row: HTMLTableRowElement;
-//     removeIcon: HTMLElement;
-//     number: string | undefined;
-//     constructor(rowVal: HTMLTableRowElement) {
-//         this.row = rowVal;      
-//         this.removeIcon = <HTMLElement> this.row.children[4].children[0];
-//         this.data = {} as BusData;
-//     }
-// }
 let busList;
 fetch("/busList").then((res) => res.json()).then((data) => { busList = data; console.log(busList); });
 let newBusEmptyRow;
 fetch("/updateBusListEmptyRow").then((res) => res.text()).then((data) => newBusEmptyRow = data);
+let newBusRow;
+fetch("/updateBusListPopulatedRow").then((res) => res.text()).then((data) => newBusRow = data);
 function newBus_busList() {
     const row = document.getElementsByClassName("buslist-table")[0].insertRow(2);
     const html = ejs.render(newBusEmptyRow);
     row.innerHTML = html;
-    row.children[0].children[0].focus();
+    let input = row.children[0].children[0];
+    input.focus();
 }
-function removeBus_busList(removeIcon) {
-    let row = removeIcon.parentElement.parentElement;
+function addBus_busList(confirmButton) {
+    let row = confirmButton.parentElement.parentElement;
+    let number = row.children[0].children[0].value;
+    if (busList.includes(number)) {
+        alert("Duplicate buses are not allowed");
+        return;
+    }
+    let index = busList.findIndex((currentNumber) => { return parseInt(number) < parseInt(currentNumber); });
+    if (index == -1)
+        index = busList.length;
+    busList.splice(index, 0, number);
+    row.remove();
+    const newRow = document.getElementsByClassName("buslist-table")[0].insertRow(index + 1);
+    const html = ejs.render(newBusRow, { number: number });
+    newRow.innerHTML = html;
+}
+function removeBus_busList(secondChild) {
+    let row = secondChild.parentElement.parentElement;
     let number = row.children[0].innerHTML;
     busList.splice(busList.indexOf(number), 1);
     row.remove();

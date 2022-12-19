@@ -13,25 +13,6 @@ body {
     width: 20%;
 }
 
-
-.buslist-table input {
-    border: none;
-    width: 100%;
-    height: 100%;
-    background-color: inherit;
-    text-align: center;
-    text-align-last: center;
-}
-
-.new-bus-buttons {
-    text-align: center;
-}
-
-.new-bus-input-cell {
-    padding: 0 !important;
-}
-
-
 /* Table */
 .buslist-table {
     margin: 0 auto 3%;
@@ -75,7 +56,7 @@ body {
     width: 50%;
 }
 
-.buslist-table .remove-button {
+.buslist-table .remove-button, .cancel-button, .confirm-button {
     padding: 5% 8%;
     border-radius: 5px;
 }
@@ -93,3 +74,21 @@ body {
     text-align: center;
 }
 
+.buslist-table input {
+    border: none;
+    width: 100%;
+    height: 100%;
+    background-color: inherit;
+    text-align: center;
+    text-align-last: center;
+}
+
+.new-bus-buttons {
+    text-align: center;
+    /* display: flex;
+    justify-content: space-evenly; */
+}
+
+.new-bus-input-cell {
+    padding: 0 !important;
+}
