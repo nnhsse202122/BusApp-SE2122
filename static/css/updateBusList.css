@@ -14,7 +14,7 @@ body {
 }
 
 
-input, select {
+.buslist-table input {
     border: none;
     width: 100%;
     height: 100%;
@@ -22,6 +22,15 @@ input, select {
     text-align: center;
     text-align-last: center;
 }
+
+.new-bus-buttons {
+    text-align: center;
+}
+
+.new-bus-input-cell {
+    padding: 0 !important;
+}
+
 
 /* Table */
 .buslist-table {
@@ -61,6 +70,7 @@ input, select {
 
 .buslist-table th,
 .buslist-table td {
+    height: 1px;
     padding: 1.8% 8%;
     width: 50%;
 }
@@ -75,7 +85,7 @@ input, select {
     border-radius: 5px;
 }
 
-.buslist-table .remove-button:hover, .add-bus-button:hover{
+.buslist-table .table-button:hover{
     background-color: #55a6d1;
 }
 
