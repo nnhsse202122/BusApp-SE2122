@@ -106,3 +106,7 @@ router.get("/updateBusListPopulatedRow", (req: Request, res: Response) => {
 router.get("/busList", (req: Request, res: Response) => {
     res.type("json").send(readFileSync(path.resolve(__dirname, "../data/busList.json")));
 });
+
+router.post("/updateBusList", (req: Request, res: Response) => {
+    fs.writeFileSync(path.resolve(__dirname, "../data/busList.json"), req.body.busList);
+});

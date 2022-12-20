@@ -13,9 +13,11 @@
             <div class="back-button-div">
                 <a class="button back-button" href="/admin">Back to Admin Page</a>
             </div>
-            <button class="button" class="save-update-button">Save and Update</button>
-            <button class="button" class="save-no-update-button">Save Without Updating</button>
-            <button class="button" class="discard-changes-button">Discard Changes</button>
+            <div class="options-div">
+                <button class="button save-reset-button" onclick="save(true)">Save and Update</button>
+                <button class="button save-no-reset-button" onclick="save(false)">Save Without Updating</button>
+                <button class="button discard-changes-button" onclick="discardChanges">Discard Changes</button>
+            </div>            
         </div>
         <table class="buslist-table">
             <thead> 

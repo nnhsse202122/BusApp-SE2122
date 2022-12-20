@@ -1,7 +1,3 @@
-// /// <reference path="./socket-io-client.d.ts"/>
-
-// const updateBusListSocket = window.io('/updateBusList');
-
 let busList: string[];
 fetch("/busList").then((res) => res.json()).then((data) => {busList = data; console.log(busList)});
 
@@ -40,4 +36,23 @@ function removeBus_busList(secondChild: HTMLElement) {
     let number = row.children[0]!.innerHTML;
     busList.splice(busList.indexOf(number), 1);
     row.remove();
+}
+
+function save(reset: boolean) {
+    fetch("/updateBusList", {
+        method: 'POST',
+        headers: {
+          accept: 'application.json',
+          'Content-Type': 'application/json'
+        },
+        body: 
+        JSON.stringify({
+            busList: busList,
+            reset: reset
+        })
+    });
+}
+
+function discardChanges() {
+    location.reload();
 }
