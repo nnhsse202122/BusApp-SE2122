@@ -1,8 +1,15 @@
 "use strict";
-// /// <reference path="./socket-io-client.d.ts"/>
-// const updateBusListSocket = window.io('/updateBusList');
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 let busList;
-fetch("/busList").then((res) => res.json()).then((data) => { busList = data; console.log(busList); });
+fetch("/busList").then((res) => res.json()).then((data) => busList = data);
 let newBusEmptyRow;
 fetch("/updateBusListEmptyRow").then((res) => res.text()).then((data) => newBusEmptyRow = data);
 let newBusRow;
@@ -35,5 +42,37 @@ function removeBus_busList(secondChild) {
     let number = row.children[0].innerHTML;
     busList.splice(busList.indexOf(number), 1);
     row.remove();
+}
+function save(reset) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let currentBusList = yield (yield fetch("/busList")).json();
+        if (busList == currentBusList) {
+            alert("No changes have been made to the bus list");
+            return;
+        }
+        if (reset) {
+            if (!confirm("Are you sure you would like to update the bus list and reset all live pages?"))
+                return;
+        }
+        else {
+            if (!confirm("Are you sure you would like to update the bus list? (This will not changes any active pages until midnight)"))
+                return;
+        }
+        fetch("/updateBusList", {
+            method: 'POST',
+            headers: {
+                accept: 'application.json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                busList: busList,
+                reset: reset
+            })
+        });
+    });
+}
+function discardChanges() {
+    if (confirm("Are you sure you would like to discard changes?"))
+        location.reload();
 }
 //# sourceMappingURL=updateBusList.js.map

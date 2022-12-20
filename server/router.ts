@@ -108,5 +108,7 @@ router.get("/busList", (req: Request, res: Response) => {
 });
 
 router.post("/updateBusList", (req: Request, res: Response) => {
-    fs.writeFileSync(path.resolve(__dirname, "../data/busList.json"), req.body.busList);
+    console.log(1)
+    console.log(req.body.busList);
+    fs.writeFileSync(path.resolve(__dirname, "../data/busList.json"), JSON.stringify(req.body.busList));
 });

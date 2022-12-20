@@ -1,5 +1,5 @@
 let busList: string[];
-fetch("/busList").then((res) => res.json()).then((data) => {busList = data; console.log(busList)});
+fetch("/busList").then((res) => res.json()).then((data) => busList = data);
 
 let newBusEmptyRow: string;
 fetch("/updateBusListEmptyRow").then((res) => res.text()).then((data) => newBusEmptyRow = data);
@@ -38,7 +38,17 @@ function removeBus_busList(secondChild: HTMLElement) {
     row.remove();
 }
 
-function save(reset: boolean) {
+async function  save(reset: boolean) {
+    // let currentBusList = await (await fetch("/busList")).json();
+    // if (busList == currentBusList) {alert("No changes have been made to the bus list"); return;}
+
+    if (reset) {
+        if (!confirm("Are you sure you would like to update the bus list and reset all live pages?")) return;
+    }
+    else {
+        if(!confirm("Are you sure you would like to update the bus list? (This will not changes any active pages until midnight)")) return;
+    }
+
     fetch("/updateBusList", {
         method: 'POST',
         headers: {
@@ -54,5 +64,5 @@ function save(reset: boolean) {
 }
 
 function discardChanges() {
-    location.reload();
+    if (confirm("Are you sure you would like to discard changes?")) location.reload();
 }
