@@ -41,6 +41,7 @@ const google_auth_library_1 = require("google-auth-library");
 const jsonHandler_1 = require("./jsonHandler");
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importStar(require("fs"));
+const server_1 = require("../server");
 exports.router = express_1.default.Router();
 const CLIENT_ID = "319647294384-m93pfm59lb2i07t532t09ed5165let11.apps.googleusercontent.com";
 const oAuth2 = new google_auth_library_1.OAuth2Client(CLIENT_ID);
@@ -99,25 +100,21 @@ exports.router.get("/beans", (req, res) => __awaiter(void 0, void 0, void 0, fun
 /* Admin page. This is where bus information can be updated from
 Reads from data file and displays data */
 exports.router.get("/updateBusList", (req, res) => {
-    res.render("updateBusList", {
-        data: (0, jsonHandler_1.readBusList)()
-    });
-    // // If user is not authenticated (email is not is session) redirects to login page
-    // if (!req.session.userEmail) {
-    //     res.redirect("/login");
-    //     return;
-    // }
-    // // Authorizes user, then either displays admin page or unauthorized page
-    // authorize(req);
-    // if (req.session.isAdmin) {
-    //     res.render("updateBusList",
-    //     {
-    //         data: readBusList()
-    //     });
-    // }
-    // else {
-    //     res.render("unauthorized");
-    // }
+    // If user is not authenticated (email is not is session) redirects to login page
+    if (!req.session.userEmail) {
+        res.redirect("/login");
+        return;
+    }
+    // Authorizes user, then either displays admin page or unauthorized page
+    authorize(req);
+    if (req.session.isAdmin) {
+        res.render("updateBusList", {
+            data: (0, jsonHandler_1.readBusList)()
+        });
+    }
+    else {
+        res.render("unauthorized");
+    }
 });
 exports.router.get("/updateBusListEmptyRow", (req, res) => {
     res.sendFile(path_1.default.resolve(__dirname, "../views/sockets/updateBusListEmptyRow.ejs"));
@@ -129,8 +126,8 @@ exports.router.get("/busList", (req, res) => {
     res.type("json").send((0, fs_1.readFileSync)(path_1.default.resolve(__dirname, "../data/busList.json")));
 });
 exports.router.post("/updateBusList", (req, res) => {
-    console.log(1);
-    console.log(req.body.busList);
     fs_1.default.writeFileSync(path_1.default.resolve(__dirname, "../data/busList.json"), JSON.stringify(req.body.busList));
+    if (req.body.reset)
+        (0, server_1.resetDatafile)();
 });
 //# sourceMappingURL=router.js.map

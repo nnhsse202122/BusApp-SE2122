@@ -45,11 +45,6 @@ function removeBus_busList(secondChild) {
 }
 function save(reset) {
     return __awaiter(this, void 0, void 0, function* () {
-        let currentBusList = yield (yield fetch("/busList")).json();
-        if (busList == currentBusList) {
-            alert("No changes have been made to the bus list");
-            return;
-        }
         if (reset) {
             if (!confirm("Are you sure you would like to update the bus list and reset all live pages?"))
                 return;

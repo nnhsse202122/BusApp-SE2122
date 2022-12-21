@@ -70,9 +70,6 @@ app.use((0, express_session_1.default)({
     resave: true,
     saveUninitialized: true
 })); // Allows use of req.session
-// app.use(bodyParser.urlencoded({extended: true})); // Allows html forms to be accessed with req.body
-// app.use(express.urlencoded({ extended: true }));
-// app.use(bodyParser.json()); // Allows use of json format for req.body
 app.use(express_1.default.json());
 app.use("/", router_1.router); // Imports routes from server/router.ts
 app.use("/css", express_1.default.static(path_1.default.resolve(__dirname, "static/css")));
@@ -90,7 +87,7 @@ function resetDatafile() {
     fs_1.default.writeFileSync(busesDatafile, JSON.stringify(newBuses));
     buses = newBuses;
     io.of("/").emit("update", (0, jsonHandler_1.readData)());
-    io.of("/admin").emit("updateBuses", (0, jsonHandler_1.readData)());
+    io.of("/admin").emit("restart");
 }
 exports.resetDatafile = resetDatafile;
 const midnight = new Date();

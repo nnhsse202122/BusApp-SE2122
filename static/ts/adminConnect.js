@@ -1,9 +1,11 @@
 "use strict";
 /// <reference path="./socket-io-client.d.ts"/>
 const adminSocket = window.io('/admin'); // This line and the line above is how you get ts types to work on clientside... cursed
-window.addEventListener("focus", () => {
-    location.reload();
-});
+window.focus();
+// window.addEventListener("focus", () => {
+//     location.reload();
+//     // window.focus(); // lmao?
+// });
 class Bus {
     constructor(rowVal) {
         this.row = rowVal;
@@ -25,7 +27,7 @@ class Bus {
 }
 const buses = [];
 {
-    const table = document.getElementById("table");
+    const table = document.getElementById("bus-table");
     const rows = [...table.rows];
     rows.splice(0, 1);
     rows.forEach((row) => {
@@ -193,5 +195,8 @@ adminSocket.on("updateBuses", (command) => {
 adminSocket.on("updateWeather", (weather) => {
     const html = ejs.render(document.getElementById("getRender").getAttribute("weather"), { weather: weather });
     document.getElementById("weather").innerHTML = html;
+});
+adminSocket.on("reset", () => {
+    location.reload();
 });
 //# sourceMappingURL=adminConnect.js.map

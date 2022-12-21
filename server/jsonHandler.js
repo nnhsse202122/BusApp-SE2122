@@ -8,7 +8,6 @@ const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
 const server_1 = require("../server");
 const busesDatafile = path_1.default.resolve(__dirname, "../data/buses.json");
-const defaultBusesDatafile = path_1.default.resolve(__dirname, "../data/defaultBuses.txt");
 const weatherDatafile = path_1.default.resolve(__dirname, "../data/weather.json");
 const defaultWeatherDatafile = path_1.default.resolve(__dirname, "../data/defaultWeather.txt");
 const whitelistDatafile = path_1.default.resolve(__dirname, "../data/whitelist.json");

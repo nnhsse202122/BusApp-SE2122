@@ -3,7 +3,6 @@ import fs from "fs";
 import {resetDatafile} from "../server";
 
 const busesDatafile = path.resolve(__dirname, "../data/buses.json");
-const defaultBusesDatafile = path.resolve(__dirname, "../data/defaultBuses.txt");
 const weatherDatafile = path.resolve(__dirname, "../data/weather.json");
 const defaultWeatherDatafile = path.resolve(__dirname, "../data/defaultWeather.txt");
 const whitelistDatafile = path.resolve(__dirname, "../data/whitelist.json");

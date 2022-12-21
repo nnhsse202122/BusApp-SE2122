@@ -2,7 +2,8 @@ import express, {Request, Response} from "express";
 import {OAuth2Client, TokenPayload} from "google-auth-library";
 import {readData, readWhitelist, readBusList, writeBusList} from "./jsonHandler";
 import path from "path";
-import fs, { appendFile, readFileSync } from "fs";
+import fs, {readFileSync} from "fs";
+import {resetDatafile} from "../server";
 
 export const router = express.Router();
 
@@ -72,27 +73,23 @@ router.get("/beans", async (req: Request, res: Response) => {
 /* Admin page. This is where bus information can be updated from
 Reads from data file and displays data */
 router.get("/updateBusList", (req: Request, res: Response) => {
-    res.render("updateBusList",
+    // If user is not authenticated (email is not is session) redirects to login page
+    if (!req.session.userEmail) {
+        res.redirect("/login");
+        return;
+    }
+    
+    // Authorizes user, then either displays admin page or unauthorized page
+    authorize(req);
+    if (req.session.isAdmin) {
+        res.render("updateBusList",
         {
             data: readBusList()
         });
-    // // If user is not authenticated (email is not is session) redirects to login page
-    // if (!req.session.userEmail) {
-    //     res.redirect("/login");
-    //     return;
-    // }
-    
-    // // Authorizes user, then either displays admin page or unauthorized page
-    // authorize(req);
-    // if (req.session.isAdmin) {
-    //     res.render("updateBusList",
-    //     {
-    //         data: readBusList()
-    //     });
-    // }
-    // else {
-    //     res.render("unauthorized");
-    // }
+    }
+    else {
+        res.render("unauthorized");
+    }
 });
 
 router.get("/updateBusListEmptyRow", (req: Request, res: Response) => {
@@ -108,7 +105,6 @@ router.get("/busList", (req: Request, res: Response) => {
 });
 
 router.post("/updateBusList", (req: Request, res: Response) => {
-    console.log(1)
-    console.log(req.body.busList);
     fs.writeFileSync(path.resolve(__dirname, "../data/busList.json"), JSON.stringify(req.body.busList));
+    if (req.body.reset) resetDatafile();
 });

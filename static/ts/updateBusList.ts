@@ -12,7 +12,7 @@ function newBus_busList() {
     const html = ejs.render(newBusEmptyRow);
     row.innerHTML = html;
     let input = row.children[0]!.children[0] as HTMLInputElement;
-    input.focus()
+    input.focus();
 }
 
 function addBus_busList(confirmButton: HTMLElement) {
@@ -39,9 +39,6 @@ function removeBus_busList(secondChild: HTMLElement) {
 }
 
 async function  save(reset: boolean) {
-    // let currentBusList = await (await fetch("/busList")).json();
-    // if (busList == currentBusList) {alert("No changes have been made to the bus list"); return;}
-
     if (reset) {
         if (!confirm("Are you sure you would like to update the bus list and reset all live pages?")) return;
     }

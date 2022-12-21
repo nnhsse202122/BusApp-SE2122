@@ -76,9 +76,6 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 })); // Allows use of req.session
-// app.use(bodyParser.urlencoded({extended: true})); // Allows html forms to be accessed with req.body
-// app.use(express.urlencoded({ extended: true }));
-// app.use(bodyParser.json()); // Allows use of json format for req.body
 app.use(express.json());
 
 app.use("/", router); // Imports routes from server/router.ts
@@ -96,11 +93,11 @@ function resetBuses() {
 }
 export function resetDatafile() {
     let newBuses: BusData[] = [];
-    readBusList().busList.forEach((number) => newBuses.push({number: number, change: "", time: "", status: "Not Here"}))
+    readBusList().busList.forEach((number) => newBuses.push({number: number, change: "", time: "", status: "Not Here"}));
     fs.writeFileSync(busesDatafile, JSON.stringify(newBuses));
     buses = newBuses;
     io.of("/").emit("update", readData());
-    io.of("/admin").emit("updateBuses", readData());
+    io.of("/admin").emit("restart");
 }
 const midnight = new Date();
 midnight.setDate(midnight.getDate() + 1);
