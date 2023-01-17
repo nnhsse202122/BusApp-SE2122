@@ -120,6 +120,14 @@ textarea{
     text-align: center;
 } */
 
+.button {
+    font-family: 'Montserrat', sans-serif;
+    text-decoration: none;
+    font-size: 2em;
+    background-color: #327fa8;
+    color: #ffffff;
+    padding: 4%;
+}
 
 * {
     padding: 0;
@@ -195,7 +203,7 @@ body {
     width: 95%;
     /* height: 87%; */
     border-collapse: collapse;
-    font-size: 2.2em;
+    font-size: 3.3em;
     font-family: 'Montserrat', sans-serif;
 }
 

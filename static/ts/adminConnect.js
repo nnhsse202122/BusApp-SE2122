@@ -61,7 +61,7 @@ function printBuses() {
     buses.forEach((bus) => { console.log(bus.data.number); });
 }
 function newBus() {
-    const row = document.getElementById("table").insertRow(1);
+    const row = document.getElementById("bus-table").insertRow(1);
     const html = ejs.render(document.getElementById("getRender").getAttribute("emptyRow"));
     row.innerHTML = html;
     const bus = new Bus(row);
@@ -134,10 +134,10 @@ function sort(bus) {
         busIndex = buses.indexOf(busAfter);
     }
     else {
-        rowIndex = document.getElementById("table").rows.length;
+        rowIndex = document.getElementById("bus-table").rows.length;
         busIndex = buses.length;
     }
-    const row = document.getElementById("table").insertRow(rowIndex);
+    const row = document.getElementById("bus-table").insertRow(rowIndex);
     const html = ejs.render(document.getElementById("getRender").getAttribute("populatedRow"), { data: bus });
     row.innerHTML = html;
     buses.splice(busIndex, 0, new Bus(row));
