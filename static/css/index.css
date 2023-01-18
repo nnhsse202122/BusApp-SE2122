@@ -123,13 +123,13 @@ body {
     width: 25%;
 }
 
-@media (orientation: portrait) {
+/* @media (orientation: portrait) {
 
-}
+} */
 
 @media (orientation: landscape) {
     .login-button {
-        font-size: 3vh
+        font-size: 3vw
     }
     .bus-table {
         width: 70%;

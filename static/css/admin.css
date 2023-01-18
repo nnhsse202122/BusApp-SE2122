@@ -123,7 +123,8 @@ textarea{
 .button {
     font-family: 'Montserrat', sans-serif;
     text-decoration: none;
-    font-size: 2vw;
+    font-size: 3vw;
+    border-width: 0;
     background-color: #327fa8;
     color: #ffffff;
     padding: 4%;
@@ -266,8 +267,22 @@ body {
 }
 
 @media (orientation: landscape) {
+    .bus-table th,
+    .bus-table td {
+    padding: 0.7% 2%;
+    width: 23%;
+}
+
     .bus-table {
         width: 70%;
-        font-size: 1vw;
+        font-size: 1.5vw;
+    }
+
+    .bus-table select {
+        font-size: 1.5vw
+    }
+
+    .bus-table input {
+        font-size: 1.5vw;
     }
 }
