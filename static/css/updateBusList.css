@@ -98,6 +98,8 @@ body {
     background-color: inherit;
     text-align: center;
     text-align-last: center;
+    font-size: 4vw;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .new-bus-buttons {
@@ -114,6 +116,10 @@ body {
     }
 
     .buslist-table {
+        font-size: 2vw;
+    }
+
+    .buslist-table input {
         font-size: 2vw;
     }
 }
