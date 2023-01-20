@@ -123,10 +123,6 @@ body {
     width: 25%;
 }
 
-/* @media (orientation: portrait) {
-
-} */
-
 @media (orientation: landscape) {
     .login-button {
         font-size: 1.8vw
