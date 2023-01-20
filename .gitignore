@@ -1,5 +1,7 @@
-data/buses.yml
-data/weather.yml
+data/buses.json
+data/weather.json
+data/busList.json
+data/whitelist.json
 
 
 # Created by https://www.toptal.com/developers/gitignore/api/node
